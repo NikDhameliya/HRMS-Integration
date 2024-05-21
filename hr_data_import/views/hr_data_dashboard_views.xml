@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_employee_dashboard_view" model="ir.actions.act_window">
+            <field name="name">HRMS Employees</field>
+            <field name="res_model">hrms.hr.employee</field>
+            <field name="view_id" ref="hrms_employee_tree_view"/>
+            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+        </record>
+
+        <record id="action_department_dashboard_view" model="ir.actions.act_window">
+            <field name="name">HRMS Departments</field>
+            <field name="res_model">hrms.hr.department</field>
+            <field name="view_id" ref="hrms_department_tree_view"/>
+            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+        </record>
+
+        <record id="action_leave_dashboard_view" model="ir.actions.act_window">
+            <field name="name">HRMS Leaves</field>
+            <field name="res_model">hrms.hr.leave</field>
+            <field name="view_id" ref="hrms_leave_tree_view"/>
+            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+        </record>
+
+        <!--Dashboard View -->
+        <record id="hr_data_dashboard_kanban_view_ept" model="ir.ui.view">
+            <field name="name">hr.data dashboard</field>
+            <field name="model">hr.data.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban
+                    class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_shopify_kanban"
+                    create="0" style="width:450px;">
+                    <field name="name" />
+                    <field name="color" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div
+                                t-attf-class="#{kanban_color(record.color.raw_value)} record_dashboard_ept">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <t t-esc="record.name.value" />
+                                        </div>
+                                        <div class="o_kanban_manage_button_section">
+                                            <a class="o_kanban_manage_toggle_button" href="#">
+                                                <i class="fa fa-ellipsis-v" aria-label="Selection"
+                                                    role="img" title="Selection" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="container o_kanban_card_manage_pane dropdown-menu"
+                                    role="menu">
+                                    <div class="row">
+                                        <div
+                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
+                                            <div role="menuitem" class="o_kanban_card_manage_title">
+                                                <span>Employees</span>
+                                            </div>
+                                            <div role="menuitem">
+                                                <a
+                                                    name="%(hr_data_import.action_employee_dashboard_view)d"
+                                                    type="action" title="Imported">
+                                                    Imported
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
+                                            <div role="menuitem" class="o_kanban_card_manage_title">
+                                                <span>Departments</span>
+                                            </div>
+                                            <div role="menuitem">
+                                                <a
+                                                    name="%(hr_data_import.action_department_dashboard_view)d"
+                                                    type="action" title="Imported">
+                                                    Imported
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
+                                            <div role="menuitem" class="o_kanban_card_manage_title">
+                                                <span>Leaves</span>
+                                            </div>
+                                            <div role="menuitem">
+                                                <a
+                                                    name="%(hr_data_import.action_leave_dashboard_view)d"
+                                                    type="action" title="Imported">
+                                                    Imported
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div t-if="widget.editable"
+                                        class="o_kanban_card_manage_settings row">
+                                        <div class="col-xs-8">
+                                            <ul class="oe_kanban_colorpicker" data-field="color" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="action_hr_data_import_dashboard" model="ir.actions.act_window">
+            <field name="name">HRMS</field>
+            <field name="res_model">hr.data.dashboard</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="hr_data_dashboard_kanban_view_ept" />
+        </record>
+
+    </data>
+</odoo>

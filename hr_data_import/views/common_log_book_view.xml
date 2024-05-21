@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_hrms_common_log_line_ept" model="ir.actions.act_window">
+        <field name="name">Log Lines</field>
+        <field name="res_model">common.log.lines</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No mismatch log lines are there!
+            </p>
+            <p>If any import/export/update process has got issue, log lines will be shown here.</p>
+        </field>
+    </record>
+
+    <menuitem id="hrms_log_line_ept" name="Log Lines"
+              parent="hr_data_import.menu_hr_data_import_root"
+              action="hr_data_import.action_hrms_common_log_line_ept"
+              sequence="7"/>
+</odoo>

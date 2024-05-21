@@ -1,0 +1,116 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!--Tree view of shopify product template-->
+    <record id="hrms_leave_tree_view" model="ir.ui.view">
+        <field name="name">Shopify Product Tree View</field>
+        <field name="model">hrms.hr.leave</field>
+        <field name="arch" type="xml">
+            <tree create="false" sample="1">
+                <field name="name"/>
+                <field name="hrms_instance_id"/>
+                <field name="leave_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--Search view of Leave-->
+    <record model="ir.ui.view" id="hrms_leave_search_view_ept">
+        <field name="name">hrms.leaves.search</field>
+        <field name="model">hrms.hr.leave</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Leave">
+                <field name="name" string="Leave"
+                       filter_domain="['|','|',('name','ilike',self),('leave_id','ilike',self),('hrms_external_id','ilike',self)]"/>
+                <!-- <filter string="Exported" name=""
+                        icon="terp-accessories-archiver"
+                        domain="[('exported','=','True')]"/> -->
+                <!-- <group expand="0" string="Group By">
+                    <filter string="Exported"
+                            name="Exported" domain="[]"
+                            context="{'group_by':'exported'}"/>
+                </group> -->
+            </search>
+        </field>
+    </record>
+
+    <!--Form view of Leave-->
+    <record id="hrms_leave_form_view_ept" model="ir.ui.view">
+        <field name="name">HRMS Leave Form View</field>
+        <field name="model">hrms.hr.leave</field>
+        <field name="arch" type="xml">
+            <form string="HRMS Leave Form View" create="false">
+                <sheet>
+                    <div class="oe_title" style="width: 390px;">
+                        <label class="oe_edit_only" for="name" string="Title"/>
+                        <h1>
+                            <field name="name" class="oe_inline"/>
+                        </h1>
+                    </div>
+                    <notebook>
+                        <page string="HRMS Info">
+                            <group>
+                                <group>
+                                    <field name="hrms_instance_id"/>
+                                    <field name="leave_id" required="1" readonly="1"/>
+                                </group>
+                                <group>
+                                    <label for="hrms_external_id"/>
+                                    <div name="hrms_leave_link">
+                                        <field name="hrms_external_id" readonly="1" style="width:auto !important;"/>
+                                    </div>
+                                </group>
+                                <group>
+                                    <field name="created_at" readonly="1"/>
+                                    <field name="updated_at" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="created_at"/>
+                                </group>
+                            </group>
+                            <!-- <div string="Description">
+                                <field name="description" nolabel="1"/>
+                            </div> -->
+                        </page>
+                        <!-- <page string="Images">
+                            <div string="Images Info" colspan="4">
+                                <field name="image_ids"
+                                       context="{'default_shopify_template_id':id}" mode="kanban"
+                                       options="{'create_text':'Add a Media','no_create_edit':True}"
+                                       nolabel="1">
+                                </field>
+                            </div>
+                        </page> -->
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+     <!--Action of HRMS Leave -->
+     <record id="action_hrms_leave" model="ir.actions.act_window">
+        <field name="name">HRMS Leave</field>
+        <field name="res_model">hrms.hr.leave</field>
+        <field name="view_id" ref="hrms_leave_tree_view" />
+        <field name="help" type="html">
+            <div>
+                <br />
+                <br />
+                <br />
+                <p>
+                    <b>There are no any Leave Created yet</b>
+                </p>
+            </div>
+        </field>
+    </record>
+
+    <!--Action, redirect instance kanban view to hrms leave-->
+    <record id="action_hrms_leaves_instance_ept" model="ir.actions.act_window">
+        <field name="name">HRMS Leaves</field>
+        <field name="res_model">hrms.hr.leave</field>
+        <field name="view_id" ref="hrms_leave_tree_view"/>
+        <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+    </record>
+
+</odoo>

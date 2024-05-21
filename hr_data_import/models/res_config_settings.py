@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+
+from odoo import _, fields, models
+
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    hrm_api_key = fields.Char(string="HRM API Key")
+    hrm_base_url = fields.Char(string="HRM Base URL")
+
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    hrm_api_key = fields.Char(string="HRM API Key", related="company_id.hrm_api_key", readonly=False, help="Set API Key")
+    hrm_base_url = fields.Char(string="HRM Base URL", related="company_id.hrm_base_url", readonly=False, help="Set Base URL")
