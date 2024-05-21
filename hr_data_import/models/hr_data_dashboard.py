@@ -23,7 +23,7 @@ class HrDataDashboard(models.Model):
     leave_ids = fields.One2many('hrms.hr.leave', 'hrms_instance_id', string="Leaves")
     active = fields.Boolean(default=True)
     
-    def _compute_kanban_shopify_order_data(self):
+    def _compute_kanban_hrms_order_data(self):
         for record in self:
             # Employee count query
             employee_data = record.get_total_employees()
@@ -34,7 +34,7 @@ class HrDataDashboard(models.Model):
             # Leaves count query
             leave_data = record.get_total_leaves()
 
-            record.shopify_order_data = json.dumps({
+            record.hrms_order_data = json.dumps({
                 "title": "",
                 "area": True,
                 "color": "#875A7B",
@@ -48,7 +48,7 @@ class HrDataDashboard(models.Model):
 
     def get_total_employees(self):
         """
-        :return: total number of shopify employee ids and action for employee
+        :return: total number of hrms employee ids and action for employee
         """
         employee_data = {}
         self._cr.execute("""select count(id) as total_count from hrms_hr_employee where
@@ -63,7 +63,7 @@ class HrDataDashboard(models.Model):
     
     def get_total_departments(self):
         """
-        :return: total number of shopify department ids and action for department
+        :return: total number of hrms department ids and action for department
         """
         department_data = {}
         self._cr.execute("""select count(id) as total_count from hrms_hr_department where
@@ -78,7 +78,7 @@ class HrDataDashboard(models.Model):
 
     def get_total_leaves(self):
         """
-        :return: total number of shopify leave ids and action for leave
+        :return: total number of hrms leave ids and action for leave
         """
         leave_data = {}
         self._cr.execute("""select count(id) as total_count from hrms_hr_leave where
@@ -114,7 +114,7 @@ class HrDataDashboard(models.Model):
     @api.model
     def perform_operation(self, record_id):
         """
-        Use: To prepare shopify operation action
+        Use: To prepare hrms operation action
         :return: operation action details
         """
         view = self.env.ref('hr_data_import.action_wizard_hrms_instance_import_export_operations').sudo().read()[0]

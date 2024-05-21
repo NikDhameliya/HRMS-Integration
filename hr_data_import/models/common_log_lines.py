@@ -14,7 +14,7 @@ class CommonLogLineEpt(models.Model):
     hrms_department_data_queue_line_id = fields.Many2one("department.data.queue.line",
                                                        "HRMS Department Queue Line")
     hrms_leave_data_queue_line_id = fields.Many2one("leave.data.queue.line",
-                                                          "HRMS Customer Queue Line")
+                                                          "HRMS Leave Queue Line")
     hrms_instance_id = fields.Many2one("hr.data.dashboard", "HRMS Instance")
 
     def create_crash_queue_schedule_activity(self, queue_id, model, note):

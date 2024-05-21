@@ -16,7 +16,7 @@ class CommonLogLineEpt(models.Model):
     message = fields.Text()
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
-    mismatch_details = fields.Boolean(string='Mismatch Detail', help="Mismatch Detail of process order")
+    mismatch_details = fields.Boolean(string='Mismatch Detail', help="Mismatch Detail of process record")
     file_name = fields.Char()
     log_line_type = fields.Selection(selection=[('success', 'Success'), ('fail', 'Fail')], default='fail')
     operation_type = fields.Selection([('import', 'Import')], string="Operation")

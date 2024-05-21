@@ -65,7 +65,7 @@ class HRMSLeaveDataQueue(models.Model):
     @api.model_create_multi
     def create(self, vals):
         """
-        This method used to create a sequence of customer queue.
+        This method used to create a sequence of leave queue.
         """
         for val in vals:
             seq = self.env["ir.sequence"].next_by_code("leave.data.queue") or "/"
@@ -73,18 +73,18 @@ class HRMSLeaveDataQueue(models.Model):
         return super(HRMSLeaveDataQueue, self).create(vals)
 
     @api.model
-    def create_customer_queue(self, instance, record_created_from):
+    def create_leave_queue(self, instance, record_created_from):
         """
-        This method used to create a customer queue.
+        This method used to create a leave queue.
         :param instance: Record of instance
         :param record_created_from: (import_process)It is used to identify which process created the
         queue record.
         """
-        customer_queue_vals = {
+        leave_queue_vals = {
             "hrms_instance_id": instance and instance.id or False,
             "record_created_from": record_created_from
         }
-        return self.create(customer_queue_vals)
+        return self.create(leave_queue_vals)
 
     @api.model
     def retrieve_dashboard(self, *args, **kwargs):

@@ -3,7 +3,7 @@
 from odoo import models, _
 
 
-class ShopifyQueueProcessEpt(models.TransientModel):
+class hrmsQueueProcessEpt(models.TransientModel):
     _name = 'queue.process'
     _description = 'HRMS Queue Process'
 
@@ -20,7 +20,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
             self.sudo().process_leave_queue_manually()
 
     def process_employee_queue_manually(self):
-        """This method used to process the product queue manually. You can call the method from here :
+        """This method used to process the employee queue manually. You can call the method from here :
             HRMS => Processes => Queues Logs => Employees => Action => Process Queue Manually.
         """
         model = self._context.get('active_model')
@@ -37,7 +37,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
         return True
 
     def process_leave_queue_manually(self):
-        """This method used to process the product queue manually. You can call the method from here :
+        """This method used to process the leave queue manually. You can call the method from here :
             HRMS => Processes => Queues Logs => Leaves => Action => Process Queue Manually.
         """
         model = self._context.get('active_model')
@@ -50,11 +50,11 @@ class ShopifyQueueProcessEpt(models.TransientModel):
             leave_queue_line_batch = leave_queue_line_obj.search(
                 [("leave_data_queue_id", "=", leave_queue_id),
                  ("state", "in", ('draft', 'failed'))])
-            leave_queue_line_batch.process_product_queue_line_data()
+            leave_queue_line_batch.process_leave_queue_line_data()
         return True
     
     def process_department_queue_manually(self):
-        """This method used to process the product queue manually. You can call the method from here :
+        """This method used to process the department queue manually. You can call the method from here :
             HRMS => Processes => Queues Logs => Departments => Action => Process Queue Manually.
         """
         model = self._context.get('active_model')
@@ -62,17 +62,17 @@ class ShopifyQueueProcessEpt(models.TransientModel):
         department_queue_ids = self._context.get('active_ids')
         if model == 'department.data.queue.line':
             department_queue_ids = department_queue_line_obj.search(
-                [('id', 'in', department_queue_ids)]).mapped("product_data_queue_id").ids
+                [('id', 'in', department_queue_ids)]).mapped("department_data_queue_id").ids
         for department_queue_id in department_queue_ids:
             department_queue_line_batch = department_queue_line_obj.search(
-                [("product_data_queue_id", "=", department_queue_id),
+                [("department_data_queue_id", "=", department_queue_id),
                  ("state", "in", ('draft', 'failed'))])
-            department_queue_line_batch.process_product_queue_line_data()
+            department_queue_line_batch.process_department_queue_line_data()
         return True
 
     def set_to_completed_queue(self):
         """
-        This method used to change the queue(order, product and customer) state as completed.
+        This method used to change the queue(employee, department and leave) state as completed.
         """
         queue_process = self._context.get('queue_process')
         if queue_process == "set_to_completed_employee_queue":
@@ -83,7 +83,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
             self.set_to_completed_leave_queue_manually()
 
     def set_to_completed_employee_queue_manually(self):
-        """This method used to set product queue as completed. You can call the method from here :
+        """This method used to set employee queue as completed. You can call the method from here :
             HRMS => Processes => Queues Logs => Employee => SET TO COMPLETED.
         """
         employee_queue_ids = self._context.get('active_ids')
@@ -97,7 +97,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
         return True
     
     def set_to_completed_department_queue_manually(self):
-        """This method used to set product queue as completed. You can call the method from here :
+        """This method used to set department queue as completed. You can call the method from here :
             HRMS => Processes => Queues Logs => Department => SET TO COMPLETED.
         """
         department_queue_ids = self._context.get('active_ids')
@@ -112,7 +112,7 @@ class ShopifyQueueProcessEpt(models.TransientModel):
         
     
     def set_to_completed_leave_queue_manually(self):
-        """This method used to set product queue as completed. You can call the method from here :
+        """This method used to set leave queue as completed. You can call the method from here :
             HRMS => Processes => Queues Logs => Leave => SET TO COMPLETED.
         """
         leave_queue_ids = self._context.get('active_ids')

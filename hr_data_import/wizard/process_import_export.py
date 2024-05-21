@@ -9,7 +9,7 @@ from odoo.tools.misc import split_every
 
 from odoo import models, fields, api, _
 
-_logger = logging.getLogger("Shopify Operations")
+_logger = logging.getLogger("hrms Operations")
 
 
 class ProcessImportExport(models.TransientModel):
@@ -39,10 +39,8 @@ class ProcessImportExport(models.TransientModel):
                                        help="Based on Leave ids get Leave from api and import in odoo")
     skip_existing_leave = fields.Boolean(string="Do Not Update Existing Leaves",
                                            help="Check if you want to skip existing Leaves.")
-    # cron_process_notification = fields.Text(string="Shopify Note: ", store=False,
+    # cron_process_notification = fields.Text(string="hrms Note: ", store=False,
     #                                         help="Used to display that cron will be run after some time")
-    # import_products_based_on_date = fields.Selection([("create_date", "Create Date"), ("update_date", "Update Date")],
-    #                                                  default="update_date", string="Import Based On")
 
 
     def hrms_execute(self):
@@ -72,7 +70,7 @@ class ProcessImportExport(models.TransientModel):
                 form_view_name = "hr_data_import.employee_synced_data_form_view"
 
         if self.hrms_operation == "sync_department":
-            department_queue_ids = department_data_queue_obj.shopify_create_department_data_queue(
+            department_queue_ids = department_data_queue_obj.hrms_create_department_data_queue(
                 instance, self.import_departments,
                 self.skip_existing_department)
             if department_queue_ids:
@@ -81,7 +79,7 @@ class ProcessImportExport(models.TransientModel):
                 form_view_name = "hr_data_import.department_synced_data_form_view"
 
         elif self.hrms_operation == "sync_department_by_remote_ids":
-            department_queue_ids = department_data_queue_obj.shopify_create_department_data_queue(
+            department_queue_ids = department_data_queue_obj.hrms_create_department_data_queue(
                 instance, skip_existing_department=self.skip_existing_department, department_ids=self.hrms_employee_ids)
             if department_queue_ids:
                 queue_ids = department_queue_ids
@@ -89,7 +87,7 @@ class ProcessImportExport(models.TransientModel):
                 form_view_name = "hr_data_import.department_synced_data_form_view"
             
         if self.hrms_operation == "sync_leave":
-            leave_queue_ids = leave_data_queue_obj.shopify_create_leave_data_queue(
+            leave_queue_ids = leave_data_queue_obj.hrms_create_leave_data_queue(
                 instance, self.import_leaves,
                 self.skip_existing_leave)
             if leave_queue_ids:
@@ -98,7 +96,7 @@ class ProcessImportExport(models.TransientModel):
                 form_view_name = "hr_data_import.leave_synced_data_form_view"
 
         elif self.hrms_operation == "sync_leave_by_remote_ids":
-            leave_queue_ids = leave_data_queue_obj.shopify_create_leave_data_queue(
+            leave_queue_ids = leave_data_queue_obj.hrms_create_leave_data_queue(
                 instance, skip_existing_leave=self.skip_existing_leave, leave_ids=self.hrms_employee_ids)
             if leave_queue_ids:
                 queue_ids = leave_queue_ids
@@ -260,18 +258,18 @@ class ProcessImportExport(models.TransientModel):
         return leave_queue_list
 
 
-    @api.onchange("hrms_instance_id", "hrms_operation")
-    def onchange_hrms_instance_id(self):
-        """
-        This method sets field values, when the Instance will be changed.
-        """
-        instance = self.hrms_instance_id
-        current_time = datetime.now()
-        if instance:
-            if self.hrms_operation == "sync_employee":
-                self.orders_from_date = instance.hrms_last_date_employee_import or False
-            elif self.hrms_operation == "sync_department":
-                self.orders_from_date = instance.hrms_last_date_department_import or False
-            elif self.hrms_operation == 'sync_leave':
-                self.orders_from_date = instance.hrms_last_date_leave_import or False
-            self.orders_to_date = current_time
+    # @api.onchange("hrms_instance_id", "hrms_operation")
+    # def onchange_hrms_instance_id(self):
+    #     """
+    #     This method sets field values, when the Instance will be changed.
+    #     """
+    #     instance = self.hrms_instance_id
+    #     current_time = datetime.now()
+    #     if instance:
+    #         if self.hrms_operation == "sync_employee":
+    #             self.orders_from_date = instance.hrms_last_date_employee_import or False
+    #         elif self.hrms_operation == "sync_department":
+    #             self.orders_from_date = instance.hrms_last_date_department_import or False
+    #         elif self.hrms_operation == 'sync_leave':
+    #             self.orders_from_date = instance.hrms_last_date_leave_import or False
+    #         self.orders_to_date = current_time

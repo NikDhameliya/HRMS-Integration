@@ -36,8 +36,7 @@
             '/hr_data_import/static/src/xml/queue_line_dashboard.xml'
         ],
         'web.assets_backend': [
-            'hr_data_import/static/src/js/shopify_button_collapse.js',
-            'hr_data_import/static/src/css/shopify_base.css',
+            'hr_data_import/static/src/css/hrms_base.css',
         ],
     },
     'installable': True,

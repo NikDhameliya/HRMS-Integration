@@ -318,12 +318,12 @@ div.o_onboard_m_p {
 
 /* To Hide Dash board panel in Mobile devices*/
 @media only screen and (max-width: 1024px) {
-    #shopify_button_toggle, #woo_button_toggle, .hide_in_mobile_device {
+    #hrms_button_toggle, #woo_button_toggle, .hide_in_mobile_device {
         display : none;
     }
 }
-/*Hide the close button form only magento onboarding, shopify and woo onboarding panel*/
-.magento_onboarding_ept .common_close_button_hide_ept,.woo_onboarding_ept .common_close_button_hide_ept,.shopify_onboarding_ept .common_close_button_hide_ept {
+/*Hide the close button form only magento onboarding, hrms and woo onboarding panel*/
+.magento_onboarding_ept .common_close_button_hide_ept,.woo_onboarding_ept .common_close_button_hide_ept,.hrms_onboarding_ept .common_close_button_hide_ept {
     display: none;
 }
 

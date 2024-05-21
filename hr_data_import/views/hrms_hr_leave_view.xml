@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <odoo>
-    <!--Tree view of shopify product template-->
+    <!--Tree view of hrms leave-->
     <record id="hrms_leave_tree_view" model="ir.ui.view">
-        <field name="name">Shopify Product Tree View</field>
+        <field name="name">hrms Leave Tree View</field>
         <field name="model">hrms.hr.leave</field>
         <field name="arch" type="xml">
             <tree create="false" sample="1">
@@ -75,7 +75,7 @@
                         <!-- <page string="Images">
                             <div string="Images Info" colspan="4">
                                 <field name="image_ids"
-                                       context="{'default_shopify_template_id':id}" mode="kanban"
+                                       context="{'default_hrms_template_id':id}" mode="kanban"
                                        options="{'create_text':'Add a Media','no_create_edit':True}"
                                        nolabel="1">
                                 </field>
@@ -110,7 +110,7 @@
         <field name="name">HRMS Leaves</field>
         <field name="res_model">hrms.hr.leave</field>
         <field name="view_id" ref="hrms_leave_tree_view"/>
-        <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+        <!-- <field name="domain">[('hrms_instance_id', '=', active_id)]</field> -->
     </record>
 
 </odoo>

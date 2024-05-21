@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="1">
 
-        <!--Auto cron job for process customer data queue and it runs every 5 min.-->
+        <!--Auto cron job for process Employee data queue and it runs every 5 min.-->
         <record id="process_hrms_employee_queue" model="ir.cron">
             <field name="name">HRMS: Process Employee Queue</field>
             <field name="model_id" ref="model_employee_data_queue_line"/>
@@ -28,7 +28,7 @@
 
         <!--Auto cron job for process leave data queue and it runs every 5 min.-->
         <record id="process_hrms_leave_queue" model="ir.cron">
-            <field name="name">HRMS: Process Customer Queue</field>
+            <field name="name">HRMS: Process Leave Queue</field>
             <field name="model_id" ref="model_leave_data_queue_line"/>
             <field name="state">code</field>
             <field name="code">model.sync_hrms_leave_into_odoo()</field>

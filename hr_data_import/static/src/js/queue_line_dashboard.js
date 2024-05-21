@@ -9,7 +9,6 @@ var ListRenderer = require('web.ListRenderer');
 var ListView = require('web.ListView');
 var SampleServer = require('web.SampleServer');
 var view_registry = require('web.view_registry');
-const session = require('web.session');
 
 var QWeb = core.qweb;
 // Add mock of method 'retrieve_dashboard' in SampleServer, so that we can have

@@ -24,7 +24,7 @@
                                         successfully, you can try this option.
                                     </li>
                                     <li>
-                                        This will not fetch any data from the Shopify store to
+                                        This will not fetch any data from the hrms store to
                                         reprocess
                                         it.
                                     </li>
@@ -81,7 +81,7 @@
     </record>
 
 
-    <!--Action for product queue process manually-->
+    <!--Action for employee queue process manually-->
     <record id="action_sync_employee_queue_data" model="ir.actions.act_window">
         <field name="name">Process Queue Manually</field>
         <field name="res_model">queue.process</field>

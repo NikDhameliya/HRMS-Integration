@@ -35,8 +35,8 @@ class CommonLogBookEpt(models.Model):
         """
         This method is use to create a log book.
         @param : **kwargs, Pass the argument like,
-        log_book = self.env['common.log.book.ept'].create_common_log_book_ept (module='shopify_ept',
-        model_name='sale.order',type='import')
+        log_book = self.env['common.log.book.ept'].create_common_log_book_ept (module='hr_data_import',
+        model_name='hr.employee',type='import')
         """
         values = {}
         for key, value in kwargs.items():

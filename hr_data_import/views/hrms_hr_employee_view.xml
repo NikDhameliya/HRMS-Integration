@@ -81,8 +81,8 @@
                         </page>
                         <!-- <page string="Images">
                             <div string="Images Info" colspan="4">
-                                <field name="shopify_image_ids"
-                                       context="{'default_shopify_template_id':id}" mode="kanban"
+                                <field name="hrms_image_ids"
+                                       context="{'default_hrms_template_id':id}" mode="kanban"
                                        options="{'create_text':'Add a Media','no_create_edit':True}"
                                        nolabel="1">
                                 </field>
@@ -117,7 +117,7 @@
         <field name="name">HRMS Employees</field>
         <field name="res_model">hrms.hr.employee</field>
         <field name="view_id" ref="hrms_employee_tree_view"/>
-        <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+        <!-- <field name="domain">[('hrms_instance_id','=', active_id)]</field> -->
     </record>
 
 

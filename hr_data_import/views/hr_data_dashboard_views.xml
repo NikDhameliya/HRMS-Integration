@@ -5,21 +5,21 @@
             <field name="name">HRMS Employees</field>
             <field name="res_model">hrms.hr.employee</field>
             <field name="view_id" ref="hrms_employee_tree_view"/>
-            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+            <!-- <field name="domain">[('hrms_instance_id', '=', active_id)]</field> -->
         </record>
 
         <record id="action_department_dashboard_view" model="ir.actions.act_window">
             <field name="name">HRMS Departments</field>
             <field name="res_model">hrms.hr.department</field>
             <field name="view_id" ref="hrms_department_tree_view"/>
-            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+            <!-- <field name="domain">[('hrms_instance_id', '=', active_id)]</field> -->
         </record>
 
         <record id="action_leave_dashboard_view" model="ir.actions.act_window">
             <field name="name">HRMS Leaves</field>
             <field name="res_model">hrms.hr.leave</field>
             <field name="view_id" ref="hrms_leave_tree_view"/>
-            <field name="domain">[('hrms_instance_id','=',active_id)]</field>
+            <!-- <field name="domain">[('hrms_instance_id', '=', active_id)]</field> -->
         </record>
 
         <!--Dashboard View -->
@@ -28,7 +28,7 @@
             <field name="model">hr.data.dashboard</field>
             <field name="arch" type="xml">
                 <kanban
-                    class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_shopify_kanban"
+                    class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_hrms_kanban"
                     create="0" style="width:450px;">
                     <field name="name" />
                     <field name="color" />

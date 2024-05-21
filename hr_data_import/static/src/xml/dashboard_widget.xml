@@ -33,7 +33,7 @@
         </div>
         <div class="row o_kanban_record_top">
             <div class="col-12 mt4">
-                <div id="shopify_left" class="float-left o_kanban_top_left">
+                <div id="hrms_left" class="float-left o_kanban_top_left">
                     <div id="perform_operation" class="o_kanban_record_headings">
                         <button class="btn btn-primary ep-btn-primary">
                             <span>Perform Operation</span>

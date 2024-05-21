@@ -10,8 +10,8 @@ class DataQueueMixinEpt(models.AbstractModel):
 
     def delete_data_queue_ept(self, queue_detail=[], is_delete_queue=False):
         """  Uses to delete unused data of queues and log book. logbook deletes which created before 7 days ago.
-            @param queue_detail: list of queue records, like product, order queue [['product_queue',
-            'order_queue']]
+            @param queue_detail: list of queue records, like employee, department queue [['employee_queue',
+            'department_queue']]
             @param is_delete_queue: Identification to delete queue
         """
         if queue_detail:

@@ -232,7 +232,7 @@
         <field name="res_model">process.import.export</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="hr_data_import.view_hrms_process_import_export_ept" />
-        <field name="context">{'default_hrms_instance_id':active_id}</field>
+        <field name="context">{'default_hrms_instance_id': active_id}</field>
         <field name="target">new</field>
     </record>
 
