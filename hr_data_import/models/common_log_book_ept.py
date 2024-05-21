@@ -10,16 +10,9 @@ class CommonLogBookEpt(models.Model):
     _description = "Common log book Ept"
 
     name = fields.Char(readonly=True)
-    type = fields.Selection([('import', 'Import'), ('export', 'Export')], string="Operation")
-    module = fields.Selection([('amazon_ept', 'Amazon Connector'),
-                               ('woocommerce_ept', 'Woocommerce Connector'),
-                               ('shopify_ept', 'Shopify Connector'),
-                               ('magento_ept', 'Magento Connector'),
-                               ('bol_ept', 'Bol Connector'),
-                               ('ebay_ept', 'Ebay Connector'),
-                               ('amz_vendor_central', 'Amazon Vendor Central'),
-                               ('tpw_ept', '3PL Connector'),
-                               ('walmart_ept', 'Walmart Connector')])
+    type = fields.Selection([('import', 'Import')], string="Operation")
+    module = fields.Selection([('hrms', 'HRMS Connector')])
+
     active = fields.Boolean(default=True)
     log_lines = fields.One2many('common.log.lines', 'log_book_id')
     message = fields.Text()
@@ -27,7 +20,6 @@ class CommonLogBookEpt(models.Model):
     res_id = fields.Integer(string="Record ID", help="Process record id")
     attachment_id = fields.Many2one('ir.attachment', string="Attachment")
     file_name = fields.Char()
-    sale_order_id = fields.Many2one(comodel_name='sale.order', string='Sale Order')
 
     @api.model_create_multi
     def create(self, vals_list):

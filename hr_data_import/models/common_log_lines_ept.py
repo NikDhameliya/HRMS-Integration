@@ -7,34 +7,26 @@ class CommonLogLineEpt(models.Model):
     _name = "common.log.lines"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Common log line"
+    
 
-    product_id = fields.Many2one('product.product', 'Product')
-    order_ref = fields.Char('Order Reference')
-    default_code = fields.Char('SKU')
+    employee_id = fields.Many2one('hr.employee', ondelete="cascade")
+    department_id = fields.Many2one('hr.department', ondelete="cascade")
+    leave_id = fields.Many2one('hr.leave', ondelete="cascade")
     log_book_id = fields.Many2one('common.log.book.ept', ondelete="cascade")
     message = fields.Text()
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
     mismatch_details = fields.Boolean(string='Mismatch Detail', help="Mismatch Detail of process order")
     file_name = fields.Char()
-    sale_order_id = fields.Many2one(comodel_name='sale.order', string='Sale Order')
     log_line_type = fields.Selection(selection=[('success', 'Success'), ('fail', 'Fail')], default='fail')
-    operation_type = fields.Selection([('import', 'Import'), ('export', 'Export')], string="Operation")
-    module = fields.Selection([('amazon_ept', 'Amazon Connector'),
-                               ('woocommerce_ept', 'Woocommerce Connector'),
-                               ('shopify_ept', 'Shopify Connector'),
-                               ('magento_ept', 'Magento Connector'),
-                               ('bol_ept', 'Bol Connector'),
-                               ('ebay_ept', 'Ebay Connector'),
-                               ('amz_vendor_central', 'Amazon Vendor Central'),
-                               ('tpw_ept', '3PL Connector'),
-                               ('walmart_ept', 'Walmart Connector')])
+    operation_type = fields.Selection([('import', 'Import')], string="Operation")
+    module = fields.Selection([('hrms', 'HRMS Connector')])
 
     def create_common_log_line_ept(self, **kwargs):
         """
         It is use to create log lines.
         @param : **kwargs, Pass the argument like, self.env['common.log.lines'].create_common_log_line_ept(
-        log_book_id=1, message=message, mismatch=True, log_line_type='fail', model_name = 'sale.order')
+        log_book_id=1, message=message, mismatch=True, log_line_type='fail', model_name = 'hr.employee')
         """
         values = {}
         for key, value in kwargs.items():
