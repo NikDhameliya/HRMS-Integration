@@ -1,81 +1,82 @@
 <?xml version="1.0"?>
 <odoo>
-    <!--Tree view of hr department-->
-    <record id="hrms_department_tree_view" model="ir.ui.view">
-        <field name="name">Departments Tree View</field>
-        <field name="model">hrms.hr.department</field>
-        <field name="arch" type="xml">
-            <tree create="false" sample="1">
-                <field name="name" />
-                <field name="hrms_instance_id" />
-                <field name="department_id" />
-            </tree>
-        </field>
-    </record>
+    <data>
+        <!--Tree view of hr department-->
+        <record id="hrms_department_tree_view" model="ir.ui.view">
+            <field name="name">Departments Tree View</field>
+            <field name="model">hrms.hr.department</field>
+            <field name="arch" type="xml">
+                <tree create="false" sample="1">
+                    <field name="name" />
+                    <field name="hrms_instance_id" />
+                    <field name="department_id" />
+                </tree>
+            </field>
+        </record>
 
-    <!--Search
+        <!--Search
     view of Department-->
-    <record model="ir.ui.view" id="hrms_department_search_view_ept">
-        <field name="name">hrms.departments.search</field>
-        <field name="model">hrms.hr.department</field>
-        <field name="type">search</field>
-        <field name="arch" type="xml">
-            <search string="Department">
-                <field name="name" string="Department"
-                    filter_domain="['|','|',('name','ilike',self),('department_id','ilike',self),('hrms_external_id','ilike',self)]" />
-                <!-- <filter string="Exported" name=""
+        <record model="ir.ui.view" id="hrms_department_search_view_ept">
+            <field name="name">hrms.departments.search</field>
+            <field name="model">hrms.hr.department</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Department">
+                    <field name="name" string="Department"
+                        filter_domain="['|','|',('name','ilike',self),('department_id','ilike',self),('hrms_external_id','ilike',self)]" />
+                    <!-- <filter string="Exported" name=""
                         icon="terp-accessories-archiver"
                         domain="[('exported','=','True')]"/> -->
-                <!-- <group expand="0" string="Group By">
+                    <!-- <group expand="0" string="Group By">
                     <filter string="Exported"
                             name="Exported" domain="[]"
                             context="{'group_by':'exported'}"/>
                 </group> -->
-            </search>
-        </field>
-    </record>
+                </search>
+            </field>
+        </record>
 
-    <!--Form
+        <!--Form
     view of Department-->
-    <record id="hrms_department_form_view_ept" model="ir.ui.view">
-        <field name="name">HRMS Department Form View</field>
-        <field name="model">hrms.hr.department</field>
-        <field name="arch" type="xml">
-            <form string="HRMS Department Form View" create="false">
-                <sheet>
-                    <div class="oe_title" style="width: 390px;">
-                        <label class="oe_edit_only" for="name" string="Title" />
-                        <h1>
-                            <field name="name" class="oe_inline" />
-                        </h1>
-                    </div>
-                    <notebook>
-                        <page string="HRMS Info">
-                            <group>
+        <record id="hrms_department_form_view_ept" model="ir.ui.view">
+            <field name="name">HRMS Department Form View</field>
+            <field name="model">hrms.hr.department</field>
+            <field name="arch" type="xml">
+                <form string="HRMS Department Form View" create="false">
+                    <sheet>
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name" string="Title" />
+                            <h1>
+                                <field name="name" class="oe_inline" />
+                            </h1>
+                        </div>
+                        <notebook>
+                            <page string="HRMS Info">
                                 <group>
-                                    <field name="hrms_instance_id" />
-                                    <field name="department_id" required="1" readonly="1" />
+                                    <group>
+                                        <field name="hrms_instance_id" />
+                                        <field name="department_id" required="1" readonly="1" />
+                                    </group>
+                                    <group>
+                                        <label for="hrms_external_id" />
+                                        <div name="hrms_department_link">
+                                            <field name="hrms_external_id" readonly="1"
+                                                style="width:auto !important;" />
+                                        </div>
+                                    </group>
+                                    <group>
+                                        <field name="created_at" readonly="1" />
+                                        <field name="updated_at" readonly="1" />
+                                    </group>
+                                    <group>
+                                        <field name="created_at" />
+                                    </group>
                                 </group>
-                                <group>
-                                    <label for="hrms_external_id" />
-                                    <div name="hrms_department_link">
-                                        <field name="hrms_external_id" readonly="1"
-                                            style="width:auto !important;" />
-                                    </div>
-                                </group>
-                                <group>
-                                    <field name="created_at" readonly="1" />
-                                    <field name="updated_at" readonly="1" />
-                                </group>
-                                <group>
-                                    <field name="created_at" />
-                                </group>
-                            </group>
-                            <!-- <div string="Description">
+                                <!-- <div string="Description">
                                     <field name="description" nolabel="1"/>
                                 </div> -->
-                        </page>
-                        <!-- <page string="Images">
+                            </page>
+                            <!-- <page string="Images">
                                 <div string="Images Info" colspan="4">
                                     <field name="image_ids"
                                            context="{'default_hrms_template_id':id}" mode="kanban"
@@ -84,36 +85,37 @@
                                     </field>
                                 </div>
                             </page> -->
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
-    <!--Action of HRMS Departmenr -->
-    <record id="action_hrms_department"
-        model="ir.actions.act_window">
-        <field name="name">HRMS Departmenr</field>
-        <field name="res_model">hrms.hr.department</field>
-        <field name="view_id" ref="hrms_department_tree_view" />
-        <field name="help" type="html">
-            <div>
-                <br />
-                <br />
-                <br />
-                <p>
-                    <b>There are no any Departmenr Created yet</b>
-                </p>
-            </div>
-        </field>
-    </record>
+        <!--Action
+        of HRMS Departmenr -->
+        <record id="action_hrms_department"
+            model="ir.actions.act_window">
+            <field name="name">HRMS Departmenr</field>
+            <field name="res_model">hrms.hr.department</field>
+            <field name="view_id" ref="hrms_department_tree_view" />
+            <field name="help" type="html">
+                <div>
+                    <br />
+                    <br />
+                    <br />
+                    <p>
+                        <b>There are no any Departmenr Created yet</b>
+                    </p>
+                </div>
+            </field>
+        </record>
 
-    <!--Action, redirect instance kanban view to hrms department-->
-    <record id="action_hrms_departments_instance_ept" model="ir.actions.act_window">
-        <field name="name">HRMS Departments</field>
-        <field name="res_model">hrms.hr.department</field>
-        <field name="view_id" ref="hrms_department_tree_view"/>
-        <!-- <field name="domain">[('hrms_instance_id', '=', active_id)]</field> -->
-    </record>
-
+        <!--Action,
+        redirect instance kanban view to hrms department-->
+        <record id="action_hrms_departments_instance_ept" model="ir.actions.act_window">
+            <field name="name">HRMS Departments</field>
+            <field name="res_model">hrms.hr.department</field>
+            <field name="view_id" ref="hrms_department_tree_view" />
+        </record>
+    </data>
 </odoo>

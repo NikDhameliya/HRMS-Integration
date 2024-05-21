@@ -3,7 +3,6 @@
     <data noupdate="1">
         <record forcecreate="True" id="hr_data_dashboard" model="hr.data.dashboard">
             <field name="name">HRMS</field>
-            <field name="model_id" ref="model_hr_data_dashboard"/>
         </record>
     </data>
 </odoo>

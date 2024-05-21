@@ -4,20 +4,21 @@
     <record id="res_config_settings_view_form" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.inherit.hr</field>
         <field name="model">res.config.settings</field>
-        <field name="priority" eval="71"/>
-        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="priority" eval="71" />
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="HRMS Data Import" string="HRMS Data Import" name="hr_data_import" groups="hr.group_hr_manager">
+                <app data-string="HRMS Data Import" string="HRMS Data Import" name="hr_data_import"
+                    groups="hr.group_hr_manager">
                     <block title="HRMS Data Import" name="employee_data_import_setting_container">
                         <div class="content-group">
                             <div class="row mt8">
                                 <label for="hrm_api_key" class="col-lg-5 o_light_label" />
-                                <field name="hrm_api_key"/>
+                                <field name="hrm_api_key" />
                             </div>
                             <div class="row mt8">
-                                <label for="hrm_base_url" class="col-lg-5 o_light_label"/>
-                                <field name="hrm_base_url"/>
+                                <label for="hrm_base_url" class="col-lg-5 o_light_label" />
+                                <field name="hrm_base_url" />
                             </div>
                         </div>
                     </block>
@@ -40,6 +41,6 @@
         parent="menu_hrms_import_configuration"
         sequence="0"
         action="hr_config_settings_action"
-        groups="base.group_system"/>
+        groups="base.group_system" />
 
 </odoo>

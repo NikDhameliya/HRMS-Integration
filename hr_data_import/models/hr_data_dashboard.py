@@ -17,6 +17,10 @@ class HrDataDashboard(models.Model):
         'res.company', string='Company', required=True, default=lambda self: self.env.company)
     auto_import_employees = fields.Boolean(
         string="Auto Create Employees if not found?")
+    auto_import_departments = fields.Boolean(
+        string="Auto Create Departments if not found?")
+    auto_import_leaves = fields.Boolean(
+        string="Auto Create Leaves if not found?")
     color = fields.Integer(string='Color Index')
     employee_ids = fields.One2many('hrms.hr.employee', 'hrms_instance_id',string="Employees")
     department_ids = fields.One2many('hrms.hr.department', 'hrms_instance_id', string="Departments")
