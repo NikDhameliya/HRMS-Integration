@@ -11,5 +11,5 @@ access_department_data_queue_line_ept,access.department.data.queue.line.ept,mode
 access_hrms_employee_data_queue,access.employee.data.queue,model_employee_data_queue,base.group_user,1,1,1,1
 access_hrms_department_data_queue,access.department.data.queue,model_department_data_queue,base.group_user,1,1,1,1
 access_hrms_leave_data_queue,access.leave.data.queue,model_leave_data_queue,base.group_user,1,1,1,1
-access_common_log_book_ept,Common Log Book,model_common_log_book_ept,,1,1,1,1
+access_common_log_book_ept,Common Log Book,model_common_log_book,,1,1,1,1
 access_common_log_lines_ept,Common Log Lines,model_common_log_lines,,1,1,1,1

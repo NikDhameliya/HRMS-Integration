@@ -4,7 +4,7 @@ from odoo import models, fields, api
 
 
 class CommonLogBookEpt(models.Model):
-    _name = "common.log.book.ept"
+    _name = "common.log.book"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = 'id desc'
     _description = "Common log book Ept"
@@ -27,7 +27,7 @@ class CommonLogBookEpt(models.Model):
             @param : vals : Dictionary of common log book create.
         """
         for vals in vals_list:
-            seq = self.env['ir.sequence'].next_by_code('common.log.book.ept') or '/'
+            seq = self.env['ir.sequence'].next_by_code('common.log.book') or '/'
             vals['name'] = seq
         return super(CommonLogBookEpt, self).create(vals_list)
 
@@ -35,7 +35,7 @@ class CommonLogBookEpt(models.Model):
         """
         This method is use to create a log book.
         @param : **kwargs, Pass the argument like,
-        log_book = self.env['common.log.book.ept'].create_common_log_book_ept (module='hr_data_import',
+        log_book = self.env['common.log.book'].create_common_log_book_ept (module='hr_data_import',
         model_name='hr.employee',type='import')
         """
         values = {}

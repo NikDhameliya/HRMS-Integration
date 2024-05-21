@@ -12,7 +12,7 @@ class CommonLogLineEpt(models.Model):
     employee_id = fields.Many2one('hr.employee', ondelete="cascade")
     department_id = fields.Many2one('hr.department', ondelete="cascade")
     leave_id = fields.Many2one('hr.leave', ondelete="cascade")
-    log_book_id = fields.Many2one('common.log.book.ept', ondelete="cascade")
+    log_book_id = fields.Many2one('common.log.book', ondelete="cascade")
     message = fields.Text()
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
@@ -44,3 +44,4 @@ class CommonLogLineEpt(models.Model):
         """
         ir_model_obj = self.env['ir.model']
         return ir_model_obj.sudo().search([('model', '=', model_name)])
+    

@@ -85,3 +85,4 @@ class CommonLogLineEpt(models.Model):
                                   kwargs.get('hrms_leave_data_queue_line_id'))
                                  ])
         return record_id
+   

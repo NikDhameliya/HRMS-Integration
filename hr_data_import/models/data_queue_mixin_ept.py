@@ -37,7 +37,7 @@ class DataQueueMixinEpt(models.AbstractModel):
         :param is_delete_queue: True or False
         :return: Boolean (TRUE/FALSE)
         """
-        log_book_obj = self.env['common.log.book.ept']
+        log_book_obj = self.env['common.log.book']
         model_name = tbl_name.replace('_', '.')
         model = log_book_obj._get_model_id(model_name)
         if is_delete_queue:

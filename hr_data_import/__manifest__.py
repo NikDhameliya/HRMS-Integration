@@ -22,7 +22,8 @@
         'views/employee_data_queue_view.xml',
         'views/department_data_queue_view.xml',
         'views/leave_data_queue_view.xml',
-        'views/common_log_book_view.xml'
+        'views/common_log_book_view.xml',
+        'views/common_log_lines_ept.xml'
     ],
     'cloc_exclude': ['**/*.xml', ],
     'assets': {
