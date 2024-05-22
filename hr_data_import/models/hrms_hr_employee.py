@@ -2,10 +2,6 @@
 
 from odoo import models, fields, api, _
 
-
-
-
-
 class HrmsHrEmployee(models.Model):
     _name = "hrms.hr.employee"
     _description = 'HR Employee HRMS'
@@ -71,6 +67,7 @@ class HrmsHrEmployee(models.Model):
         employee_id = fields.Many2one('hr.employee', string="Employee")
         hrms_employee_id = fields.Many2one('hrms.hr.employee', string="HRMS Employee")
 
+
     class HRContact(models.Model):
         _name = 'hrms.hr.contact'
         _description = 'HR Contact'
@@ -85,8 +82,6 @@ class HrmsHrEmployee(models.Model):
     # def shopify_create_contact_partner(self, vals, instance, queue_line):
     #     """
     #     This method is used to create a contact type customer.
-    #     @author: Maulik Barad on Date 09-Sep-2020.
-    #     @change : pass category_id as tag on vals by Nilam Kubavat for task id : 190111 at 19/05/2022
     #     """
     #     partner_obj = self.env["res.partner"]
     #     common_log_line_obj = self.env["common.log.lines.ept"]
@@ -155,9 +150,6 @@ class HrmsHrEmployee(models.Model):
 
     # def search_shopify_partner(self, shopify_customer_id, shopify_instance_id):
     #     """ This method is used to search the shopify partner.
-    #         :param shopify_customer_id: Id of shopify customer which receive from customer response.
-    #         @author: Haresh Mori @Emipro Technologies Pvt. Ltd on date 27 October 2020 .
-    #         Task_id: 167537
     #     """
     #     partner = False
     #     shopify_partner = self.search([("shopify_customer_id", "=", shopify_customer_id),
@@ -173,9 +165,6 @@ class HrmsHrEmployee(models.Model):
     #     This method used to prepare a partner vals.
     #     @param : self,vals
     #     @return: partner_vals
-    #     @author: Haresh Mori @Emipro Technologies Pvt. Ltd on date 29 August 2020 .
-    #     Task_id: 165956
-    #     @change : pass lang on vals by Nilam Kubavat for task id : 190111 at 19/05/2022
     #     """
     #     partner_obj = self.env["res.partner"]
 

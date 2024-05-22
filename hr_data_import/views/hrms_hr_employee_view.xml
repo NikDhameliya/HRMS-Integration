@@ -1,18 +1,113 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-        <!--Tree view of Employee-->
-        <record id="hrms_employee_tree_view" model="ir.ui.view">
-            <field name="name">Employee Tree View</field>
+
+        <!-- Form view for HRMS Employee -->
+        <record id="view_hrms_employee_form" model="ir.ui.view">
+            <field name="name">hrms.hr.employee.form</field>
             <field name="model">hrms.hr.employee</field>
             <field name="arch" type="xml">
-                <tree create="false" sample="1">
+                <form string="HRMS Employee">
+                    <sheet>
+                        <field name="active" class="oe_inline" invisible='1' />
+                        <div class="ribbon ribbon-top-right" invisible="active == True">
+                            <span class="bg-danger"
+                                style="left: -4px !important;top: 20px !important">Archived
+                            </span>
+                        </div>
+                        <div class="oe_title" style="width: 390px;">
+                            <label class="oe_edit_only" for="name" string="Title" />
+                            <h1>
+                                <field name="name" class="oe_inline" />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" />
+                                <field name="hrms_instance_id" />
+                                <field name="created_at" />
+                                <field name="updated_at" />
+                                <field name="active" />
+                                <field name="hrms_external_id" />
+                                <field name="employee_id" />
+                                <field name="exported_in_hrms" />
+                                <field name="email" />
+                                <field name="job_id" />
+                                <field name="residence" />
+                                <field name="residence_comment" />
+                            </group>
+                            <group>
+                                <field name="country" />
+                                <field name="city" />
+                                <field name="birth_date" />
+                                <field name="linked_in" />
+                                <field name="skype" />
+                                <field name="phone" />
+                                <field name="telegram" />
+                                <field name="additional_email" />
+                                <field name="additional_phone" />
+                                <field name="gender" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="end_test" />
+                                <field name="fired_date" />
+                                <field name="start_date" />
+                                <field name="relocate" />
+                                <field name="duties" />
+                                <field name="description" />
+                                <field name="additional_info" />
+                            </group>
+                            <group>
+                                <field name="skills" />
+                                <field name="skill_ids" widget="many2many_tags"/>
+                                <field name="languages" />
+                                <field name="language_ids" widget="many2many_tags"/>
+                                <field name="team_ids" widget="many2many_tags"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="career_ids"
+                                    context="{'default_hrms_employee_id': active_id}"
+                                    widget="one2many_list" />
+                            </group>
+                            <group>
+                                <field name="contact_ids"
+                                    context="{'default_hrms_employee_id': active_id}"
+                                    widget="one2many_list" />
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="awards" />
+                                <field name="educations" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view for HRMS Employee -->
+        <record id="view_hrms_employee_tree" model="ir.ui.view">
+            <field name="name">hrms.hr.employee.tree</field>
+            <field name="model">hrms.hr.employee</field>
+            <field name="arch" type="xml">
+                <tree string="HRMS Employee">
                     <field name="name" />
-                    <field name="hrms_instance_id" />
-                    <field name="employee_id" />
+                    <field name="email" />
+                    <field name="job_id" />
+                    <field name="company_id" />
+                    <field name="country" />
+                    <field name="city" />
+                    <field name="phone" />
+                    <field name="start_date" />
                 </tree>
             </field>
         </record>
+
 
         <!--Search
         view of employees-->
@@ -24,87 +119,17 @@
                 <search string="Employee">
                     <field name="name" string="Employee"
                         filter_domain="['|','|',('name','ilike',self),('employee_id','ilike',self),('hrms_external_id','ilike',self)]" />
-                    <!-- <filter string="Exported" name=""
-                        icon="terp-accessories-archiver"
-                        domain="[('exported','=','True')]"/> -->
-                    <!-- <group expand="0" string="Group By">
-                    <filter string="Exported"
-                            name="Exported" domain="[]"
-                            context="{'group_by':'exported'}"/>
-                </group> -->
                 </search>
             </field>
         </record>
 
-        <!--Form
-        view of employee-->
-        <record id="hrms_employee_form_view_ept" model="ir.ui.view">
-            <field name="name">HRMS Employee Form View</field>
-            <field name="model">hrms.hr.employee</field>
-            <field name="arch" type="xml">
-                <form string="HRMS Employee Form View" create="false">
-                    <sheet>
-                        <field name="active" class="oe_inline" invisible='1' />
-                        <div class="ribbon ribbon-top-right" invisible="active == True">
-                            <span class="bg-danger"
-                                style="left: -4px !important;top: 20px !important">Archived
-                            </span>
-                        </div>
-
-                        <div class="oe_title" style="width: 390px;">
-                            <label class="oe_edit_only" for="name" string="Title" />
-                            <h1>
-                                <field name="name" class="oe_inline" />
-                            </h1>
-                        </div>
-                        <notebook>
-                            <page string="HRMS Info">
-                                <group>
-                                    <group>
-                                        <field name="hrms_instance_id" />
-                                        <field name="employee_id" required="1" readonly="1" />
-                                    </group>
-                                    <group>
-                                        <label for="hrms_external_id" />
-                                        <div name="hrms_employee_link">
-                                            <field name="hrms_external_id" readonly="1"
-                                                style="width:auto !important;" />
-                                        </div>
-                                    </group>
-                                    <group>
-                                        <field name="created_at" readonly="1" />
-                                        <field name="updated_at" readonly="1" />
-                                    </group>
-                                    <group>
-                                        <field name="created_at" />
-                                    </group>
-                                </group>
-                                <!-- <div string="Description">
-                                <field name="description" nolabel="1"/>
-                            </div> -->
-                            </page>
-                            <!-- <page string="Images">
-                            <div string="Images Info" colspan="4">
-                                <field name="hrms_image_ids"
-                                       context="{'default_hrms_template_id':id}" mode="kanban"
-                                       options="{'create_text':'Add a Media','no_create_edit':True}"
-                                       nolabel="1">
-                                </field>
-                            </div>
-                        </page> -->
-                        </notebook>
-                    </sheet>
-                </form>
-            </field>
-        </record>
 
         <!--Action
         of HRMS Emplotee -->
-        <record id="action_hrms_employee"
-            model="ir.actions.act_window">
+        <record id="action_hrms_employee" model="ir.actions.act_window">
             <field name="name">HRMS Employee</field>
             <field name="res_model">hrms.hr.employee</field>
-            <field name="view_id" ref="hrms_employee_tree_view" />
+            <field name="view_id" ref="view_hrms_employee_tree" />
             <field name="help" type="html">
                 <div>
                     <br />
@@ -122,7 +147,7 @@
         <record id="action_hrms_employees_instance_ept" model="ir.actions.act_window">
             <field name="name">HRMS Employees</field>
             <field name="res_model">hrms.hr.employee</field>
-            <field name="view_id" ref="hrms_employee_tree_view" />
+            <field name="view_id" ref="view_hrms_employee_tree" />
         </record>
 
     </data>

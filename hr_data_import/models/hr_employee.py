@@ -5,7 +5,7 @@ from odoo import models, fields
 class HREmployee(models.Model):
     _inherit = 'hr.employee'
 
-    api_id = fields.Char(string="API ID")
+    hrms_external_id = fields.Char(string='HRMS External ID')
     grade = fields.Char(string="Grade")
     residence_comment = fields.Text(string="Residence Comment")
     skype = fields.Char(string="Skype")
@@ -23,7 +23,12 @@ class HREmployee(models.Model):
     skill_ids = fields.Many2many('hr.skill', string='Skills')
     language_ids = fields.Many2many('res.lang', string='Languages')
     team_ids = fields.Many2many('hr.department', string='Teams')
-    career_ids = fields.One2many('hr.employee.career', 'employee_id', string='Career')
-    contact_ids = fields.One2many('hr.employee.contact', 'employee_id', string='Contacts')
+    career_ids = fields.One2many('hrms.hr.career', 'employee_id', string='Career')
+    contact_ids = fields.One2many('hrms.hr.contact', 'employee_id', string='Contacts')
     awards = fields.Char(string="Awards")
     educations = fields.Char(string="Educations")
+
+    _sql_constraints = [
+        ('hrms_external_id_unique', 'unique(hrms_external_id)',
+         'The hrms_external_id already exists!'),
+    ]

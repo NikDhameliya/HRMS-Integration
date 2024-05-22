@@ -4,7 +4,7 @@
         <record id="action_employee_dashboard_view" model="ir.actions.act_window">
             <field name="name">HRMS Employees</field>
             <field name="res_model">hrms.hr.employee</field>
-            <field name="view_id" ref="hrms_employee_tree_view" />
+            <field name="view_id" ref="view_hrms_employee_tree" />
         </record>
 
         <record id="action_department_dashboard_view" model="ir.actions.act_window">

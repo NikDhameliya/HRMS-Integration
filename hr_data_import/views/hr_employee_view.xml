@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Inherit the existing employee form view to add custom fields -->
+        <record id="view_employee_form_inherited" model="ir.ui.view">
+            <field name="name">hr.employee.form.inherited</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='personal_information']" position="after">
+                    <page name="hrms_public" string="HRMS Information">
+                        <group>
+                            <group string="Additional Details">
+                                <field name="hrms_external_id" />
+                                <field name="awards" />
+                                <field name="educations" />
+                                <field name="grade" />
+                                <field name="end_test" />
+                                <field name="fired_date" />
+                                <field name="start_date" />
+                                <field name="relocate" />
+                                <field name="residence_comment" />
+                                <field name="duties" />
+                                <field name="description" />
+                                <field name="additional_info" />
+                            </group>
+                            <group string="Contact Details">
+                                <field name="skype" />
+                                <field name="linked_in" />
+                                <field name="telegram" />
+                                <field name="additional_email" />
+                                <field name="additional_phone" />
+                            </group>
+                            <group string="Skills and Languages">
+                                <field name="skill_ids" widget="many2many_tags" />
+                                <field name="language_ids" widget="many2many_tags" />
+                            </group>
+                            <group string="Teams">
+                                <field name="team_ids" widget="many2many_tags" />
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Career">
+                        <field name="career_ids" />
+                    </page>
+                    <page string="Contacts">
+                        <field name="contact_ids" />
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

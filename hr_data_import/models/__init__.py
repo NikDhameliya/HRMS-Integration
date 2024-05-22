@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import models
+from . import hr_employee
 from . import hr_data_dashboard
 from . import res_config_settings
 from . import hrms_hr_employee

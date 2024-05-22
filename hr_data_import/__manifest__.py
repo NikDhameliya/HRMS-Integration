@@ -25,6 +25,7 @@
         'views/common_log_lines_ept.xml',
         'views/hrms_hr_carrer_view.xml',
         'views/hrms_hr_contact_view.xml',
+        'views/hr_employee_view.xml',
         'views/menu_items.xml',
     ],
     'cloc_exclude': ['**/*.xml', ],
