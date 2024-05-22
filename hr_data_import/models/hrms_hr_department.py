@@ -14,4 +14,5 @@ class HrmsHrDepartment(models.Model):
     created_at = fields.Datetime()
     updated_at = fields.Datetime()
     hrms_external_id = fields.Char(string="HRMS Department ID")
-    department_id = fields.Many2one('hr.department', string="Department")
+    department_id = fields.Many2one('hr.department', string="Department", ondelete="cascade")
+    exported_in_hrms = fields.Boolean(default=False)

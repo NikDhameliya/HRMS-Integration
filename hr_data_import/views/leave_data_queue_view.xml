@@ -250,8 +250,5 @@
             </field>
         </record>
 
-        <menuitem name="Leave Queue" id="hrms_leave_data_menu"
-            parent="hr_data_import.menu_hr_data_import_root" sequence="4"
-            action="action_hrms_leave_data_queue" />
     </data>
 </odoo>

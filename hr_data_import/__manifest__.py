@@ -15,7 +15,6 @@
         'views/hrms_hr_department_view.xml',
         'views/hrms_hr_leave_view.xml',
         'views/hr_data_dashboard_views.xml',
-        'views/menu_items.xml',
         'views/res_config_settings_views.xml',
         'wizard/process_import_export_view.xml',
         'wizard/queue_process_wizard_view.xml',
@@ -23,7 +22,10 @@
         'views/department_data_queue_view.xml',
         'views/leave_data_queue_view.xml',
         'views/common_log_book_view.xml',
-        'views/common_log_lines_ept.xml'
+        'views/common_log_lines_ept.xml',
+        'views/hrms_hr_carrer_view.xml',
+        'views/hrms_hr_contact_view.xml',
+        'views/menu_items.xml',
     ],
     'cloc_exclude': ['**/*.xml', ],
     'assets': {

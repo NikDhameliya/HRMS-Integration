@@ -14,4 +14,5 @@ class HrmsHrLeave(models.Model):
     created_at = fields.Datetime()
     updated_at = fields.Datetime()
     hrms_external_id = fields.Char(string="HRMS Leave ID")
-    leave_id = fields.Many2one('hr.leave', string="Leave")
+    leave_id = fields.Many2one('hr.leave', string="Leave", ondelete="cascade")
+    exported_in_hrms = fields.Boolean(default=False)

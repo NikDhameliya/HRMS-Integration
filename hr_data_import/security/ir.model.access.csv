@@ -13,3 +13,5 @@ access_hrms_department_data_queue,access.department.data.queue,model_department_
 access_hrms_leave_data_queue,access.leave.data.queue,model_leave_data_queue,base.group_user,1,1,1,1
 access_common_log_book_ept,Common Log Book,model_common_log_book,,1,1,1,1
 access_common_log_lines_ept,Common Log Lines,model_common_log_lines,,1,1,1,1
+access_hrms_hr_career,access.hrms.hr.career,model_hrms_hr_career,base.group_user,1,1,1,1
+access_hrms_hr_contact,access.hrms.hr.contact,model_hrms_hr_contact,base.group_user,1,1,1,1

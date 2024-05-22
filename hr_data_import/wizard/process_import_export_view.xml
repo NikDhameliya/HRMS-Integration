@@ -275,8 +275,6 @@
         </record>
 
 
-        <menuitem id="menu_hrms_processes_ept"
-            parent="hr_data_import.menu_hr_data_import_root" name="Operations"
-            action="action_wizard_hrms_import_orders_in_hr_data_import" sequence="4" />
+
     </data>
 </odoo>

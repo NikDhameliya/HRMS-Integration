@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Form view for HR Contact -->
+        <record id="view_hr_contact_form" model="ir.ui.view">
+            <field name="name">hr.contact.form</field>
+            <field name="model">hrms.hr.contact</field>
+            <field name="arch" type="xml">
+                <form string="HR Contact">
+                    <sheet>
+                        <group>
+                            <field name="type_id" />
+                            <field name="type_name" />
+                            <field name="value" />
+                            <field name="employee_id" />
+                            <field name="hrms_employee_id" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view for HR Contact -->
+        <record id="view_hr_contact_tree" model="ir.ui.view">
+            <field name="name">hr.contact.tree</field>
+            <field name="model">hrms.hr.contact</field>
+            <field name="arch" type="xml">
+                <tree string="HR Contact">
+                    <field name="type_id" />
+                    <field name="type_name" />
+                    <field name="value" />
+                    <field name="employee_id" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action for HR Contact -->
+        <record id="action_hr_contact" model="ir.actions.act_window">
+            <field name="name">HR Contact</field>
+            <field name="res_model">hrms.hr.contact</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first HR Contact record
+                </p>
+            </field>
+        </record>
+
+
+        
+    </data>
+</odoo>

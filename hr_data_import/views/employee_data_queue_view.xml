@@ -251,8 +251,6 @@
             </field>
         </record>
 
-        <menuitem name="Employee Queue" id="hrms_employee_data_menu"
-            parent="hr_data_import.menu_hr_data_import_root" sequence="4"
-            action="action_hrms_employee_data_queue" />
+
     </data>
 </odoo>

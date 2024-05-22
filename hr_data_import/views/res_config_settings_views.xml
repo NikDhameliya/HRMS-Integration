@@ -36,11 +36,6 @@
         <field name="context">{'module' : 'hr_data_import', 'bin_size': False}</field>
     </record>
 
-    <menuitem id="hrms_import_menu_configuration"
-        name="Settings"
-        parent="menu_hrms_import_configuration"
-        sequence="0"
-        action="hr_config_settings_action"
-        groups="base.group_system" />
+
 
 </odoo>
