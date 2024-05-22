@@ -1,18 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-        <!--Tree view of hr department-->
-        <record id="hrms_department_tree_view" model="ir.ui.view">
-            <field name="name">Departments Tree View</field>
-            <field name="model">hrms.hr.department</field>
-            <field name="arch" type="xml">
-                <tree create="false" sample="1">
-                    <field name="name" />
-                    <field name="hrms_instance_id" />
-                    <field name="department_id" />
-                </tree>
-            </field>
-        </record>
 
         <!--Search
     view of Department-->
@@ -36,13 +24,32 @@
             </field>
         </record>
 
-        <!--Form
-    view of Department-->
-        <record id="hrms_department_form_view_ept" model="ir.ui.view">
-            <field name="name">HRMS Department Form View</field>
+        <!-- Tree view for HrmsHrDepartment -->
+        <record id="hrms_department_tree_view" model="ir.ui.view">
+            <field name="name">hrms.hr.department.tree</field>
             <field name="model">hrms.hr.department</field>
             <field name="arch" type="xml">
-                <form string="HRMS Department Form View" create="false">
+                <tree>
+                    <field name="name" />
+                    <field name="company_id" />
+                    <field name="hrms_instance_id" />
+                    <field name="hrms_external_id" />
+                    <field name="department_id" />
+                    <field name="type" />
+                    <field name="number_of_members" />
+                    <field name="number_of_members_with_subteams" />
+                    <field name="team_leader_id" />
+                    <field name="exported_in_hrms" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view for HrmsHrDepartment -->
+        <record id="view_hrms_hr_department_form" model="ir.ui.view">
+            <field name="name">hrms.hr.department.form</field>
+            <field name="model">hrms.hr.department</field>
+            <field name="arch" type="xml">
+                <form>
                     <sheet>
                         <div class="oe_title" style="width: 390px;">
                             <label class="oe_edit_only" for="name" string="Title" />
@@ -50,72 +57,51 @@
                                 <field name="name" class="oe_inline" />
                             </h1>
                         </div>
+                        <group>
+                            <group>
+                                <field name="company_id" />
+                                <field name="hrms_instance_id" />
+                                <field name="hrms_external_id" />
+                                <field name="department_id" />
+                                <field name="type" />
+                            </group>
+                            <group>
+                                <field name="number_of_members" />
+                                <field name="number_of_members_with_subteams" />
+                                <field name="team_leader_id" />
+                                <field name="exported_in_hrms" />
+                            </group>
+                        </group>
                         <notebook>
-                            <page string="HRMS Info">
-                                <group>
-                                    <group>
-                                        <field name="hrms_instance_id" />
-                                        <field name="department_id" required="1" readonly="1" />
-                                    </group>
-                                    <group>
-                                        <label for="hrms_external_id" />
-                                        <div name="hrms_department_link">
-                                            <field name="hrms_external_id" readonly="1"
-                                                style="width:auto !important;" />
-                                        </div>
-                                    </group>
-                                    <group>
-                                        <field name="created_at" readonly="1" />
-                                        <field name="updated_at" readonly="1" />
-                                    </group>
-                                    <group>
-                                        <field name="created_at" />
-                                    </group>
-                                </group>
-                                <!-- <div string="Description">
-                                    <field name="description" nolabel="1"/>
-                                </div> -->
+                            <page string="HR IDs">
+                                <field name="hr_ids" widget="many2many_tags" />
                             </page>
-                            <!-- <page string="Images">
-                                <div string="Images Info" colspan="4">
-                                    <field name="image_ids"
-                                           context="{'default_hrms_template_id':id}" mode="kanban"
-                                           options="{'create_text':'Add a Media','no_create_edit':True}"
-                                           nolabel="1">
-                                    </field>
-                                </div>
-                            </page> -->
+                            <page string="Managers">
+                                <field name="managers" widget="many2many_tags" />
+                            </page>
+                            <page string="Subteams">
+                                <field name="child_ids" widget="many2many_tags" />
+                            </page>
+                            <page string="Parent Team">
+                                <field name="parent_id" />
+                            </page>
                         </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!--Action
-        of HRMS Departmenr -->
-        <record id="action_hrms_department"
-            model="ir.actions.act_window">
-            <field name="name">HRMS Departmenr</field>
+        <!-- Action for HrmsHrDepartment -->
+        <record id="action_hrms_department" model="ir.actions.act_window">
+            <field name="name">HR Departments</field>
             <field name="res_model">hrms.hr.department</field>
-            <field name="view_id" ref="hrms_department_tree_view" />
+            <field name="view_mode">tree,form</field>
             <field name="help" type="html">
-                <div>
-                    <br />
-                    <br />
-                    <br />
-                    <p>
-                        <b>There are no any Departmenr Created yet</b>
-                    </p>
-                </div>
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first HR department
+                </p>
             </field>
         </record>
 
-        <!--Action,
-        redirect instance kanban view to hrms department-->
-        <record id="action_hrms_departments_instance_ept" model="ir.actions.act_window">
-            <field name="name">HRMS Departments</field>
-            <field name="res_model">hrms.hr.department</field>
-            <field name="view_id" ref="hrms_department_tree_view" />
-        </record>
     </data>
 </odoo>

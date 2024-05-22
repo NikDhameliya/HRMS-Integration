@@ -54,7 +54,7 @@
             name="Departments"
             parent="hr_data_import.menu_hrms_data"
             sequence="2"
-            action="hr_data_import.action_hrms_departments_instance_ept" />
+            action="hr_data_import.action_hrms_department" />
 
         <menuitem 
             id="menu_item_hrms_leave"
@@ -123,5 +123,14 @@
             parent="hr_data_import.menu_log_book_ept"
             action="hr_data_import.action_common_log_line_ept"
             sequence="2" />
+        
+        <menuitem 
+            id="menu_hr_leave_detail" 
+            name="HR Leave Details" 
+            parent="hr_data_import.menu_hrms_data" 
+            action="hr_data_import.action_hr_leave_detail"
+            sequence="10" />
+        
+
     </data>
 </odoo>

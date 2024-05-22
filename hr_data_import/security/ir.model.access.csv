@@ -15,3 +15,4 @@ access_common_log_book_ept,Common Log Book,model_common_log_book,,1,1,1,1
 access_common_log_lines_ept,Common Log Lines,model_common_log_lines,,1,1,1,1
 access_hrms_hr_career,access.hrms.hr.career,model_hrms_hr_career,base.group_user,1,1,1,1
 access_hrms_hr_contact,access.hrms.hr.contact,model_hrms_hr_contact,base.group_user,1,1,1,1
+access_hr_leave_detail,access.hr.leave.detail,model_hr_leave_detail,base.group_user,1,1,1,1

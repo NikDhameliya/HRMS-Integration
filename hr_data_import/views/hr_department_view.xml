@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Inherit the existing form view for hr.department -->
+    <record id="view_hr_department_form_inherited" model="ir.ui.view">
+        <field name="name">hr.department.form.inherited</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <sheet position="inside">
+                <group string="HRMS Information">
+                    <field name="hrms_external_id"/>
+                    <field name="type"/>
+                    <field name="number_of_members"/>
+                    <field name="number_of_members_with_subteams"/>
+                    <field name="team_leader_id"/>
+                </group>
+                <notebook position="inside">
+                    <page string="HR IDs">
+                        <field name="hr_ids" widget="many2many_tags"/>
+                    </page>
+                    <page string="Managers">
+                        <field name="managers" widget="many2many_tags"/>
+                    </page>
+                </notebook>
+            </sheet>
+        </field>
+    </record>
+</odoo>
