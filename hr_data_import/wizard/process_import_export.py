@@ -20,11 +20,8 @@ class ProcessImportExport(models.TransientModel):
     hrms_operation = fields.Selection(
         [
             ("sync_employee", "Import Employees"),
-            ("sync_employee_by_remote_ids", "Import Specific Employee(s)"),
             ("sync_department", "Import Departments"),
-            ("sync_department_by_remote_ids", "Import Specific Department(s)"),
             ("sync_leave", "Import Leaves"),
-            ("sync_leave_by_remote_ids", "Import Specific Leave(s)"),
         ],
         default="sync_employee", string="Operation")
     hrms_employee_ids = fields.Text(string="Employee Ids",
@@ -61,14 +58,6 @@ class ProcessImportExport(models.TransientModel):
                 action_name = "hr_data_import.action_hrms_employee_data_queue"
                 form_view_name = "hr_data_import.employee_synced_data_form_view"
 
-        elif self.hrms_operation == "sync_employee_by_remote_ids":
-            employee_queue_ids = employee_data_queue_obj.hrms_create_employee_data_queue(
-                instance, skip_existing_employee=self.skip_existing_employee, employee_ids=self.hrms_employee_ids)
-            if employee_queue_ids:
-                queue_ids = employee_queue_ids
-                action_name = "hr_data_import.action_hrms_employee_data_queue"
-                form_view_name = "hr_data_import.employee_synced_data_form_view"
-
         if self.hrms_operation == "sync_department":
             department_queue_ids = department_data_queue_obj.hrms_create_department_data_queue(
                 instance, self.import_departments,
@@ -78,13 +67,6 @@ class ProcessImportExport(models.TransientModel):
                 action_name = "hr_data_import.action_hrms_department_data_queue"
                 form_view_name = "hr_data_import.department_synced_data_form_view"
 
-        elif self.hrms_operation == "sync_department_by_remote_ids":
-            department_queue_ids = department_data_queue_obj.hrms_create_department_data_queue(
-                instance, skip_existing_department=self.skip_existing_department, department_ids=self.hrms_employee_ids)
-            if department_queue_ids:
-                queue_ids = department_queue_ids
-                action_name = "hr_data_import.action_hrms_department_data_queue"
-                form_view_name = "hr_data_import.department_synced_data_form_view"
             
         if self.hrms_operation == "sync_leave":
             leave_queue_ids = leave_data_queue_obj.hrms_create_leave_data_queue(
@@ -95,13 +77,6 @@ class ProcessImportExport(models.TransientModel):
                 action_name = "hr_data_import.action_hrms_leave_data_queue"
                 form_view_name = "hr_data_import.leave_synced_data_form_view"
 
-        elif self.hrms_operation == "sync_leave_by_remote_ids":
-            leave_queue_ids = leave_data_queue_obj.hrms_create_leave_data_queue(
-                instance, skip_existing_leave=self.skip_existing_leave, leave_ids=self.hrms_employee_ids)
-            if leave_queue_ids:
-                queue_ids = leave_queue_ids
-                action_name = "hr_data_import.action_hrms_leave_data_queue"
-                form_view_name = "hr_data_import.leave_synced_data_form_view"
 
         if queue_ids and action_name and form_view_name:
             action = self.env.ref(action_name).sudo().read()[0]

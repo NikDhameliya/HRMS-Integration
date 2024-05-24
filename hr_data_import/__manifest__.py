@@ -34,17 +34,12 @@
     'cloc_exclude': ['**/*.xml', ],
     'assets': {
         'web.assets_backend': [
-            '/hr_data_import/static/src/scss/graph_widget_ept.scss',
-            '/hr_data_import/static/src/scss/on_boarding_wizards.css',
             '/hr_data_import/static/src/scss/queue_line_dashboard.scss',
-            '/hr_data_import/static/src/js/graph_widget_ept.js',
-            '/hr_data_import/static/src/js/queue_line_dashboard.js',
+            # '/hr_data_import/static/src/js/graph_widget_ept.js',
+            # '/hr_data_import/static/src/js/queue_line_dashboard.js',
             '/hr_data_import/static/src/xml/dashboard_widget.xml',
             '/hr_data_import/static/src/xml/queue_line_dashboard.xml'
-        ],
-        'web.assets_backend': [
-            'hr_data_import/static/src/css/hrms_base.css',
-        ],
+        ]
     },
     'installable': True,
     'application': True,

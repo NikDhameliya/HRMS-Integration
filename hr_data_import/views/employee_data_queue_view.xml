@@ -25,11 +25,11 @@
                     <field name="is_action_require" invisible="1" />
                     <button title="Need manual interaction"
                         icon="fa-exclamation-triangle text-danger"
-                        invisible="'is_action_require' == False or 'state' == 'completed'"
+                        invisible="is_action_require == False or state == 'completed'"
                         special="cancel" />
                     <field name="is_process_queue" invisible="1" />
                     <field name="running_status"
-                        invisible="'is_process_queue' == False" />
+                        invisible="is_process_queue == False" />
                     <field name="activity_ids" widget="list_activity" />
                 </tree>
             </field>
@@ -46,18 +46,18 @@
                         <button name="%(hr_data_import.action_sync_employee_queue_data)d"
                             string="Process Queue Manually"
                             type="action" class="btn-primary"
-                            invisible="'is_process_queue' == True or 'state' == 'completed'" />
+                            invisible="is_process_queue == True or state == 'completed'" />
                         <button
                             name="%(hr_data_import.action_wizard_set_to_completed_employee_queue)d"
                             string="Set To Completed"
                             type="action" class="btn-primary"
-                            invisible="'is_process_queue' == True or 'state' == 'completed'" />
+                            invisible="is_process_queue == True or state == 'completed'" />
 
                         <field name="state" widget="statusbar" />
                         <field name="is_process_queue" invisible="1" />
                     </header>
                     <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                        invisible="'is_action_require' == True or 'state' == 'completed'">
+                        invisible="is_action_require == True or state == 'completed'">
 
                         <strong> - Need to process this queue manually. There are 3 attempts been
                             made by automated action to process this queue, but due to some reason
@@ -87,7 +87,7 @@
                             </button>
                             <button id="fail_state_count" class="oe_stat_button" disabled="1"
                                 icon="fa-times"
-                                invisible="'state' == 'partially_completed'">
+                                invisible="state == 'partially_completed'">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_value">
                                         <field name="fail_state_count" readonly="1" />
@@ -96,7 +96,7 @@
                                 </div>
                             </button>
                             <button id="fail_state_count_sub" class="oe_stat_button" disabled="1"
-                                invisible="'state' != 'partially_completed'">
+                                invisible="state != 'partially_completed'">
                                 <span class="fa-stack fa-lg"
                                     style="padding-top: 6px; margin-left:2px; margin-top:2PX; font-size: 22px; color:#ff0000;">
                                     <i class="fa fa-times-circle" title="Time Circle"
@@ -107,7 +107,7 @@
                             </button>
                             <button id="done_state_count" class="oe_stat_button" disabled="1"
                                 icon="fa-check"
-                                invisible="'state' == 'completed'">
+                                invisible="state == 'completed'">
 
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_value">
@@ -117,7 +117,7 @@
                                 </div>
                             </button>
                             <button id="done_state_count_sub" class="oe_stat_button" disabled="1"
-                                invisible="'state' != 'completed'">
+                                invisible="state != 'completed'">
                                 <span class="fa-stack fa-lg"
                                     style="padding-top: 6px; margin-left:15px; color:#00ff00;">
                                     <i class="fa fa-check fa-stack-1x" style="margin-left:4px;"
@@ -141,9 +141,9 @@
                             </button>
                         </div>
                         <widget name="web_ribbon" text="Processed"
-                            invisible="'state' != 'completed'" />
+                            invisible="state != 'completed'" />
                         <widget name="web_ribbon" text="Processing..."
-                            invisible="'is_process_queue' != False" />
+                            invisible="is_process_queue != False" />
                         <div>
                             <h1>
                                 <field name="name" />

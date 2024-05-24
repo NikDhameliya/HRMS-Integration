@@ -25,76 +25,60 @@
             <field name="name">hr.data dashboard</field>
             <field name="model">hr.data.dashboard</field>
             <field name="arch" type="xml">
-                <kanban
-                    class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_hrms_kanban"
-                    create="0" style="width:450px;">
-                    <field name="name" />
-                    <field name="color" />
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_hrms_kanban" create="0" style="width:450px;">
+                    <field name="name"/>
+                    <field name="color"/>
+                    <field name="total_employee"/>
+                    <field name="total_department"/>
+                    <field name="total_leave"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div
-                                t-attf-class="#{kanban_color(record.color.raw_value)} record_dashboard_ept">
-                                <div class="o_kanban_card_header">
-                                    <div class="o_kanban_card_header_title">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} record_dashboard_ept">
+                                <div class="row o_kanban_card_header">
+                                    <div class="col-8 o_kanban_card_header_title">
                                         <div class="o_primary">
-                                            <t t-esc="record.name.value" />
+                                            <t t-esc="record.name.value"/>
                                         </div>
-                                        <div class="o_kanban_manage_button_section">
-                                            <a class="o_kanban_manage_toggle_button" href="#">
-                                                <i class="fa fa-ellipsis-v" aria-label="Selection"
-                                                    role="img" title="Selection" />
+                                    </div>
+                                    <div class="col-4 border-right">
+                                        <a role="button" name="%(hr_data_import.action_wizard_hrms_import_orders_in_hr_data_import)d" type="action" class="d-flex flex-column align-items-center btn btn-primary">
+                                            <span>Operations</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <div class="container o_kanban_card_content">
+                                    <div class="row mt16">
+                                        <div class="col-4 border-right">
+                                            <a role="button" name="%(hr_data_import.action_employee_dashboard_view)d" type="action" class="d-flex flex-column align-items-center btn btn-link">
+                                                <span class="font-weight-bold">
+                                                    <t t-esc="record.total_employee.value"/>
+                                                </span>
+                                                <span>Employees</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-4 border-right">
+                                            <a role="button" name="%(hr_data_import.action_department_dashboard_view)d" type="action" class="d-flex flex-column align-items-center btn btn-link">
+                                                <span class="font-weight-bold">
+                                                    <t t-esc="record.total_department.value"/>
+                                                </span>
+                                                <span>Departments</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-4">
+                                            <a role="button" name="%(hr_data_import.action_leave_dashboard_view)d" type="action" class="d-flex flex-column align-items-center btn btn-link">
+                                                <span class="font-weight-bold">
+                                                    <t t-esc="record.total_leave.value"/>
+                                                </span>
+                                                <span>Leaves</span>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div
-                                    class="container o_kanban_card_manage_pane dropdown-menu"
-                                    role="menu">
-                                    <div class="row">
-                                        <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                            <div role="menuitem" class="o_kanban_card_manage_title">
-                                                <span>Employees</span>
-                                            </div>
-                                            <div role="menuitem">
-                                                <a
-                                                    name="%(hr_data_import.action_employee_dashboard_view)d"
-                                                    type="action" title="Imported">
-                                                    Imported
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                            <div role="menuitem" class="o_kanban_card_manage_title">
-                                                <span>Departments</span>
-                                            </div>
-                                            <div role="menuitem">
-                                                <a
-                                                    name="%(hr_data_import.action_department_dashboard_view)d"
-                                                    type="action" title="Imported">
-                                                    Imported
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="col-xs-3 o_kanban_card_manage_section o_kanban_manage_view">
-                                            <div role="menuitem" class="o_kanban_card_manage_title">
-                                                <span>Leaves</span>
-                                            </div>
-                                            <div role="menuitem">
-                                                <a
-                                                    name="%(hr_data_import.action_leave_dashboard_view)d"
-                                                    type="action" title="Imported">
-                                                    Imported
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div t-if="widget.editable"
-                                        class="o_kanban_card_manage_settings row">
-                                        <div class="col-xs-8">
-                                            <ul class="oe_kanban_colorpicker" data-field="color" />
+                                <div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                    <div t-if="widget.editable" class="o_kanban_card_manage_settings row">
+                                        <div class="col-8" role="menuitem" aria-haspopup="true">
+                                            <ul role="menu" class="oe_kanban_colorpicker" data-field="color"/>
                                         </div>
                                     </div>
                                 </div>

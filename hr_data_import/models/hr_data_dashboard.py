@@ -25,8 +25,18 @@ class HrDataDashboard(models.Model):
     employee_ids = fields.One2many('hrms.hr.employee', 'hrms_instance_id',string="Employees")
     department_ids = fields.One2many('hrms.hr.department', 'hrms_instance_id', string="Departments")
     leave_ids = fields.One2many('hrms.hr.leave', 'hrms_instance_id', string="Leaves")
+    total_employee = fields.Integer(string='Total Employee', compute='get_kanban_counts', store=True)
+    total_department = fields.Integer(string='Total Department', compute='get_kanban_counts', store=True)
+    total_leave = fields.Integer(string='Total Leave', compute='get_kanban_counts', store=True)
     active = fields.Boolean(default=True)
     
+    @api.depends('employee_ids', 'department_ids', 'leave_ids')
+    def get_kanban_counts(self):
+        for data in self:
+            data.total_employee = len(self.employee_ids.ids)
+            data.total_department = len(self.department_ids.ids)
+            data.total_leave = len(self.leave_ids.ids)
+
     def _compute_kanban_hrms_order_data(self):
         for record in self:
             # Employee count query

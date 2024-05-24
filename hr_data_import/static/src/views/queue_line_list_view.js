@@ -7,11 +7,11 @@ import { useService } from "@web/core/utils/hooks";
 import { Component, onWillStart } from "@odoo/owl";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
-import { QueueLineEptDashBoard } from '@common_connector_library/views/queue_line_dashboard';
+import { QueueLineEptDashBoard } from '@hr_data_import/views/queue_line_dashboard';
 
 export class QueueLineEptDashboardRenderer extends ListRenderer {};
 
-QueueLineEptDashboardRenderer.template = 'common_connector_library.QueueLineEptListView';
+QueueLineEptDashboardRenderer.template = 'hr_data_import.QueueLineEptListView';
 
 
 QueueLineEptDashboardRenderer.components= Object.assign({}, ListRenderer.components, {QueueLineEptDashBoard});

@@ -29,7 +29,7 @@
                                 </group>
                             </group>
                             <div name="msg_opr_main">
-                                <div invisible="'hrms_operation' !=  'sync_employee'">
+                                <div invisible="hrms_operation !=  'sync_employee'">
                                     <p colspan="2" class="alert alert-warning" role="alert">
                                         <b>
                                             <u>
@@ -48,7 +48,7 @@
                                         </b>
                                     </p>
                                 </div>
-                                <div invisible="'hrms_operation' !=  'sync_department'">
+                                <div invisible="hrms_operation !=  'sync_department'">
                                     <p colspan="2" class="alert alert-warning" role="alert">
                                         <b>
                                             <u>
@@ -67,7 +67,7 @@
                                         </b>
                                     </p>
                                 </div>
-                                <div invisible="'hrms_operation' !=  'sync_leave'">
+                                <div invisible="hrms_operation !=  'sync_leave'">
                                     <p colspan="2" class="alert alert-warning" role="alert">
                                         <b>
                                             <u>
@@ -92,17 +92,17 @@
                                     <div class="row">
                                         <div class='col-md-6'>
                                             <group name='sync_employees'
-                                                invisible="'hrms_operation' != 'sync_employees'">
+                                                invisible="hrms_operation != 'sync_employee'">
                                                 <field name="skip_existing_employee" />
                                             </group>
                                             <group name='sync_leave'
-                                                invisible="'hrms_operation' != 'sync_leave'">
+                                                invisible="hrms_operation != 'sync_leave'">
                                                 <field name="skip_existing_leave" />
                                             </group>
                                         </div>
                                         <div class="col-md-6">
                                             <group name='sync_department'
-                                                invisible="'hrms_operation' != 'sync_department'">
+                                                invisible="hrms_operation != 'sync_department'">
                                                 <field name="skip_existing_department" />
                                             </group>
                                         </div>

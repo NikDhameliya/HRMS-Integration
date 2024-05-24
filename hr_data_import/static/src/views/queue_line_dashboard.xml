@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates>
-    <t t-name="common_connector_library.QueueLineDashboard">
+    <t t-name="hr_data_import.QueueLineDashboard">
         <div class="o_queue_line_dashboard container-fluid py-4 border-bottom bg-white">
             <div class="row justify-content-between gap-3 gap-lg-0">
                 <div class="col-12 col-lg-5 col-xl-5 col-xxl-5 flex-grow-1 flex-lg-grow-0 flex-shrink-0">

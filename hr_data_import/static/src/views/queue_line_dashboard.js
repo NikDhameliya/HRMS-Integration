@@ -80,4 +80,4 @@ export class QueueLineEptDashBoard extends Component {
 
 }
 
-QueueLineEptDashBoard.template = "common_connector_library.QueueLineDashboard";
+QueueLineEptDashBoard.template = "hr_data_import.QueueLineDashboard";

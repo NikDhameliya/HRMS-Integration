@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <template>
-    <t t-name="common_connector_library.EmiproDashboardGraph">
+    <t t-name="hr_data_import.EmiproDashboardGraph">
         <select class="border-0 h7 position-absolute" id="sort_order_data" t-attf-value="selectedOption" t-on-change="onchangeSortOrderData">
                 <option value="week"
                         t-att-selected="props.graph_data.sort_on == 'week' ? 'selected' : undefined">
@@ -63,7 +63,7 @@
                             <a id="instance_log" t-on-click="_getLog">
                                 <span class="mr4">
                                     <img class="img img-responsive m-auto"
-                                         src="/common_connector_library/static/src/img/log.svg"
+                                         src="/hr_data_import/static/src/img/log.svg"
                                          style="width: 16px;display: inline-block;"/>
                                 </span>
                                 <span class=" font-weight-bold">Logs</span>
