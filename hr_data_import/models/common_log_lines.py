@@ -9,12 +9,9 @@ _logger = logging.getLogger(__name__)
 class CommonLogLineEpt(models.Model):
     _inherit = "common.log.lines"
 
-    hrms_employee_data_queue_line_id = fields.Many2one("employee.data.queue.line",
-                                                         "HRMS Employee Queue Line")
-    hrms_department_data_queue_line_id = fields.Many2one("department.data.queue.line",
-                                                       "HRMS Department Queue Line")
-    hrms_leave_data_queue_line_id = fields.Many2one("leave.data.queue.line",
-                                                          "HRMS Leave Queue Line")
+    hrms_employee_id = fields.Many2one("hrms.hr.employee", "HRMS Employee Queue Line")
+    hrms_department_id = fields.Many2one("hrms.hr.department", "HRMS Department Queue Line")
+    hrms_leave_id = fields.Many2one("hrms.hr.leave", "HRMS Leave Queue Line")
     hrms_instance_id = fields.Many2one("hr.data.dashboard", "HRMS Instance")
 
     def create_crash_queue_schedule_activity(self, queue_id, model, note):
@@ -77,12 +74,12 @@ class CommonLogLineEpt(models.Model):
         record_id = self.search([('hrms_instance_id', '=', kwargs.get('hrms_instance_id')),
                                  ('model_id', '=', model),
                                  ('message', '=', kwargs.get('message')),
-                                 ('hrms_employee_data_queue_line_id', '=',
-                                  kwargs.get('hrms_employee_data_queue_line_id')),
-                                 ('hrms_department_data_queue_line_id', '=',
-                                  kwargs.get('hrms_department_data_queue_line_id')),
-                                 ('hrms_leave_data_queue_line_id', '=',
-                                  kwargs.get('hrms_leave_data_queue_line_id'))
+                                 ('hrms_employee_id', '=',
+                                  kwargs.get('hrms_employee_id')),
+                                 ('hrms_department_id', '=',
+                                  kwargs.get('hrms_department_id')),
+                                 ('hrms_leave_id', '=',
+                                  kwargs.get('hrms_leave_id'))
                                  ])
         return record_id
    

@@ -25,12 +25,11 @@
                             <group>
                                 <field name="company_id" />
                                 <field name="hrms_instance_id" />
-                                <field name="created_at" />
-                                <field name="updated_at" />
+                                <field name="create_date" />
+                                <field name="write_date" />
                                 <field name="active" />
                                 <field name="hrms_external_id" />
                                 <field name="employee_id" />
-                                <field name="exported_in_hrms" />
                                 <field name="email" />
                                 <field name="job_id" />
                                 <field name="residence" />

@@ -4,13 +4,6 @@ access_hrms_hr_employee,hrms.hr.employee.user.access,model_hrms_hr_employee,base
 access_hrms_hr_department,hrms.hr.department.user.access,model_hrms_hr_department,base.group_user,1,1,1,1
 access_hrms_hr_leave,hrms.hr.leave.user.access,model_hrms_hr_leave,base.group_user,1,1,1,1
 access_process_import_export,access.process.import.export,model_process_import_export,base.group_user,1,1,1,1
-access_queue_process,access.queue.process,model_queue_process,base.group_user,1,1,1,1
-access_employee_data_queue_line,access.employee.data.queue.line,model_employee_data_queue_line,base.group_user,1,1,1,1
-access_leave_data_queue_line,access.leave.data.queue.line,model_leave_data_queue_line,base.group_user,1,1,1,1
-access_department_data_queue_line_ept,access.department.data.queue.line.ept,model_department_data_queue_line,base.group_user,1,1,1,1
-access_hrms_employee_data_queue,access.employee.data.queue,model_employee_data_queue,base.group_user,1,1,1,1
-access_hrms_department_data_queue,access.department.data.queue,model_department_data_queue,base.group_user,1,1,1,1
-access_hrms_leave_data_queue,access.leave.data.queue,model_leave_data_queue,base.group_user,1,1,1,1
 access_common_log_book_ept,Common Log Book,model_common_log_book,,1,1,1,1
 access_common_log_lines_ept,Common Log Lines,model_common_log_lines,,1,1,1,1
 access_hrms_hr_career,access.hrms.hr.career,model_hrms_hr_career,base.group_user,1,1,1,1

@@ -12,11 +12,9 @@ class HrmsHrLeave(models.Model):
     company_id = fields.Many2one(
         'res.company', string='Company', required=True, default=lambda self: self.env.company)
     hrms_instance_id = fields.Many2one('hr.data.dashboard', string="HRMS Instance", required=True)
-    created_at = fields.Datetime()
     updated_at = fields.Datetime()
     hrms_external_id = fields.Char(string="HRMS Leave ID")
     leave_id = fields.Many2one('hr.leave', string="Leave", ondelete="cascade")
-    exported_in_hrms = fields.Boolean(default=False)
     business_trip = fields.One2many('hr.leave.detail', 'leave_id', string="Business Trip")
     home_work = fields.One2many('hr.leave.detail', 'leave_id', string="Home Work")
     sick_leave = fields.One2many('hr.leave.detail', 'leave_id', string="Sick Leave")

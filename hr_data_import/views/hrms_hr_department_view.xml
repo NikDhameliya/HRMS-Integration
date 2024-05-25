@@ -39,7 +39,6 @@
                     <field name="number_of_members" />
                     <field name="number_of_members_with_subteams" />
                     <field name="team_leader_id" />
-                    <field name="exported_in_hrms" />
                 </tree>
             </field>
         </record>
@@ -69,7 +68,6 @@
                                 <field name="number_of_members" />
                                 <field name="number_of_members_with_subteams" />
                                 <field name="team_leader_id" />
-                                <field name="exported_in_hrms" />
                             </group>
                         </group>
                         <notebook>

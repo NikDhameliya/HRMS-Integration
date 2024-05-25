@@ -18,11 +18,8 @@
                         <group>
                             <field name="company_id" />
                             <field name="hrms_instance_id" />
-                            <field name="created_at" />
-                            <field name="updated_at" />
                             <field name="hrms_external_id" />
                             <field name="leave_id" />
-                            <field name="exported_in_hrms" />
                             <field name="end_test" />
                             <field name="fired_date" />
                         </group>

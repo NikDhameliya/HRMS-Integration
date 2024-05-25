@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+import logging
+
+_logger = logging.getLogger("HRMS Operations")
+
 
 class HrmsHrEmployee(models.Model):
     _name = "hrms.hr.employee"
@@ -10,13 +14,11 @@ class HrmsHrEmployee(models.Model):
     company_id = fields.Many2one(
         'res.company', string='Company', required=True, default=lambda self: self.env.company)
     hrms_instance_id = fields.Many2one(
-        'hr.data.dashboard', string="HRMS Instance", required=True)
-    created_at = fields.Datetime()
-    updated_at = fields.Datetime()
+        'hr.data.dashboard', string="HRMS Instance")
     active = fields.Boolean(default=True)
     hrms_external_id = fields.Char(string="HRMS Employee ID")
-    employee_id = fields.Many2one('hr.employee', string="Employee", ondelete="cascade")
-    exported_in_hrms = fields.Boolean(default=False)
+    employee_id = fields.Many2one(
+        'hr.employee', string="Employee", ondelete="cascade")
     email = fields.Char(string='Email')
     job_id = fields.Many2one('hr.job', string='Position')
     residence = fields.Char(string='Residence')
@@ -30,7 +32,8 @@ class HrmsHrEmployee(models.Model):
     telegram = fields.Char(string='Telegram')
     additional_email = fields.Char(string='Additional Email')
     additional_phone = fields.Char(string='Additional Phone')
-    gender = fields.Selection([('male', 'Male'), ('female', 'Female'), ('other', 'Other')], string="Gender")
+    gender = fields.Selection(
+        [('male', 'Male'), ('female', 'Female'), ('other', 'Other')], string="Gender")
     end_test = fields.Date(string="End Test")
     fired_date = fields.Date(string="Fired Date")
     start_date = fields.Date(string="Start Date")
@@ -43,155 +46,193 @@ class HrmsHrEmployee(models.Model):
     languages = fields.Char(string="Languages")
     language_ids = fields.Many2many('res.lang', string='Languages')
     team_ids = fields.Many2many('hr.department', string='Teams')
-    career_ids = fields.One2many('hrms.hr.career', 'hrms_employee_id', string='Career')
-    contact_ids = fields.One2many('hrms.hr.contact', 'hrms_employee_id', string='Contacts')
+    career_ids = fields.One2many(
+        'hrms.hr.career', 'hrms_employee_id', string='Career')
+    contact_ids = fields.One2many(
+        'hrms.hr.contact', 'hrms_employee_id', string='Contacts')
     awards = fields.Char(string="Awards")
     educations = fields.Char(string="Educations")
 
+    def hrms_create_employee(self, employee_data, skip_existing_employee):
+        employee_obj = self.env["hrms.hr.employee"]
+        hr_employee_obj = self.env['hr.employee']
+        res_country_obj = self.env['res.country']
+        hr_department_obj = self.env['hr.department']
+        hr_job_obj = self.env['hr.job']
 
-    class HRCareer(models.Model):
-        _name = 'hrms.hr.career'
-        _description = 'HR Career'
+        employee_ids = []
 
-        start_date = fields.Date(string="Start Date")
-        end_date = fields.Date(string="End Date")
-        test_period_start_date = fields.Date(string="Test Period Start Date")
-        test_period_end_date = fields.Date(string="Test Period End Date")
-        company_name = fields.Char(string="Company Name")
-        department = fields.Char(string="Department")
-        position = fields.Char(string="Position")
-        grade = fields.Char(string="Grade")
-        place = fields.Char(string="Place")
-        team = fields.Char(string="Team")
-        comment = fields.Text(string="Comment")
-        employee_id = fields.Many2one('hr.employee', string="Employee")
-        hrms_employee_id = fields.Many2one('hrms.hr.employee', string="HRMS Employee")
+        for employee in employee_data:
+            employee_rec = employee_obj.search(
+                [('hrms_external_id', '=', employee.get('id'))], limit=1)
+            if skip_existing_employee and employee_rec:
+                continue
+            country_id = res_country_obj.search(
+                [('name', '=', employee.get('country'))], limit=1)
+            team_ids = []
+            for team in employee.get('team', []):
+                team_rec = hr_department_obj.search(
+                    [('name', '=', team.get('name'))], limit=1)
+                if not team_rec:
+                    team_rec = hr_department_obj.create(
+                        {'name': team.get('name')})
+                team_ids.append(team_rec.id)
+            job_id = hr_job_obj.search(
+                [('name', '=', employee.get('position'))], limit=1)
+            if not job_id:
+                job_id = hr_job_obj.create({'name': employee.get('position')})
+                
+            # Handling skills, languages, awards, educations
+            skill_ids = []
+            for skill in employee.get('skills', []):
+                skill_rec = self.env['hr.skill'].search([('name', '=', skill)], limit=1)
+                if not skill_rec:
+                    skill_rec = self.env['hr.skill'].create({'name': skill})
+                skill_ids.append(skill_rec.id)
+
+            language_ids = []
+            #TODO check language search
+            for language in employee.get('languages', []):
+                language_rec = self.env['res.lang'].search([('name', 'like', language)], limit=1)
+                if language_rec:
+                    language_ids.append(language_rec.id)
+                else:
+                     _logger.info("Language %s Not found" % (language))
+
+            awards = employee.get('awards', "")
+            educations = employee.get('educations', "")
+
+            employee_vals = {
+                'name': employee.get('name'),
+                'email': employee.get('email'),
+                'phone': employee.get('phone'),
+                'skype': employee.get('skype'),
+                'linked_in': employee.get('linked_in'),
+                'telegram': employee.get('telegram'),
+                'birth_date': employee.get('birth_date'),
+                'end_test': employee.get('end_test'),
+                'fired_date': employee.get('fired_date'),
+                'start_date': employee.get('start_date'),
+                'gender': 'male' if employee.get('gender') == 1 else 'female',
+                'additional_email': employee.get('additional_email'),
+                'additional_phone': employee.get('additional_phone'),
+                'relocate': employee.get('relocate'),
+                'duties': employee.get('duties'),
+                'description': employee.get('description'),
+                'additional_info': employee.get('additional_info'),
+                'residence': employee.get('residence'),
+                'residence_comment': employee.get('residence_comment'),
+                'country': country_id.id if country_id else False,
+                'city': employee.get('city'),
+                'hrms_external_id': employee.get('id'),
+                'company_id': self.env.company.id,
+                'team_ids': [(6, 0, team_ids)],
+                'job_id': job_id.id if job_id else False,
+                'skill_ids': [(6, 0, skill_ids)],
+                'language_ids': [(6, 0, language_ids)],
+                'awards': awards,
+                'educations': educations,
+            }
+
+            if employee_rec:
+                employee_rec.write(employee_vals)
+                hr_employee = employee_rec.employee_id
+            else:
+                hr_employee = hr_employee_obj.create({
+                    'name': employee.get('name'),
+                    'work_email': employee.get('email'),
+                    'work_phone': employee.get('phone'),
+                    'job_id': job_id.id if job_id else False,
+                    'department_id': team_ids[0] if team_ids else False,
+                    'country_id': country_id.id if country_id else False,
+                    'address_home_id': employee.get('residence'),
+                    'city': employee.get('city'),
+                    'birthday': employee.get('birth_date'),
+                    'start_date': employee.get('start_date'),
+                    'gender': 'male' if employee.get('gender') == 1 else 'female',
+                    'hrms_external_id': employee.get('id'),
+                    'grade': employee.get('grade', ""),
+                    'residence_comment': employee.get('residence_comment'),
+                    'skype': employee.get('skype'),
+                    'linked_in': employee.get('linked_in'),
+                    'telegram': employee.get('telegram'),
+                    'additional_email': employee.get('additional_email'),
+                    'additional_phone': employee.get('additional_phone'),
+                    'end_test': employee.get('end_test'),
+                    'fired_date': employee.get('fired_date'),
+                    'relocate': employee.get('relocate'),
+                    'duties': employee.get('duties'),
+                    'description': employee.get('description'),
+                    'additional_info': employee.get('additional_info'),
+                    'awards': awards,
+                    'educations': educations
+                })
+
+                employee_vals['employee_id'] = hr_employee.id
+                employee_rec = employee_obj.create(employee_vals)
+
+            employee_ids.append(employee_rec.id)
+
+            for contact in employee.get('contacts', []):
+                contact_vals = {
+                    'type_id': contact.get('type_id'),
+                    'type_name': contact.get('type_name'),
+                    'value': contact.get('value'),
+                    'hrms_employee_id': employee_rec.id
+                }
+                contact_rec = employee_rec.contact_ids.search([('type_id', '=', contact.get(
+                    'type_id')), ('hrms_employee_id', '=', employee_rec.id)], limit=1)
+                if contact_rec:
+                    contact_rec.write(contact_vals)
+                else:
+                    employee_rec.contact_ids.create(contact_vals)
+
+            for career in employee.get('career', []):
+                career_vals = {
+                    'start_date': career.get('start_date'),
+                    'end_date': career.get('end_date'),
+                    'position': career.get('position'),
+                    'team': career.get('team'),
+                    'comment': career.get('comment'),
+                    'hrms_employee_id': employee_rec.id
+                }
+                career_rec = employee_rec.career_ids.search([('start_date', '=', career.get('start_date')), (
+                    'end_date', '=', career.get('end_date')), ('hrms_employee_id', '=', employee_rec.id)], limit=1)
+                if career_rec:
+                    career_rec.write(career_vals)
+                else:
+                    employee_rec.career_ids.create(career_vals)
+
+        return employee_ids
 
 
-    class HRContact(models.Model):
-        _name = 'hrms.hr.contact'
-        _description = 'HR Contact'
+class HRCareer(models.Model):
+    _name = 'hrms.hr.career'
+    _description = 'HR Career'
 
-        type_id = fields.Integer(string="Type ID")
-        type_name = fields.Char(string="Type Name")
-        value = fields.Char(string="Value")
-        employee_id = fields.Many2one('hr.employee', string="Employee")
-        hrms_employee_id = fields.Many2one('hrms.hr.employee', string="HRMS Employee")
+    start_date = fields.Date(string="Start Date")
+    end_date = fields.Date(string="End Date")
+    test_period_start_date = fields.Date(string="Test Period Start Date")
+    test_period_end_date = fields.Date(string="Test Period End Date")
+    company_name = fields.Char(string="Company Name")
+    department = fields.Char(string="Department")
+    position = fields.Char(string="Position")
+    grade = fields.Char(string="Grade")
+    place = fields.Char(string="Place")
+    team = fields.Char(string="Team")
+    comment = fields.Text(string="Comment")
+    employee_id = fields.Many2one('hr.employee', string="Employee")
+    hrms_employee_id = fields.Many2one(
+        'hrms.hr.employee', string="HRMS Employee")
 
 
-    # def shopify_create_contact_partner(self, vals, instance, queue_line):
-    #     """
-    #     This method is used to create a contact type customer.
-    #     """
-    #     partner_obj = self.env["res.partner"]
-    #     common_log_line_obj = self.env["common.log.lines.ept"]
+class HRContact(models.Model):
+    _name = 'hrms.hr.contact'
+    _description = 'HR Contact'
 
-    #     shopify_instance_id = instance.id
-    #     shopify_customer_id = vals.get("id", False)
-    #     first_name = vals.get("first_name", "")
-    #     last_name = vals.get("last_name", "")
-    #     email = vals.get("email", "")
-
-    #     if not first_name and not last_name and not email:
-    #         message = "First name, Last name and Email are not found in customer data."
-    #         common_log_line_obj.create_common_log_line_ept(shopify_instance_id=instance.id, message=message,
-    #                                                        model_name='res.partner',
-    #                                                        shopify_customer_data_queue_line_id=queue_line.id
-    #                                                        if queue_line else False)
-    #         return False
-
-    #     name = ""
-    #     if first_name:
-    #         name = "%s" % first_name
-    #     if last_name:
-    #         name += " %s" % last_name if name else "%s" % last_name
-    #     if not name and email:
-    #         name = email
-
-    #     partner = self.search_shopify_partner(shopify_customer_id, shopify_instance_id)
-    #     tags = vals.get("tags").split(",") if vals.get("tags") != '' else vals.get("tags")
-    #     tag_ids = []
-    #     for tag in tags:
-    #         tag_ids.append(partner_obj.create_or_search_tag(tag))
-
-    #     if partner:
-    #         if not partner.parent_id:
-    #             partner = self.update_partner_with_company(instance, vals.get("default_address", {}), False, partner)
-    #         partner.write({"category_id": tag_ids})
-    #         return partner
-
-    #     shopify_partner_values = {"shopify_customer_id": shopify_customer_id,
-    #                               "shopify_instance_id": shopify_instance_id}
-    #     if email:
-    #         partner = partner_obj.search_partner_by_email(email)
-
-    #         if partner:
-    #             partner.write({"is_shopify_customer": True, "category_id": tag_ids})
-    #             shopify_partner_values.update({"partner_id": partner.id})
-    #             self.create(shopify_partner_values)
-    #             return partner
-
-    #     partner_vals = self.shopify_prepare_partner_vals(vals.get("default_address", {}), instance)
-    #     partner_vals.update({
-    #         "name": name,
-    #         "email": email,
-    #         "customer_rank": 1,
-    #         "is_shopify_customer": True,
-    #         "type": "contact",
-    #         "category_id": tag_ids,
-    #         "phone": vals.get("phone", "") if not partner_vals.get("phone") else partner_vals.get("phone")
-    #     })
-    #     partner = partner_obj.create(partner_vals)
-
-    #     shopify_partner_values.update({"partner_id": partner.id})
-    #     self.create(shopify_partner_values)
-    #     partner = self.update_partner_with_company(instance, vals.get("default_address", {}), False, partner)
-    #     return partner
-
-    # def search_shopify_partner(self, shopify_customer_id, shopify_instance_id):
-    #     """ This method is used to search the shopify partner.
-    #     """
-    #     partner = False
-    #     shopify_partner = self.search([("shopify_customer_id", "=", shopify_customer_id),
-    #                                    ("shopify_instance_id", "=", shopify_instance_id)], limit=1)
-    #     if shopify_partner:
-    #         partner = shopify_partner.partner_id
-    #         return partner
-
-    #     return partner
-
-    # def shopify_prepare_partner_vals(self, vals, instance=False):
-    #     """
-    #     This method used to prepare a partner vals.
-    #     @param : self,vals
-    #     @return: partner_vals
-    #     """
-    #     partner_obj = self.env["res.partner"]
-
-    #     first_name = vals.get("first_name")
-    #     last_name = vals.get("last_name")
-    #     name = "%s %s" % (first_name, last_name)
-
-    #     zipcode = vals.get("zip")
-    #     state_code = vals.get("province_code")
-
-    #     country_code = vals.get("country_code")
-    #     country = partner_obj.get_country(country_code)
-
-    #     state = partner_obj.create_or_update_state_ept(country_code, state_code, zipcode, country)
-
-    #     partner_vals = {
-    #         "email": vals.get("email") or False,
-    #         "name": name,
-    #         "phone": vals.get("phone"),
-    #         "street": vals.get("address1"),
-    #         "street2": vals.get("address2"),
-    #         "city": vals.get("city"),
-    #         "zip": zipcode,
-    #         "state_id": state and state.id or False,
-    #         "country_id": country and country.id or False,
-    #         "is_company": False,
-    #         'lang': instance.shopify_lang_id.code if instance != False else None,
-    #     }
-    #     update_partner_vals = partner_obj.remove_special_chars_from_partner_vals(partner_vals)
-    #     return update_partner_vals
+    type_id = fields.Integer(string="Type ID")
+    type_name = fields.Char(string="Type Name")
+    value = fields.Char(string="Value")
+    employee_id = fields.Many2one('hr.employee', string="Employee")
+    hrms_employee_id = fields.Many2one(
+        'hrms.hr.employee', string="HRMS Employee")

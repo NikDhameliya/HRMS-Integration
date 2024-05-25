@@ -81,7 +81,7 @@
             id="menu_hrms_queue" 
             name="Queue" 
             parent="hr_data_import.menu_hrms_data" 
-            sequence="5"/>
+            sequence="7"/>
 
         <menuitem 
             id="hrms_employee_data_menu"
@@ -129,7 +129,7 @@
             name="HR Leave Details" 
             parent="hr_data_import.menu_hrms_data" 
             action="hr_data_import.action_hr_leave_detail"
-            sequence="10" />
+            sequence="6" />
         
 
     </data>

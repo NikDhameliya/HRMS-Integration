@@ -1,8 +1,7 @@
-1. Complete js and css file (imported from hrms ept)
-2. Implement Start / stop functionality
-3. Implement page no functionality
-4. Implement live logs (if possible)
-5. Design Dashboard kanban
+1. Implement Start / stop functionality
+2. Implement live logs (if possible)
+3. Check skills table 
+4. Build all 3 records api
 
 
 # import requests
