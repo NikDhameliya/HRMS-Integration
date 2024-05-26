@@ -39,10 +39,7 @@
                                             <ol>
                                                 <li>
                                                     It will start fetching Employee data from HRMS
-                                                    and will just add
-                                                    that data in Queue for processing. (HRMS
-                                                    &gt; Processes &gt;
-                                                    Queues Logs &gt; Employees)
+                                                    and will add records.
                                                 </li>
                                             </ol>
                                         </b>
@@ -58,10 +55,7 @@
                                             <ol>
                                                 <li>
                                                     It will start fetching Department data from HRMS
-                                                    and will just add
-                                                    that data in Queue for processing. (HRMS
-                                                    &gt; Processes &gt;
-                                                    Queues Logs &gt; Departments)
+                                                    and will add records.
                                                 </li>
                                             </ol>
                                         </b>
@@ -77,10 +71,7 @@
                                             <ol>
                                                 <li>
                                                     It will start fetching Leave data from HRMS
-                                                    and will just add
-                                                    that data in Queue for processing. (HRMS
-                                                    &gt; Processes &gt;
-                                                    Queues Logs &gt; Leaves)
+                                                    and will add records.
                                                 </li>
                                             </ol>
                                         </b>
@@ -90,22 +81,18 @@
                             <notebook>
                                 <page string='Sync Option'>
                                     <div class="row">
-                                        <div class='col-md-6'>
-                                            <group name='sync_employees'
-                                                invisible="hrms_operation != 'sync_employee'">
-                                                <field name="skip_existing_employee" />
-                                            </group>
-                                            <group name='sync_leave'
-                                                invisible="hrms_operation != 'sync_leave'">
-                                                <field name="skip_existing_leave" />
-                                            </group>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <group name='sync_department'
-                                                invisible="hrms_operation != 'sync_department'">
-                                                <field name="skip_existing_department" />
-                                            </group>
-                                        </div>
+                                        <group name='sync_employees'
+                                            invisible="hrms_operation != 'sync_employee'">
+                                            <field name="skip_existing_employee" />
+                                        </group>
+                                        <group name='sync_leave'
+                                            invisible="hrms_operation != 'sync_leave'">
+                                            <field name="skip_existing_leave" />
+                                        </group>
+                                        <group name='sync_department'
+                                            invisible="hrms_operation != 'sync_department'">
+                                            <field name="skip_existing_department" />
+                                        </group>
                                     </div>
                                 </page>
                             </notebook>
@@ -120,105 +107,6 @@
                 </form>
             </field>
         </record>
-
-        <!-- Below view used for update employees-->
-        <!-- <record id="view_update_employee_process_manual" model="ir.ui.view">
-            <field name="name">Update Employee manual</field>
-            <field name="model">process.import.export</field>
-            <field name="arch" type="xml">
-                <form string="Update Employee">
-                    <sheet>
-                        <p colspan="2" class="alert alert-danger" role="alert">
-                            <b>
-                                <u>
-                                    <h3 style="font-weight:bold;color:#7d5a29">Important Note:</h3>
-                                </u>
-
-                                <ol>
-                                    <li>
-                                        If multiple employees are selected, a maximum of 80
-                                        employees
-                                        can be processed at a time.
-                                    </li>
-                                </ol>
-                            </b>
-                        </p>
-                        <footer>
-                            <button string="Update Employee" class="oe_highlight"
-                                type="object" name="manual_update_employee_to_hrms" />
-                            <button string="Cancel" class="oe_highlight"
-                                special="cancel" />
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record> -->
-
-        <!-- Below view used for update departments-->
-        <!-- <record id="view_update_department_process_manual" model="ir.ui.view">
-            <field name="name">Update Department manual</field>
-            <field name="model">process.import.export</field>
-            <field name="arch" type="xml">
-                <form string="Update Department">
-                    <sheet>
-                        <p colspan="2" class="alert alert-danger" role="alert">
-                            <b>
-                                <u>
-                                    <h3 style="font-weight:bold;color:#7d5a29">Important Note:</h3>
-                                </u>
-
-                                <ol>
-                                    <li>
-                                        If multiple departments are selected, a maximum of 80
-                                        departments
-                                        can be processed at a time.
-                                    </li>
-                                </ol>
-                            </b>
-                        </p>
-                        <footer>
-                            <button string="Update Department" class="oe_highlight"
-                                type="object" name="manual_update_department_to_hrms" />
-                            <button string="Cancel" class="oe_highlight"
-                                special="cancel" />
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record> -->
-
-        <!-- Below view used for update leaves-->
-        <!-- <record id="view_update_leave_process_manual" model="ir.ui.view">
-            <field name="name">Update Leave manual</field>
-            <field name="model">process.import.export</field>
-            <field name="arch" type="xml">
-                <form string="Update Leave">
-                    <sheet>
-                        <p colspan="2" class="alert alert-danger" role="alert">
-                            <b>
-                                <u>
-                                    <h3 style="font-weight:bold;color:#7d5a29">Important Note:</h3>
-                                </u>
-
-                                <ol>
-                                    <li>
-                                        If multiple leaves are selected, a maximum of 80 leaves
-                                        can be processed at a time.
-                                    </li>
-                                </ol>
-                            </b>
-                        </p>
-                        <footer>
-                            <button string="Update Leave" class="oe_highlight"
-                                type="object" name="manual_update_leave_to_hrms" />
-                            <button string="Cancel" class="oe_highlight"
-                                special="cancel" />
-                        </footer>
-                    </sheet>
-                </form>
-            </field>
-        </record> -->
-
 
         <!-- Action for hrms oprations-->
         <record id="action_wizard_hrms_import_orders_in_hr_data_import"
@@ -242,38 +130,6 @@
             <field name="view_id" ref="hr_data_import.view_hrms_process_import_export_ept" />
             <field name="target">new</field>
         </record>
-
-
-        <!-- Below action used for update employee-->
-        <!-- <record id="action_wizard_hrms_employee_for_update" model="ir.actions.act_window">
-            <field name="name">Update Existing Employee in HRMS</field>
-            <field name="res_model">process.import.export</field>
-            <field name="binding_model_id" eval="False" />
-            <field name="binding_view_types">form,list</field>
-            <field name="target">new</field>
-            <field name="view_id" ref="hr_data_import.view_update_employee_process_manual" />
-        </record> -->
-
-        <!-- Below action used for update department-->
-        <!-- <record id="action_wizard_hrms_department_for_update" model="ir.actions.act_window">
-            <field name="name">Update Existing Department in HRMS</field>
-            <field name="res_model">process.import.export</field>
-            <field name="binding_model_id" eval="False" />
-            <field name="binding_view_types">form,list</field>
-            <field name="target">new</field>
-            <field name="view_id" ref="hr_data_import.view_update_department_process_manual" />
-        </record> -->
-
-        <!-- Below action used for update leave-->
-        <!-- <record id="action_wizard_hrms_leave_for_update" model="ir.actions.act_window">
-            <field name="name">Update Existing Leave in HRMS</field>
-            <field name="res_model">process.import.export</field>
-            <field name="binding_model_id" eval="False" />
-            <field name="binding_view_types">form,list</field>
-            <field name="target">new</field>
-            <field name="view_id" ref="hr_data_import.view_update_leave_process_manual" />
-        </record> -->
-
 
 
     </data>

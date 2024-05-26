@@ -140,6 +140,7 @@ class HrmsHrEmployee(models.Model):
                 'language_ids': [(6, 0, language_ids)],
                 'awards': awards or False,
                 'educations': educations or False,
+                'hrms_instance_id': self.env.context.get('hrms_instance_id'),
             }
 
             if employee_rec:

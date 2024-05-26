@@ -38,11 +38,11 @@ class HrmsHrDepartment(models.Model):
                 'type': dept.get('type', 1),
                 'number_of_members': dept.get('number_of_members', 0),
                 'number_of_members_with_subteams': dept.get('number_of_members_with_subteams', 0),
-                'team_leader_id': self.env['hr.employee'].search([('id', '=', dept['team_leader_id'])]).id if dept['team_leader_id'] else False,
-                'hr_ids': [(6, 0, [self.env['hr.employee'].search([('id', '=', hr_id)]).id for hr_id in dept.get('hr_ids', [])])],
-                'managers': [(6, 0, [self.env['hr.employee'].search([('id', '=', manager_id)]).id for manager_id in dept.get('managers', [])])],
-                'child_ids': [(6, 0, [self.env['hr.department'].search([('hrms_external_id', '=', subteam_id)]).id for subteam_id in dept.get('subteams', [])])],
-                'parent_id': self.env['hr.department'].search([('hrms_external_id', '=', dept['parent_id'])]).id if dept['parent_id'] else False
+                'team_leader_id': self.env['hr.employee'].search([('hrms_external_id', '=', dept['team_leader_id'])],limit=1).id if dept['team_leader_id'] else False,
+                'hr_ids': [(6, 0, [self.env['hr.employee'].search([('hrms_external_id', '=', hr_id)],limit=1).id for hr_id in dept.get('hr_ids', [])])],
+                'managers': [(6, 0, [self.env['hr.employee'].search([('hrms_external_id', '=', manager_id)],limit=1).id for manager_id in dept.get('managers', [])])],
+                'child_ids': [(6, 0, [self.env['hr.department'].search([('hrms_external_id', '=', subteam_id)],limit=1).id for subteam_id in dept.get('subteams', [])])],
+                'parent_id': self.env['hr.department'].search([('hrms_external_id', '=', dept['parent_id'])],limit=1).id if dept['parent_id'] else False
             }
             
             department = Department.create(vals)
@@ -57,10 +57,10 @@ class HrmsHrDepartment(models.Model):
                 'type': dept.get('type', 1),
                 'number_of_members': dept.get('number_of_members', 0),
                 'number_of_members_with_subteams': dept.get('number_of_members_with_subteams', 0),
-                'team_leader_id': self.env['hr.employee'].search([('id', '=', dept['team_leader_id'])]).id if dept['team_leader_id'] else False,
-                'hr_ids': [(6, 0, [self.env['hr.employee'].search([('id', '=', hr_id)]).id for hr_id in dept.get('hr_ids', [])])],
-                'managers': [(6, 0, [self.env['hr.employee'].search([('id', '=', manager_id)]).id for manager_id in dept.get('managers', [])])],
-                'child_ids': [(6, 0, [self.env['hr.department'].search([('hrms_external_id', '=', subteam_id)]).id for subteam_id in dept.get('subteams', [])])],
-                'parent_id': self.env['hr.department'].search([('hrms_external_id', '=', dept['parent_id'])]).id if dept['parent_id'] else False
+                'team_leader_id': self.env['hr.employee'].search([('hrms_external_id', '=', dept['team_leader_id'])],limit=1).id if dept['team_leader_id'] else False,
+                'hr_ids': [(6, 0, [self.env['hr.employee'].search([('hrms_external_id', '=', hr_id)],limit=1).id for hr_id in dept.get('hr_ids', [])])],
+                'managers': [(6, 0, [self.env['hr.employee'].search([('hrms_external_id', '=', manager_id)],limit=1).id for manager_id in dept.get('managers', [])])],
+                'child_ids': [(6, 0, [self.env['hr.department'].search([('hrms_external_id', '=', subteam_id)],limit=1).id for subteam_id in dept.get('subteams', [])])],
+                'parent_id': self.env['hr.department'].search([('hrms_external_id', '=', dept['parent_id'])],limit=1).id if dept['parent_id'] else False
             })
         return created_department_ids

@@ -42,11 +42,11 @@ class ProcessImportExport(models.TransientModel):
         """This method used to execute the operation as per given in wizard.
         """
         data_ids = False
-        # action_name = None
-        # form_view_name = None
+        context = dict(self.env.context or {})
+        context.update({'hrms_instance_id': self.hrms_instance_id.id})
         try:
             if self.hrms_operation == "sync_employee":
-                employee_ids = self.hrms_create_employee(
+                employee_ids = self.with_context(context).hrms_create_employee(
                     self.skip_existing_employee)
                 # Flatten the list of lists into a single list
                 flat_employee_ids = [
@@ -63,7 +63,7 @@ class ProcessImportExport(models.TransientModel):
                         }
 
             elif self.hrms_operation == "sync_department":
-                department_ids = self.hrms_create_department(
+                department_ids = self.with_context(context).hrms_create_department(
                     self.skip_existing_department)
                 # Flatten the list of lists into a single list
                 flat_department_ids = [
@@ -81,7 +81,7 @@ class ProcessImportExport(models.TransientModel):
                         }
 
             elif self.hrms_operation == "sync_leave":
-                leave_ids = self.hrms_create_leave(self.skip_existing_leave)
+                leave_ids = self.with_context(context).hrms_create_leave(self.skip_existing_leave)
                 # Flatten the list of lists into a single list
                 flat_leave_ids = [
                     item for sublist in leave_ids for item in sublist]
