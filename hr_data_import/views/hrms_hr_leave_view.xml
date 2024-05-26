@@ -23,7 +23,7 @@
                             <field name="end_test" />
                             <field name="fired_date" />
                         </group>
-                        <notebook>
+                        <!-- <notebook>
                             <page string="Business Trip">
                                 <field name="business_trip" />
                             </page>
@@ -54,7 +54,7 @@
                             <page string="Day Transfer">
                                 <field name="day_transfer" />
                             </page>
-                        </notebook>
+                        </notebook> -->
                     </sheet>
                 </form>
             </field>

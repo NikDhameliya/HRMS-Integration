@@ -45,7 +45,7 @@ class HrmsHrEmployee(models.Model):
     additional_info = fields.Text(string="Additional Info.")
     skills = fields.Char(string="Skills")
     skill_ids = fields.Many2many('hr.skill', string='Skills')
-    languages = fields.Char(string="Languages")
+    languages = fields.Char(string="Received Languages")
     language_ids = fields.Many2many('res.lang', string='Languages')
     team_ids = fields.Many2many('hr.department', string='Teams')
     career_ids = fields.One2many(
@@ -54,6 +54,7 @@ class HrmsHrEmployee(models.Model):
         'hrms.hr.contact', 'hrms_employee_id', string='Contacts')
     awards = fields.Char(string="Awards")
     educations = fields.Char(string="Educations")
+    grade = fields.Char(string="Grade")
 
     def hrms_create_employee(self, employee_data, skip_existing_employee):
         employee_obj = self.env["hrms.hr.employee"]
@@ -113,6 +114,7 @@ class HrmsHrEmployee(models.Model):
                 'email': employee.get('email') or False,
                 'phone': employee.get('phone') or False,
                 'skype': employee.get('skype') or False,
+                'grade': employee.get('grade', "") or False,
                 'linked_in': employee.get('linked_in') or False,
                 'telegram': employee.get('telegram') or False,
                 'birth_date': str_to_date(employee.get('birth_date')) if employee.get('birth_date') else False,
@@ -220,7 +222,6 @@ class HrmsHrEmployee(models.Model):
                     career_rec.write(career_vals)
                 else:
                     employee_rec.career_ids.create(career_vals)
-        print ("BBBBBBBBBBBB", employee_ids)
         return employee_ids
 
 
