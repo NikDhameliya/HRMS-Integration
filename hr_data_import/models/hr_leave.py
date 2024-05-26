@@ -11,11 +11,6 @@ class Leave(models.Model):
     end_test = fields.Date(string="End Test")
     fired_date = fields.Date(string="Fired Date")
 
-    _sql_constraints = [
-        ('hrms_external_id_unique', 'unique(hrms_external_id)',
-         'The hrms_external_id already exists!'),
-    ]
-
 
 class HRLeaveDetail(models.Model):
     _name = 'hr.leave.detail'

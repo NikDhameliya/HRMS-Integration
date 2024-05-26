@@ -9,12 +9,12 @@
     'data': [
         'data/data.xml',
         'security/ir.model.access.csv',
+        'wizard/process_import_export_view.xml',
         'views/hrms_hr_employee_view.xml',
         'views/hrms_hr_department_view.xml',
         'views/hrms_hr_leave_view.xml',
         'views/hr_data_dashboard_views.xml',
         'views/res_config_settings_views.xml',
-        'wizard/process_import_export_view.xml',
         'views/common_log_book_view.xml',
         'views/common_log_lines_ept.xml',
         'views/hrms_hr_carrer_view.xml',
@@ -23,7 +23,7 @@
         'views/hr_department_view.xml',
         'views/hr_leave_view.xml',
         'views/hr_leave_detail_view.xml',
-        'views/menu_items.xml',
+        'views/menu_items.xml'
     ],
     'cloc_exclude': ['**/*.xml', ],
     'installable': True,

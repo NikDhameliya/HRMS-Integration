@@ -43,53 +43,65 @@ class ProcessImportExport(models.TransientModel):
     def hrms_execute(self):
         """This method used to execute the operation as per given in wizard.
         """
-        employee_obj = self.env["hrms.hr.employee"]
-        department_obj = self.env["hrms.hr.department"]
-        leave_obj = self.env["hrms.hr.leave"]
         data_ids = False
+        # action_name = None
+        # form_view_name = None
+        try:
+            if self.hrms_operation == "sync_employee":
+                employee_ids = self.hrms_create_employee(self.skip_existing_employee)
+                # Flatten the list of lists into a single list
+                flat_employee_ids = [item for sublist in employee_ids for item in sublist]
+                if flat_employee_ids:
+                    data_ids = flat_employee_ids
+                    if data_ids:
+                        return {
+                            'type': 'ir.actions.act_window',
+                            'name': _('HRMS Employees'),
+                            'res_model': 'hrms.hr.employee',
+                            'views': [[False, 'list'], [False, 'form']],
+                            'domain': [('id', 'in', data_ids)],
+                        }
 
-        instance = self.hrms_instance_id
-        if self.hrms_operation == "sync_employee":
-            employee_ids = self.hrms_create_employee(
-                self.skip_existing_employee)
-            if employee_ids:
-                data_ids = employee_ids
-                action_name = "hr_data_import.view_hrms_employee_form"
-                form_view_name = "hr_data_import.action_hrms_employee"
+            elif self.hrms_operation == "sync_department":
+                department_ids = self.hrms_create_department(self.skip_existing_department)
+                # Flatten the list of lists into a single list
+                flat_department_ids = [item for sublist in department_ids for item in sublist]
 
-        if self.hrms_operation == "sync_department":
-            department_ids = self.hrms_create_department(
-                self.skip_existing_department)
-            if department_ids:
-                data_ids = department_ids
-                action_name = "hr_data_import.view_hrms_hr_department_form"
-                form_view_name = "hr_data_import.action_hrms_department"
+                if flat_department_ids:
+                    data_ids = flat_department_ids
+                    if data_ids:
+                        return {
+                            'type': 'ir.actions.act_window',
+                            'name': _('HRMS Departments'),
+                            'res_model': 'hrms.hr.department',
+                            'views': [[False, 'list'], [False, 'form']],
+                            'domain': [('id', 'in', data_ids)],
+                        }
 
-            
-        if self.hrms_operation == "sync_leave":
-            leave_ids = self.hrms_create_leave(
-                self.skip_existing_leave)
-            if leave_ids:
-                data_ids = leave_ids
-                action_name = "hr_data_import.view_hrms_hr_leave_form"
-                form_view_name = "hr_data_import.action_hrms_leave"
-
-
-        if data_ids and action_name and form_view_name:
-            action = self.env.ref(action_name).sudo().read()[0]
-            form_view = self.sudo().env.ref(form_view_name)
-
-            if len(data_ids) == 1:
-                action.update({"view_id": (form_view.id, form_view.name), "res_id": data_ids[0],
-                               "views": [(form_view.id, "form")]})
-            else:
-                action["domain"] = [("id", "in", data_ids)]
-            return action
+            elif self.hrms_operation == "sync_leave":
+                leave_ids = self.hrms_create_leave(self.skip_existing_leave)
+                # Flatten the list of lists into a single list
+                flat_leave_ids = [item for sublist in leave_ids for item in sublist]
+                if flat_leave_ids:
+                    data_ids = flat_leave_ids
+                    if flat_leave_ids:
+                        return {
+                            'type': 'ir.actions.act_window',
+                            'name': _('HRMS Leaves'),
+                            'res_model': 'hrms.hr.leave',
+                            'views': [[False, 'list'], [False, 'form']],
+                            'domain': [('id', 'in', data_ids)],
+                        }
+        except KeyError as e:
+            _logger.error("Error in hrms_execute: Missing reference %s", str(e))
+        except Exception as e:
+            _logger.error("Unexpected error in hrms_execute: %s", str(e))
 
         return {
             "type": "ir.actions.client",
             "tag": "reload",
         }
+
 
     def hrms_create_employee(self, skip_existing_employee):
         """
@@ -106,24 +118,24 @@ class ProcessImportExport(models.TransientModel):
           'token': '{api_token}'
         }
 
-        response = requests.request("GET", api_url, headers=headers, data=payload)
+        # response = requests.request("GET", api_url, headers=headers, data=payload)
+        response = {'result': {'current_page': 1, 'data': [{'id': 'ND', 'name': 'John Doe', 'email': 'john.doe@example.com', 'position': 'CEO', 'grade': '', 'residence': 'Country, City', 'residence_comment': False, 'country': 'Молдова', 'city': False, 'phone': '1234567890', 'skype': False, 'linked_in': False, 'telegram': False, 'birth_date': '1982-08-11', 'end_test': '2016-04-01', 'fired_date': False, 'start_date': '2016-04-01', 'gender': 1, 'additional_email': 'alternate.email@example.com', 'additional_phone': False, 'relocate': False, 'duties': False, 'description': False, 'additional_info': False, 'team': [{'id': 2, 'name': 'Management'}], 'career': [{'start_date': '2021-04-08', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': '', 'department': False, 'position': 'CEO&СТО', 'grade': '', 'place': '', 'team': 'Management', 'comment': False}, {'start_date': '2021-03-29', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': '', 'department': False, 'position': 'CEO&СТО', 'grade': '', 'place': '', 'team': '', 'comment': ''}], 'contacts': [{'type_id': 2, 'type_name': 'email', 'value': 'alternate.email@example.com'}, {'type_id': 1, 'type_name': 'phone', 'value': '1234567890'}], 'languages': [], 'educations': [], 'skills': [], 'awards': []}, {'id': '7xl', 'name': 'Jane Smith', 'email': 'jane.smith@example.com', 'position': 'HR Specialist', 'grade': '', 'residence': 'Country, City, Address', 'residence_comment': 'Address details', 'country': 'Україна', 'city': 'Суми', 'phone': '0987654321', 'skype': False, 'linked_in': False, 'telegram': False, 'birth_date': '1995-11-26', 'end_test': '2021-03-11', 'fired_date': False, 'start_date': '2021-02-11', 'gender': 2, 'additional_email': False, 'additional_phone': False, 'relocate': False, 'duties': False, 'description': False, 'additional_info': "Relative's contact phone number - 1231231234", 'team': [{'id': 8, 'name': 'HR/ Recruiting'}, {'id': 2, 'name': 'Management'}], 'career': [{'start_date': '2021-05-27', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'Management', 'comment': False}, {'start_date': '2021-04-08', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'HR/ Recruiting', 'comment': False}, {'start_date': '', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'HR/ Recruiting', 'comment': False}], 'contacts': [{'type_id': 2, 'type_name': 'email', 'value': 'jane.smith@fakemail.com'}, {'type_id': 1, 'type_name': 'phone', 'value': '9876543210'}], 'languages': [], 'educations': [], 'skills': [], 'awards': []}], 'first_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=1', 'from': 1, 'last_page': 19, 'last_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=19', 'links': [{'url': False, 'label': '&laquo; Поп.', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=1', 'label': '1', 'active': True}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'label': '2', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=3', 'label': '3', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=4', 'label': '4', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=5', 'label': '5', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=6', 'label': '6', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=7', 'label': '7', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=8', 'label': '8', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=9', 'label': '9', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=10', 'label': '10', 'active': False}, {'url': False, 'label': '...', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=18', 'label': '18', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=19', 'label': '19', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'label': 'Наст. &raquo;', 'active': False}], 'next_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'path': 'https://mycompany.hrmsystem.com/api/v1/employees', 'per_page': 5, 'prev_page_url': False, 'to': 5, 'total': 200}, 'error': False, 'code': 200, 'messages': []}
 
-        if response.status_code == 200:
+        if response['code'] == 200:
             #TODO Uncomment below line and remove static data assign
             # employee_data = response.json().get('data', [])
-            response = {'result': {'current_page': 1, 'data': [{'id': 'ND', 'name': 'John Doe', 'email': 'john.doe@example.com', 'position': 'CEO', 'grade': '', 'residence': 'Country, City', 'residence_comment': False, 'country': 'Молдова', 'city': False, 'phone': '1234567890', 'skype': False, 'linked_in': False, 'telegram': False, 'birth_date': '1982-08-11', 'end_test': '2016-04-01', 'fired_date': False, 'start_date': '2016-04-01', 'gender': 1, 'additional_email': 'alternate.email@example.com', 'additional_phone': False, 'relocate': False, 'duties': False, 'description': False, 'additional_info': False, 'team': [{'id': 2, 'name': 'Management'}], 'career': [{'start_date': '2021-04-08', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': '', 'department': False, 'position': 'CEO&СТО', 'grade': '', 'place': '', 'team': 'Management', 'comment': False}, {'start_date': '2021-03-29', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': '', 'department': False, 'position': 'CEO&СТО', 'grade': '', 'place': '', 'team': '', 'comment': ''}], 'contacts': [{'type_id': 2, 'type_name': 'email', 'value': 'alternate.email@example.com'}, {'type_id': 1, 'type_name': 'phone', 'value': '1234567890'}], 'languages': [], 'educations': [], 'skills': [], 'awards': []}, {'id': '7xl', 'name': 'Jane Smith', 'email': 'jane.smith@example.com', 'position': 'HR Specialist', 'grade': '', 'residence': 'Country, City, Address', 'residence_comment': 'Address details', 'country': 'Україна', 'city': 'Суми', 'phone': '0987654321', 'skype': False, 'linked_in': False, 'telegram': False, 'birth_date': '1995-11-26', 'end_test': '2021-03-11', 'fired_date': False, 'start_date': '2021-02-11', 'gender': 2, 'additional_email': False, 'additional_phone': False, 'relocate': False, 'duties': False, 'description': False, 'additional_info': "Relative's contact phone number - 1231231234", 'team': [{'id': 8, 'name': 'HR/ Recruiting'}, {'id': 2, 'name': 'Management'}], 'career': [{'start_date': '2021-05-27', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'Management', 'comment': False}, {'start_date': '2021-04-08', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'HR/ Recruiting', 'comment': False}, {'start_date': '', 'end_date': False, 'test_period_start_date': False, 'test_period_end_date': False, 'company_name': False, 'department': False, 'position': 'HR Specialist/Recruiter', 'grade': '', 'place': False, 'team': 'HR/ Recruiting', 'comment': False}], 'contacts': [{'type_id': 2, 'type_name': 'email', 'value': 'jane.smith@fakemail.com'}, {'type_id': 1, 'type_name': 'phone', 'value': '9876543210'}], 'languages': [], 'educations': [], 'skills': [], 'awards': []}], 'first_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=1', 'from': 1, 'last_page': 19, 'last_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=19', 'links': [{'url': False, 'label': '&laquo; Поп.', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=1', 'label': '1', 'active': True}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'label': '2', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=3', 'label': '3', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=4', 'label': '4', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=5', 'label': '5', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=6', 'label': '6', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=7', 'label': '7', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=8', 'label': '8', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=9', 'label': '9', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=10', 'label': '10', 'active': False}, {'url': False, 'label': '...', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=18', 'label': '18', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=19', 'label': '19', 'active': False}, {'url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'label': 'Наст. &raquo;', 'active': False}], 'next_page_url': 'https://mycompany.hrmsystem.com/api/v1/employees?page=2', 'path': 'https://mycompany.hrmsystem.com/api/v1/employees', 'per_page': 5, 'prev_page_url': False, 'to': 5, 'total': 200}, 'error': False, 'code': 200, 'messages': []}
             employee_data = response['result']['data']
 
         if len(employee_data) > 0:
             for employee_id_chunk in split_every(25, employee_data):
-                hrms_employees = employee_obj.hrms_create_employee(employee_id_chunk, skip_existing_employee)
-
+                hrms_employees_ids = employee_obj.hrms_create_employee(employee_id_chunk, skip_existing_employee)
+                hrms_employees = employee_obj.browse(hrms_employees_ids)
                 message = "Employee created %s" % ', '.join(hrms_employees.mapped('name'))
                 bus_bus_obj._sendone(self.env.user.partner_id, "simple_notification",
                                      {"title": "HRMS Notification","message": message, "sticky": False,
                                       "warning": True})
                 _logger.info(message)
-                hrms_employee_ids.append(hrms_employees.ids)
+                hrms_employee_ids.append(hrms_employees_ids)
 
             self._cr.commit()
         return hrms_employee_ids

@@ -27,8 +27,3 @@ class HREmployee(models.Model):
     contact_ids = fields.One2many('hrms.hr.contact', 'employee_id', string='Contacts')
     awards = fields.Char(string="Awards")
     educations = fields.Char(string="Educations")
-
-    _sql_constraints = [
-        ('hrms_external_id_unique', 'unique(hrms_external_id)',
-         'The hrms_external_id already exists!'),
-    ]

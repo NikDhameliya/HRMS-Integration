@@ -77,7 +77,7 @@
             action="hr_data_import.action_hr_contact" 
             sequence="5" />
         
-        <menuitem 
+        <!-- <menuitem 
             id="menu_hrms_queue" 
             name="Queue" 
             parent="hr_data_import.menu_hrms_data" 
@@ -102,7 +102,7 @@
             name="Leave Queue" 
             parent="hr_data_import.menu_hrms_queue"
             action="hr_data_import.action_hrms_leave_data_queue" 
-            sequence="3"/>
+            sequence="3"/> -->
 
         <menuitem 
             id="menu_log_book_ept" 
