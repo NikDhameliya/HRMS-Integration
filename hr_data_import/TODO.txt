@@ -1,22 +1,24 @@
 1. Implement Start / stop functionality
 2. Implement live logs (if possible)
 3. Check skills table 
-4. Work on 
-"day_transfer": [
-                    {
-                        "start": {
-                            "date": "2021-07-28",
-                            "is_full_day": false,
-                            "from": "16:30",
-                            "to": "18:00",
-                            "used_minutes": 90
-                        },
-                        "end": {
-                            "date": "2021-07-27",
-                            "is_full_day": false,
-                            "from": "18:00",
-                            "to": "19:30",
-                            "used_minutes": 90
-                        }
-                    }
-                ]
+
+
+To handle the "day_transfer" leave type in Odoo, where you have start and end times on different days, you can create two leave records: one for the start date and one for the end date. This approach ensures that the leave entries reflect the correct hours and dates in the Odoo system.
+
+Handling "day_transfer":
+
+Extract start and end times from the detail dictionary.
+Create separate leave records for start and end times.
+Update leave values and details for both start and end parts of the day transfer.
+
+
+Leave Types
+
+vacation
+unpaid_vacation
+overtime
+weekend_work
+night_shift
+day_transfer
+sick_leave
+documented_sick_leave

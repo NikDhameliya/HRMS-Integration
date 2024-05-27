@@ -57,67 +57,158 @@ class HrmsHrLeave(models.Model):
                         'employee_type': 'employee',
                         'company_id': self.env.company.id
                     })
-
                 for leave_type in ['business_trip', 'home_work', 'sick_leave', 'documented_sick_leave', 'vacation', 'unpaid_vacation', 'overtime', 'weekend_work', 'night_shift', 'day_transfer']:
                     for detail in leave.get(leave_type, []):
-                        leave_vals = {
-                            'name': leave['name'],
-                            'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
-                            'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
-                            'holiday_type': 'employee',
-                            'employee_id': employee_id.id if employee_id else False,
-                            'request_date_from': str_to_date(detail.get('date')) if detail.get('date') else False,
-                            'leave_detail_ids': []
-                        }
-                        
                         # Initialize from_time and to_time
                         from_time = None
                         to_time = None
-                        if detail.get('is_full_day') == True:
-                            leave_vals['leave_type_request_unit'] = 'day'
-                            leave_vals['request_date_to'] = str_to_date(detail.get('date')) if detail.get('date') else False
+                        if leave_type == 'day_transfer':
+                            # Handle start part of day_transfer
+                            start = detail.get('start', {})
+                            if start:
+                                from_time = time_to_hour(start.get('from', False))
+                                to_time = time_to_hour(start.get('to', False))
+                                start_vals = {
+                                    'name': leave['name'],
+                                    'hrms_external_id': leave['id'],
+                                    'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                    'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                    'holiday_type': 'employee',
+                                    'employee_id': employee_id.id if employee_id else False,
+                                    'request_date_from': str_to_date(start.get('date')) if start.get('date') else False,
+                                    'leave_type_request_unit': 'hour',
+                                    'request_unit_hours': True,
+                                    'request_hour_from': str(from_time) if from_time else False,
+                                    'request_hour_to': str(to_time) if to_time else False,
+                                    'leave_detail_ids': []
+                                }
+                                start_detail_vals = {
+                                    'date': str_to_date(start.get('date')) if start.get('date') else False,
+                                    'is_full_day': start.get('is_full_day', False),
+                                    'from_time': str(from_time) if from_time else False,
+                                    'to_time': str(to_time) if to_time else False,
+                                    'used_minutes': start.get('used_minutes', 0),
+                                    'type': leave_type
+                                }
+                                holiday_status_id = self.env['hr.leave.type'].search([('name', '=', leave_type)], limit=1)
+                                if not holiday_status_id:
+                                    holiday_status_id = self.env['hr.leave.type'].create({
+                                        'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
+                                    })
+                                start_vals.update({'holiday_status_id': holiday_status_id.id})
+                                start_vals['leave_detail_ids'].append((0, 0, start_detail_vals))
+                                start_leave_record = Leave.create(start_vals)
+                                hrms_leave_start = self.create({
+                                    'name': leave['name'],
+                                    'employee_id': employee_id.id if employee_id else False,
+                                    'email': leave['email'],
+                                    'company_id': self.env.company.id,
+                                    'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                    'hrms_external_id': leave['id'],
+                                    'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                    'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                    'leave_detail_ids': [detail for detail in start_vals['leave_detail_ids']]
+                                })
+                                created_leave_ids.append(hrms_leave_start.id)
+                            # Handle end part of day_transfer
+                            end = detail.get('end', {})
+                            if end:
+                                from_time = time_to_hour(end.get('from', False))
+                                to_time = time_to_hour(end.get('to', False))
+                                end_vals = {
+                                    'name': leave['name'],
+                                    'hrms_external_id': leave['id'],
+                                    'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                    'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                    'holiday_type': 'employee',
+                                    'employee_id': employee_id.id if employee_id else False,
+                                    'request_date_from': str_to_date(end.get('date')) if end.get('date') else False,
+                                    'leave_type_request_unit': 'hour',
+                                    'request_unit_hours': True,
+                                    'request_hour_from': str(from_time) if from_time else False,
+                                    'request_hour_to': str(to_time) if to_time else False,
+                                    'leave_detail_ids': []
+                                }
+                                end_detail_vals = {
+                                    'date': str_to_date(end.get('date')) if end.get('date') else False,
+                                    'is_full_day': end.get('is_full_day', False),
+                                    'from_time': str(from_time) if from_time else False,
+                                    'to_time': str(to_time) if to_time else False,
+                                    'used_minutes': end.get('used_minutes', 0),
+                                    'type': leave_type
+                                }
+                                holiday_status_id = self.env['hr.leave.type'].search([('name', '=', leave_type)], limit=1)
+                                if not holiday_status_id:
+                                    holiday_status_id = self.env['hr.leave.type'].create({
+                                        'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
+                                    })
+                                end_vals.update({'holiday_status_id': holiday_status_id.id})
+                                end_vals['leave_detail_ids'].append((0, 0, end_detail_vals))
+                                end_leave_record = Leave.create(end_vals)
+                                hrms_leave_end = self.create({
+                                    'name': leave['name'],
+                                    'employee_id': employee_id.id if employee_id else False,
+                                    'email': leave['email'],
+                                    'company_id': self.env.company.id,
+                                    'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                    'hrms_external_id': leave['id'],
+                                    'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                    'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                    'leave_detail_ids': [detail for detail in end_vals['leave_detail_ids']]
+                                })
+                                created_leave_ids.append(hrms_leave_end.id)
                         else:
-                            from_time = time_to_hour(detail.get('from', False))
-                            to_time = time_to_hour(detail.get('to', False))
-                            print("CALLLLLLLLLLLLLLLL", from_time, to_time)
-                            leave_vals['leave_type_request_unit'] = 'hour'
-                            leave_vals['request_unit_hours'] = True
-                            leave_vals['request_hour_from'] = str(from_time) if from_time else False
-                            leave_vals['request_hour_to'] = str(to_time) if to_time else False
-                            print("LEAVE VALSSSSSSS", leave_vals)
-
-                        detail_vals = {
-                            'date': str_to_date(detail.get('date')) if detail.get('date') else False,
-                            'is_full_day': detail.get('is_full_day', False),
-                            'from_time': str(from_time) if from_time else False,
-                            'to_time': str(to_time) if to_time else False,
-                            'used_minutes': detail.get('used_minutes', 0),
-                            'type': leave_type
-                        }
-                        holiday_status_id = self.env['hr.leave.type'].search([('name', '=', leave_type)], limit=1)
-                        if not holiday_status_id:
-                            holiday_status_id = self.env['hr.leave.type'].create({
-                                'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
+                            leave_vals = {
+                                'name': leave['name'],
+                                'hrms_external_id': leave['id'],
+                                'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                'holiday_type': 'employee',
+                                'employee_id': employee_id.id if employee_id else False,
+                                'request_date_from': str_to_date(detail.get('date')) if detail.get('date') else False,
+                                'leave_detail_ids': []
+                            }
+                            if detail.get('is_full_day') == True:
+                                leave_vals['leave_type_request_unit'] = 'day'
+                                leave_vals['request_date_to'] = str_to_date(detail.get('date')) if detail.get('date') else False
+                            else:
+                                from_time = time_to_hour(detail.get('from', False))
+                                to_time = time_to_hour(detail.get('to', False))
+                                leave_vals['leave_type_request_unit'] = 'hour'
+                                leave_vals['request_unit_hours'] = True
+                                leave_vals['request_hour_from'] = str(from_time) if from_time else False
+                                leave_vals['request_hour_to'] = str(to_time) if to_time else False
+                            detail_vals = {
+                                'date': str_to_date(detail.get('date')) if detail.get('date') else False,
+                                'is_full_day': detail.get('is_full_day', False),
+                                'from_time': str(from_time) if from_time else False,
+                                'to_time': str(to_time) if to_time else False,
+                                'used_minutes': detail.get('used_minutes', 0),
+                                'type': leave_type
+                            }
+                            holiday_status_id = self.env['hr.leave.type'].search([('name', '=', leave_type)], limit=1)
+                            if not holiday_status_id:
+                                holiday_status_id = self.env['hr.leave.type'].create({
+                                    'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
+                                })
+                            leave_vals.update({'holiday_status_id': holiday_status_id.id})
+                            leave_vals['leave_detail_ids'].append((0, 0, detail_vals))
+                            leave_record = Leave.create(leave_vals)
+                            hrms_leave = self.create({
+                                'name': leave['name'],
+                                'employee_id': employee_id.id if employee_id else False,
+                                'email': leave['email'],
+                                'company_id': self.env.company.id,
+                                'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                'hrms_external_id': leave['id'],
+                                'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
+                                'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
+                                'leave_detail_ids': [detail for detail in leave_vals['leave_detail_ids']]
                             })
-                        leave_vals.update({
-                            'holiday_status_id': holiday_status_id.id
-                        })
-                        leave_vals['leave_detail_ids'].append((0, 0, detail_vals))
-                        leave_record = Leave.create(leave_vals)
-                        hrms_leave = self.create({
-                            'name': leave['name'],
-                            'employee_id': employee_id.id if employee_id else False,
-                            'email': leave['email'],
-                            'company_id': self.env.company.id,
-                            'hrms_instance_id': self.env.context.get('hrms_instance_id'),
-                            'hrms_external_id': leave['id'],
-                            'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
-                            'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
-                            'leave_detail_ids': [detail for detail in leave_vals['leave_detail_ids']]
-                        })
-                        created_leave_ids.append(hrms_leave.id)
+                            created_leave_ids.append(hrms_leave.id)
             except Exception as e:
                 _logger.error(f"Error processing leave for {leave['name']}: {e}")
                 continue
         return created_leave_ids
+
 
