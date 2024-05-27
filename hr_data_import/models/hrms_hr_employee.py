@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api, _
+
 import logging
 from datetime import datetime
 
 
-_logger = logging.getLogger("HRMS Operations")
+_logger = logging.getLogger("HRMS Employee Operations")
 
 
 class HrmsHrEmployee(models.Model):
@@ -111,6 +112,7 @@ class HrmsHrEmployee(models.Model):
 
             employee_vals = {
                 'name': employee.get('name'),
+                'employee_type': 'employee',
                 'email': employee.get('email') or False,
                 'phone': employee.get('phone') or False,
                 'skype': employee.get('skype') or False,

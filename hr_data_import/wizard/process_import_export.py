@@ -5,7 +5,6 @@ import time
 from datetime import datetime
 import requests
 
-from odoo.exceptions import UserError
 from odoo.tools.misc import split_every
 
 from odoo import models, fields, api, _
@@ -17,7 +16,8 @@ class ProcessImportExport(models.TransientModel):
     _name = 'process.import.export'
     _description = 'Process Import Export'
 
-    hrms_instance_id = fields.Many2one("hr.data.dashboard", string="Instance")
+    hrms_instance_id = fields.Many2one("hr.data.dashboard", string="Instance",
+                                       default=lambda self: self.env.ref('hr_data_import.hr_data_dashboard'))
     hrms_operation = fields.Selection(
         [
             ("sync_employee", "Import Employees"),
@@ -81,7 +81,8 @@ class ProcessImportExport(models.TransientModel):
                         }
 
             elif self.hrms_operation == "sync_leave":
-                leave_ids = self.with_context(context).hrms_create_leave(self.skip_existing_leave)
+                leave_ids = self.with_context(
+                    context).hrms_create_leave(self.skip_existing_leave)
                 # Flatten the list of lists into a single list
                 flat_leave_ids = [
                     item for sublist in leave_ids for item in sublist]
@@ -163,171 +164,171 @@ class ProcessImportExport(models.TransientModel):
 
         # response = requests.request("GET", api_url, headers=headers, data=payload)
         response = {
-    "result": {
-        "current_page": 1,
-        "data": [
-            {
-                "id": 2,
-                "type": 1,
-                "name": "Management",
-                "number_of_members": 4,
-                "number_of_members_with_subteams": 4,
-                "team_leader_id": False,
-                "hr_ids": [
-                    "7xl"
+            "result": {
+                "current_page": 1,
+                "data": [
+                    {
+                        "id": 2,
+                        "type": 1,
+                        "name": "Management",
+                        "number_of_members": 4,
+                        "number_of_members_with_subteams": 4,
+                        "team_leader_id": False,
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [
+                            "ND"
+                        ],
+                        "subteams": [],
+                        "parent_id": False
+                    },
+                    {
+                        "id": 5,
+                        "type": 1,
+                        "name": "Sales Team",
+                        "number_of_members": 5,
+                        "number_of_members_with_subteams": 5,
+                        "team_leader_id": "lXEQ",
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [
+                            "ND",
+                            "lXEQ"
+                        ],
+                        "subteams": [],
+                        "parent_id": False
+                    },
+                    {
+                        "id": 26,
+                        "type": 1,
+                        "name": "DELIVERY",
+                        "number_of_members": 1,
+                        "number_of_members_with_subteams": 29,
+                        "team_leader_id": False,
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [],
+                        "subteams": [
+                            7,
+                            12,
+                            21,
+                            22,
+                            24,
+                            27,
+                            28,
+                            35,
+                            39,
+                            40,
+                            41,
+                            42
+                        ],
+                        "parent_id": False
+                    },
+                    {
+                        "id": 6,
+                        "type": 1,
+                        "name": "Training Camp",
+                        "number_of_members": 0,
+                        "number_of_members_with_subteams": 0,
+                        "team_leader_id": False,
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [
+                            "d82"
+                        ],
+                        "subteams": [],
+                        "parent_id": False
+                    },
+                    {
+                        "id": 7,
+                        "type": 1,
+                        "name": "Project ABC",
+                        "number_of_members": 7,
+                        "number_of_members_with_subteams": 7,
+                        "team_leader_id": False,
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [
+                            "Oox"
+                        ],
+                        "subteams": [],
+                        "parent_id": 26
+                    },
+                    {
+                        "id": 8,
+                        "type": 1,
+                        "name": "HR/ Recruiting",
+                        "number_of_members": 2,
+                        "number_of_members_with_subteams": 2,
+                        "team_leader_id": "7xl",
+                        "hr_ids": [
+                            "7xl"
+                        ],
+                        "managers": [
+                            "ND",
+                            "7xl"
+                        ],
+                        "subteams": [],
+                        "parent_id": False
+                    }
                 ],
-                "managers": [
-                    "ND"
+                "first_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=1",
+                "from": 1,
+                "last_page": 5,
+                "last_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=5",
+                "links": [
+                    {
+                        "url": False,
+                        "label": "&laquo; Prev.",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=1",
+                        "label": "1",
+                        "active": True
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
+                        "label": "2",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=3",
+                        "label": "3",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=4",
+                        "label": "4",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=5",
+                        "label": "5",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
+                        "label": "Next. &raquo;",
+                        "active": False
+                    }
                 ],
-                "subteams": [],
-                "parent_id": False
+                "next_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
+                "path": "https://mycompany.hrmsystem.com/api/v1/departments",
+                "per_page": 5,
+                "prev_page_url": False,
+                "to": 5,
+                "total": 21
             },
-            {
-                "id": 5,
-                "type": 1,
-                "name": "Sales Team",
-                "number_of_members": 5,
-                "number_of_members_with_subteams": 5,
-                "team_leader_id": "lXEQ",
-                "hr_ids": [
-                    "7xl"
-                ],
-                "managers": [
-                    "ND",
-                    "lXEQ"
-                ],
-                "subteams": [],
-                "parent_id": False
-            },
-            {
-                "id": 26,
-                "type": 1,
-                "name": "DELIVERY",
-                "number_of_members": 1,
-                "number_of_members_with_subteams": 29,
-                "team_leader_id": False,
-                "hr_ids": [
-                    "7xl"
-                ],
-                "managers": [],
-                "subteams": [
-                    7,
-                    12,
-                    21,
-                    22,
-                    24,
-                    27,
-                    28,
-                    35,
-                    39,
-                    40,
-                    41,
-                    42
-                ],
-                "parent_id": False
-            },
-            {
-                "id": 6,
-                "type": 1,
-                "name": "Training Camp",
-                "number_of_members": 0,
-                "number_of_members_with_subteams": 0,
-                "team_leader_id": False,
-                "hr_ids": [
-                    "7xl"
-                ],
-                "managers": [
-                    "d82"
-                ],
-                "subteams": [],
-                "parent_id": False
-            },
-            {
-                "id": 7,
-                "type": 1,
-                "name": "Project ABC",
-                "number_of_members": 7,
-                "number_of_members_with_subteams": 7,
-                "team_leader_id": False,
-                "hr_ids": [
-                    "7xl"
-                ],
-                "managers": [
-                    "Oox"
-                ],
-                "subteams": [],
-                "parent_id": 26
-            },
-            {
-                "id": 8,
-                "type": 1,
-                "name": "HR/ Recruiting",
-                "number_of_members": 2,
-                "number_of_members_with_subteams": 2,
-                "team_leader_id": "7xl",
-                "hr_ids": [
-                    "7xl"
-                ],
-                "managers": [
-                    "ND",
-                    "7xl"
-                ],
-                "subteams": [],
-                "parent_id": False
-            }
-        ],
-        "first_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=1",
-        "from": 1,
-        "last_page": 5,
-        "last_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=5",
-        "links": [
-            {
-                "url": False,
-                "label": "&laquo; Prev.",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=1",
-                "label": "1",
-                "active": True
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
-                "label": "2",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=3",
-                "label": "3",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=4",
-                "label": "4",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=5",
-                "label": "5",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
-                "label": "Next. &raquo;",
-                "active": False
-            }
-        ],
-        "next_page_url": "https://mycompany.hrmsystem.com/api/v1/departments?page=2",
-        "path": "https://mycompany.hrmsystem.com/api/v1/departments",
-        "per_page": 5,
-        "prev_page_url": False,
-        "to": 5,
-        "total": 21
-    },
-    "error": False,
-    "code": 200,
-    "messages": []
-}
+            "error": False,
+            "code": 200,
+            "messages": []
+        }
 
         if response['code'] == 200:
             # TODO Uncomment below line and remove static data assign
@@ -339,7 +340,6 @@ class ProcessImportExport(models.TransientModel):
                 hrms_departments_ids = department_obj.hrms_create_department(
                     department_id_chunk, skip_existing_department)
                 hrms_departments = department_obj.browse(hrms_departments_ids)
-                
 
                 message = "Department created %s" % ', '.join(
                     hrms_departments.mapped('name'))
@@ -369,369 +369,370 @@ class ProcessImportExport(models.TransientModel):
 
         # response = requests.request("GET", api_url, headers=headers, data=payload)
         response = {
-    "result": {
-        "current_page": 1,
-        "data": [
-            {
-                "id": "ND",
-                "name": "John Doe",
-                "email": "john.doe@example.com",
-                "end_test": "2016-04-01",
-                "fired_date": False,
-                "business_trip": [],
-                "home_work": [],
-                "sick_leave": [],
-                "documented_sick_leave": [],
-                "vacation": [                 
+            "result": {
+                "current_page": 1,
+                "data": [
                     {
-                        "date": "2023-02-09",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
+                        "id": "ND",
+                        "name": "John Doe",
+                        "email": "john.doe@example.com",
+                        "end_test": "2016-04-01",
+                        "fired_date": False,
+                        "business_trip": [],
+                        "home_work": [],
+                        "sick_leave": [],
+                        "documented_sick_leave": [],
+                        "vacation": [
+                            {
+                                "date": "2023-02-09",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-02-08",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-02-07",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-02-06",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            }
+                        ],
+                        "unpaid_vacation": [],
+                        "overtime": [],
+                        "weekend_work": [
+                            {
+                                "date": "2021-06-27",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2021-04-17",
+                                "is_full_day": False,
+                                "from": "10:00",
+                                "to": "16:00",
+                                "used_minutes": 360
+                            }
+                        ],
+                        "night_shift": [],
+                        "day_transfer": []
                     },
                     {
-                        "date": "2023-02-08",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
+                        "id": "7xl",
+                        "name": "Helen Aoe",
+                        "email": "helen.aoe@example.com",
+                        "end_test": "2021-03-11",
+                        "fired_date": False,
+                        "business_trip": [],
+                        "home_work": [
+                            {
+                                "date": "2021-09-06",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2021-08-02",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            }
+                        ],
+                        "sick_leave": [
+                            {
+                                "date": "2022-03-30",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2022-02-21",
+                                "is_full_day": False,
+                                "from": "14:30",
+                                "to": "15:30",
+                                "used_minutes": 60
+                            },
+                            {
+                                "date": "2022-02-18",
+                                "is_full_day": False,
+                                "from": "11:30",
+                                "to": "18:00",
+                                "used_minutes": 390
+                            },
+                            {
+                                "date": "2022-02-17",
+                                "is_full_day": False,
+                                "from": "09:00",
+                                "to": "11:30",
+                                "used_minutes": 150
+                            },
+                            {
+                                "date": "2022-02-16",
+                                "is_full_day": False,
+                                "from": "14:30",
+                                "to": "15:30",
+                                "used_minutes": 60
+                            },
+                            {
+                                "date": "2021-11-05",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            }
+                        ],
+                        "documented_sick_leave": [],
+                        "vacation": [
+                            {
+                                "date": "2024-03-25",
+                                "is_full_day": False,
+                                "from": "14:00",
+                                "to": "18:00",
+                                "used_minutes": 240
+                            },
+                            {
+                                "date": "2024-02-23",
+                                "is_full_day": False,
+                                "from": "14:00",
+                                "to": "18:00",
+                                "used_minutes": 240
+                            },
+                            {
+                                "date": "2023-12-29",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-12-28",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-12-21",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                        ],
+                        "unpaid_vacation": [],
+                        "overtime": [
+                            {
+                                "date": "2022-06-08",
+                                "is_full_day": False,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            }
+                        ],
+                        "weekend_work": [],
+                        "night_shift": [],
+                        "day_transfer": [
+                            {
+                                "start": {
+                                    "date": "2021-07-28",
+                                    "is_full_day": False,
+                                    "from": "16:30",
+                                    "to": "18:00",
+                                    "used_minutes": 90
+                                },
+                                "end": {
+                                    "date": "2021-07-27",
+                                    "is_full_day": False,
+                                    "from": "18:00",
+                                    "to": "19:30",
+                                    "used_minutes": 90
+                                }
+                            }
+                        ]
                     },
                     {
-                        "date": "2023-02-07",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
+                        "id": "RLp",
+                        "name": "Dennis Smith",
+                        "email": "dennis.smith@example.com",
+                        "end_test": "2021-12-19",
+                        "fired_date": False,
+                        "business_trip": [],
+                        "home_work": [],
+                        "sick_leave": [],
+                        "documented_sick_leave": [],
+                        "vacation": [
+                            {
+                                "date": "2023-12-22",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-11-10",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-11-09",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-11-08",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-04-18",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-04-17",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 480
+                            },
+                            {
+                                "date": "2023-04-16",
+                                "is_full_day": True,
+                                "from": False,
+                                "to": False,
+                                "used_minutes": 0
+                            },
+                        ],
+                        "unpaid_vacation": [],
+                        "overtime": [],
+                        "weekend_work": [],
+                        "night_shift": [],
+                        "day_transfer": []
+                    },
+                ],
+                "first_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=1",
+                "from": 1,
+                "last_page": 19,
+                "last_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=19",
+                "links": [
+                    {
+                        "url": False,
+                        "label": "&laquo; Prev.",
+                        "active": False
                     },
                     {
-                        "date": "2023-02-06",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=1",
+                        "label": "1",
+                        "active": True
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
+                        "label": "2",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=3",
+                        "label": "3",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=4",
+                        "label": "4",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=5",
+                        "label": "5",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=6",
+                        "label": "6",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=7",
+                        "label": "7",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=8",
+                        "label": "8",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=9",
+                        "label": "9",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=10",
+                        "label": "10",
+                        "active": False
+                    },
+                    {
+                        "url": False,
+                        "label": "...",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=18",
+                        "label": "18",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=19",
+                        "label": "19",
+                        "active": False
+                    },
+                    {
+                        "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
+                        "label": "Next. &raquo;",
+                        "active": False
                     }
                 ],
-                "unpaid_vacation": [],
-                "overtime": [],
-                "weekend_work": [
-                    {
-                        "date": "2021-06-27",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2021-04-17",
-                        "is_full_day": False,
-                        "from": "10:00",
-                        "to": "16:00",
-                        "used_minutes": 360
-                    }
-                ],
-                "night_shift": [],
-                "day_transfer": []
+                "next_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
+                "path": "https://mycompany.hrmsystem.com/api/v1/out-off-office",
+                "per_page": 5,
+                "prev_page_url": False,
+                "to": 5,
+                "total": 94
             },
-            {
-                "id": "7xl",
-                "name": "Helen Aoe",
-                "email": "helen.aoe@example.com",
-                "end_test": "2021-03-11",
-                "fired_date": False,
-                "business_trip": [],
-                "home_work": [
-                    {
-                        "date": "2021-09-06",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2021-08-02",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    }
-                ],
-                "sick_leave": [
-                    {
-                        "date": "2022-03-30",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2022-02-21",
-                        "is_full_day": False,
-                        "from": "14:30",
-                        "to": "15:30",
-                        "used_minutes": 60
-                    },
-                    {
-                        "date": "2022-02-18",
-                        "is_full_day": False,
-                        "from": "11:30",
-                        "to": "18:00",
-                        "used_minutes": 390
-                    },
-                    {
-                        "date": "2022-02-17",
-                        "is_full_day": False,
-                        "from": "09:00",
-                        "to": "11:30",
-                        "used_minutes": 150
-                    },
-                    {
-                        "date": "2022-02-16",
-                        "is_full_day": False,
-                        "from": "14:30",
-                        "to": "15:30",
-                        "used_minutes": 60
-                    },
-                    {
-                        "date": "2021-11-05",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    }
-                ],
-                "documented_sick_leave": [],
-                "vacation": [
-                    {
-                        "date": "2024-03-25",
-                        "is_full_day": False,
-                        "from": "14:00",
-                        "to": "18:00",
-                        "used_minutes": 240
-                    },
-                    {
-                        "date": "2024-02-23",
-                        "is_full_day": False,
-                        "from": "14:00",
-                        "to": "18:00",
-                        "used_minutes": 240
-                    },
-                    {
-                        "date": "2023-12-29",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-12-28",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-12-21",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                ],
-                "unpaid_vacation": [],
-                "overtime": [
-                    {
-                        "date": "2022-06-08",
-                        "is_full_day": False,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    }
-                ],
-                "weekend_work": [],
-                "night_shift": [],
-                "day_transfer": [
-                    {
-                        "start": {
-                            "date": "2021-07-28",
-                            "is_full_day": False,
-                            "from": "16:30",
-                            "to": "18:00",
-                            "used_minutes": 90
-                        },
-                        "end": {
-                            "date": "2021-07-27",
-                            "is_full_day": False,
-                            "from": "18:00",
-                            "to": "19:30",
-                            "used_minutes": 90
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "RLp",
-                "name": "Dennis Smith",
-                "email": "dennis.smith@example.com",
-                "end_test": "2021-12-19",
-                "fired_date": False,
-                "business_trip": [],
-                "home_work": [],
-                "sick_leave": [],
-                "documented_sick_leave": [],
-                "vacation": [
-                    {
-                        "date": "2023-12-22",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-11-10",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-11-09",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-11-08",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-04-18",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-04-17",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 480
-                    },
-                    {
-                        "date": "2023-04-16",
-                        "is_full_day": True,
-                        "from": False,
-                        "to": False,
-                        "used_minutes": 0
-                    },
-                ],
-                "unpaid_vacation": [],
-                "overtime": [],
-                "weekend_work": [],
-                "night_shift": [],
-                "day_transfer": []
-            },
-        ],
-        "first_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=1",
-        "from": 1,
-        "last_page": 19,
-        "last_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=19",
-        "links": [
-            {
-                "url": False,
-                "label": "&laquo; Prev.",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=1",
-                "label": "1",
-                "active": True
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
-                "label": "2",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=3",
-                "label": "3",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=4",
-                "label": "4",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=5",
-                "label": "5",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=6",
-                "label": "6",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=7",
-                "label": "7",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=8",
-                "label": "8",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=9",
-                "label": "9",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=10",
-                "label": "10",
-                "active": False
-            },
-            {
-                "url": False,
-                "label": "...",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=18",
-                "label": "18",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=19",
-                "label": "19",
-                "active": False
-            },
-            {
-                "url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
-                "label": "Next. &raquo;",
-                "active": False
-            }
-        ],
-        "next_page_url": "https://mycompany.hrmsystem.com/api/v1/out-off-office?page=2",
-        "path": "https://mycompany.hrmsystem.com/api/v1/out-off-office",
-        "per_page": 5,
-        "prev_page_url": False,
-        "to": 5,
-        "total": 94
-    },
-    "error": False,
-    "code": 200,
-    "messages": []
-}
+            "error": False,
+            "code": 200,
+            "messages": []
+        }
 
         if response['code'] == 200:
-            leave_data = response.json().get('data', [])
+            # leave_data = response.json().get('data', [])
+            leave_data = response['result']['data']
 
         if len(leave_data) > 0:
             for leave_id_chunk in split_every(50, leave_data):
@@ -749,4 +750,3 @@ class ProcessImportExport(models.TransientModel):
 
             self._cr.commit()
         return hrms_leave_ids
-

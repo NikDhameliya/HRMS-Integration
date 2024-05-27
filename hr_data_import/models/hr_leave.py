@@ -19,8 +19,8 @@ class HRLeaveDetail(models.Model):
     leave_id = fields.Many2one('hr.leave', string="Leave")
     date = fields.Date(string="Date")
     is_full_day = fields.Boolean(string="Is Full Day")
-    from_time = fields.Float(string="From")
-    to_time = fields.Float(string="To")
+    from_time = fields.Char(string="From")
+    to_time = fields.Char(string="To")
     used_minutes = fields.Integer(string="Used Minutes")
     type = fields.Selection([
         ('business_trip', 'Business Trip'),
