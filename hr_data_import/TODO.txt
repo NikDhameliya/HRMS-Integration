@@ -1,3 +1,22 @@
 1. Implement Start / stop functionality
 2. Implement live logs (if possible)
 3. Check skills table 
+4. Work on 
+"day_transfer": [
+                    {
+                        "start": {
+                            "date": "2021-07-28",
+                            "is_full_day": false,
+                            "from": "16:30",
+                            "to": "18:00",
+                            "used_minutes": 90
+                        },
+                        "end": {
+                            "date": "2021-07-27",
+                            "is_full_day": false,
+                            "from": "18:00",
+                            "to": "19:30",
+                            "used_minutes": 90
+                        }
+                    }
+                ]
