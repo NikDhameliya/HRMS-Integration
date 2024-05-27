@@ -17,6 +17,7 @@ class HRLeaveDetail(models.Model):
     _description = 'HR Leave Detail'
 
     leave_id = fields.Many2one('hr.leave', string="Leave")
+    hrms_leave_id = fields.Many2one('hrms.hr.leave', string="Leave")
     date = fields.Date(string="Date")
     is_full_day = fields.Boolean(string="Is Full Day")
     from_time = fields.Char(string="From")

@@ -23,38 +23,11 @@
                             <field name="end_test" />
                             <field name="fired_date" />
                         </group>
-                        <!-- <notebook>
-                            <page string="Business Trip">
-                                <field name="business_trip" />
+                        <notebook>
+                            <page string="Leave Details">
+                                <field name="leave_detail_ids" />
                             </page>
-                            <page string="Home Work">
-                                <field name="home_work" />
-                            </page>
-                            <page string="Sick Leave">
-                                <field name="sick_leave" />
-                            </page>
-                            <page string="Documented Sick Leave">
-                                <field name="documented_sick_leave" />
-                            </page>
-                            <page string="Vacation">
-                                <field name="vacation" />
-                            </page>
-                            <page string="Unpaid Vacation">
-                                <field name="unpaid_vacation" />
-                            </page>
-                            <page string="Overtime">
-                                <field name="overtime" />
-                            </page>
-                            <page string="Weekend Work">
-                                <field name="weekend_work" />
-                            </page>
-                            <page string="Night Shift">
-                                <field name="night_shift" />
-                            </page>
-                            <page string="Day Transfer">
-                                <field name="day_transfer" />
-                            </page>
-                        </notebook> -->
+                        </notebook>
                     </sheet>
                 </form>
             </field>

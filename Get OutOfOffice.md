@@ -54,7 +54,7 @@ Sample Response
                 "home_work": [],
                 "sick_leave": [],
                 "documented_sick_leave": [],
-                "vacation": [                 
+                "vacation": [
                     {
                         "date": "2023-02-09",
                         "is_full_day": true,

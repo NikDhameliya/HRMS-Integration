@@ -112,7 +112,6 @@ class HrmsHrEmployee(models.Model):
 
             employee_vals = {
                 'name': employee.get('name'),
-                'employee_type': 'employee',
                 'email': employee.get('email') or False,
                 'phone': employee.get('phone') or False,
                 'skype': employee.get('skype') or False,
@@ -151,6 +150,7 @@ class HrmsHrEmployee(models.Model):
             else:
                 hr_employee = hr_employee_obj.create({
                     'name': employee.get('name'),
+                    'employee_type': 'employee',
                     'work_email': employee.get('email') or False,
                     'work_phone': employee.get('phone') or False,
                     'job_id': job_id.id if job_id else False,
