@@ -8,8 +8,9 @@
     'depends': ['base', 'hr', 'hr_holidays'],
     'data': [
         'data/data.xml',
+        'data/ir_sequence.xml',
         'security/ir.model.access.csv',
-        'wizard/process_import_export_view.xml',
+        'views/process_import_export_view.xml',
         'views/hrms_hr_employee_view.xml',
         'views/hrms_hr_department_view.xml',
         'views/hrms_hr_leave_view.xml',

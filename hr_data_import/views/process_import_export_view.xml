@@ -9,6 +9,11 @@
             <field name="priority">11</field>
             <field name="arch" type="xml">
                 <form string="Import/Export">
+                    <header>
+                        <button name="action_start" type="object" string="Start" invisible="state != 'draft'" />
+                        <button name="action_stop" type="object" string="Pause" invisible="state != 'started'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,started,done,cancelled"/>
+                    </header>
                     <sheet>
                         <style>
                             .embed-responsive-item {
@@ -79,6 +84,19 @@
                                 </div>
                             </div>
                             <notebook>
+                                <page string="Common Logs">
+                                    <field name="log_book_id" invisible="1"/>
+
+                                    <field name="log_lines" readonly="True">
+                                        <tree create="false" editable="bottom" decoration-danger="log_line_type=='fail'"
+                                              decoration-success="log_line_type=='success'">
+                                            <field name="message"/>
+                                            <field name="model_id"/>
+                                            <field name="res_id"/>
+                                            <field name="log_line_type" column_invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </page>
                                 <page string='Sync Option'>
                                     <div class="row">
                                         <group name='sync_employees'
@@ -96,17 +114,55 @@
                                     </div>
                                 </page>
                             </notebook>
-                            <footer>
-                                <button string="Execute" class="oe_highlight"
-                                    type="object" name="hrms_execute" />
-                                <button string="Cancel" class="oe_highlight"
-                                    special="cancel" />
-                            </footer>
                         </div>
                     </sheet>
                 </form>
             </field>
         </record>
+
+            <!-- List View for Process Import Export -->
+    <record id="view_process_import_export_list" model="ir.ui.view">
+        <field name="name">process.import.export.list</field>
+        <field name="model">process.import.export</field>
+        <field name="arch" type="xml">
+            <tree string="Process Import Export">
+                <field name="hrms_instance_id"/>
+                <field name="hrms_operation"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View for Process Import Export -->
+    <record id="view_process_import_export_search" model="ir.ui.view">
+        <field name="name">process.import.export.search</field>
+        <field name="model">process.import.export</field>
+        <field name="arch" type="xml">
+            <search string="Process Import Export">
+                <field name="hrms_instance_id"/>
+                <field name="hrms_operation"/>
+                <field name="state"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Started" name="started" domain="[('state', '=', 'started')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action to open the list view -->
+    <record id="action_process_import_export" model="ir.actions.act_window">
+        <field name="name">Process Import Export</field>
+        <field name="res_model">process.import.export</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_process_import_export_search"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to create a new process import/export record.
+            </p>
+        </field>
+    </record>
 
         <!-- Action for hrms oprations-->
         <record id="action_wizard_hrms_import_orders_in_hr_data_import"
@@ -115,20 +171,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">process.import.export</field>
             <field name="view_mode">form</field>
-            <field name="view_id"
-                ref="view_hrms_process_import_export_ept" />
-            <field name="target">new</field>
-        </record>
-
-        <!-- Below action used to redirect operation wizard from the instance kanban view-->
-        <record
-            id="action_wizard_hrms_instance_import_export_operations" model="ir.actions.act_window">
-            <field name="name">Operations</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">process.import.export</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="hr_data_import.view_hrms_process_import_export_ept" />
-            <field name="target">new</field>
+            <field name="view_id" ref="view_hrms_process_import_export_ept" />
         </record>
 
 

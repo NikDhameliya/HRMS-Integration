@@ -57,16 +57,23 @@ class HrmsHrEmployee(models.Model):
     educations = fields.Char(string="Educations")
     grade = fields.Char(string="Grade")
 
-    def hrms_create_employee(self, employee_data, skip_existing_employee):
+    def hrms_create_employee(self, employee_data, skip_existing_employee, log_book):
         employee_obj = self.env["hrms.hr.employee"]
         hr_employee_obj = self.env['hr.employee']
         res_country_obj = self.env['res.country']
         hr_department_obj = self.env['hr.department']
         hr_job_obj = self.env['hr.job']
-
         employee_ids = []
-
+        self.env['common.log.lines'].create_common_log_line_ept(
+            log_book_id=log_book.id,
+            message=f"Processing Employee Data",
+            log_line_type='success',
+            model_name='hr.employee'
+        )
         for employee in employee_data:
+            import_job_status = self.env.company.import_job_status
+            if import_job_status == 'stopped':
+                break
             employee_rec = employee_obj.search(
                 [('hrms_external_id', '=', employee.get('id'))], limit=1)
             if skip_existing_employee and employee_rec:
@@ -78,13 +85,45 @@ class HrmsHrEmployee(models.Model):
                 team_rec = hr_department_obj.search(
                     [('name', '=', team.get('name'))], limit=1)
                 if not team_rec:
+                    message = "Creating new team %s" % (team.get('name'))
+                    _logger.info(message)
+                    self.env['common.log.lines'].create_common_log_line_ept(
+                        log_book_id=log_book.id,
+                        message=message,
+                        log_line_type='success',
+                        model_name='hr.employee'
+                    )
                     team_rec = hr_department_obj.create(
                         {'name': team.get('name')})
+                    message = "Created new team %s" % (team.get('name'))
+                    _logger.info(message)
+                    self.env['common.log.lines'].create_common_log_line_ept(
+                        log_book_id=log_book.id,
+                        message=message,
+                        log_line_type='success',
+                        model_name='hr.employee'
+                    )
                 team_ids.append(team_rec.id)
             job_id = hr_job_obj.search(
                 [('name', '=', employee.get('position'))], limit=1)
             if not job_id:
+                message = "Creating new job %s" % (employee.get('position'))
+                _logger.info(message)
+                self.env['common.log.lines'].create_common_log_line_ept(
+                    log_book_id=log_book.id,
+                    message=message,
+                    log_line_type='success',
+                    model_name='hr.employee'
+                )
                 job_id = hr_job_obj.create({'name': employee.get('position')})
+                message = "Created new job %s" % (employee.get('position'))
+                _logger.info(message)
+                self.env['common.log.lines'].create_common_log_line_ept(
+                    log_book_id=log_book.id,
+                    message=message,
+                    log_line_type='success',
+                    model_name='hr.employee'
+                )
                 
             # Handling skills, languages, awards, educations
             skill_ids = []

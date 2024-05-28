@@ -8,9 +8,8 @@
             <field name="arch" type="xml">
                 <tree string="Common Log Book" create="false">
                     <field name="name"/>
-                    <field name="type"/>
-                    <field name="module"/>
                     <field name="create_date"/>
+                    <field name="message"/>
                 </tree>
             </field>
         </record>
@@ -29,13 +28,11 @@
                         </div>
                         <group>
                             <group>
-                                <field name="type"/>
-                                <field name="module"/>
                                 <field name="model_id"/>
+                                <field name="create_date"/>
                             </group>
                             <group>
-                                <field name="create_date"/>
-                                <field name="active"/>
+                                <field name="message"/>
                                 <field name="res_id"/>
                             </group>
                         </group>
@@ -44,9 +41,6 @@
                                 <field name="log_lines" readonly="True">
                                     <tree create="false" editable="bottom" decoration-danger="log_line_type=='fail'"
                                           decoration-success="log_line_type=='success'">
-                                        <field name="employee_id"/>
-                                        <field name="department_id"/>
-                                        <field name="leave_id"/>
                                         <field name="message"/>
                                         <field name="model_id"/>
                                         <field name="res_id"/>

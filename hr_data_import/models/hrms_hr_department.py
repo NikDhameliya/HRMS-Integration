@@ -3,6 +3,7 @@
 from odoo import models, fields, api, _
 
 import logging
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger("HRMS Department Operations")
 
@@ -25,12 +26,22 @@ class HrmsHrDepartment(models.Model):
     child_ids = fields.Many2many('hr.department', 'hr_department_subteams_dept_rel', 'department_id', 'subteam_id', string="Subteams")
     parent_id = fields.Many2one('hr.department', string="Parent Team", index=True)
 
-    def hrms_create_department(self, department_data, skip_existing_department=False):
+    def hrms_create_department(self, department_data, skip_existing_department, log_book):
         Department = self.env['hr.department']
         Employee = self.env['hr.employee']
         created_department_ids = []
 
+        self.env['common.log.lines'].create_common_log_line_ept(
+            log_book_id=log_book.id,
+            message=f"Processing Department Data",
+            log_line_type='success',
+            model_name='hr.department'
+        )
+
         for dept in department_data:
+            import_job_status = self.env.company.import_job_status
+            if import_job_status == 'stopped':
+                break
             existing_dept = Department.search(
                 [('hrms_external_id', '=', dept.get('id'))], limit=1)
             if skip_existing_department and existing_dept:

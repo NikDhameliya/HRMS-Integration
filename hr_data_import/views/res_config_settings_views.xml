@@ -20,6 +20,12 @@
                                 <label for="hrm_base_url" class="col-lg-5 o_light_label" />
                                 <field name="hrm_base_url" />
                             </div>
+                            <div class="content-group">
+                                <div class="mt16">
+                                    <label for="import_job_status" class="col-lg-5 o_light_label" />
+                                    <field name="import_job_status" class="o_light_label" widget="radio"/>
+                                </div>
+                            </div>
                         </div>
                     </block>
                 </app>

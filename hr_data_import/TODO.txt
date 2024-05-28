@@ -1,6 +1,6 @@
 1. Implement Start / stop functionality
 2. Implement live logs (if possible)
-3. Check skills table 
+3. Get settings while post req
 
 
 To handle the "day_transfer" leave type in Odoo, where you have start and end times on different days, you can create two leave records: one for the start date and one for the end date. This approach ensures that the leave entries reflect the correct hours and dates in the Odoo system.

@@ -10,16 +10,10 @@ class CommonLogBookEpt(models.Model):
     _description = "Common log book Ept"
 
     name = fields.Char(readonly=True)
-    type = fields.Selection([('import', 'Import')], string="Operation")
-    module = fields.Selection([('hrms', 'HRMS Connector')])
-
-    active = fields.Boolean(default=True)
     log_lines = fields.One2many('common.log.lines', 'log_book_id')
     message = fields.Text()
     model_id = fields.Many2one("ir.model", help="Model Id", string="Model")
     res_id = fields.Integer(string="Record ID", help="Process record id")
-    attachment_id = fields.Many2one('ir.attachment', string="Attachment")
-    file_name = fields.Char()
 
     @api.model_create_multi
     def create(self, vals_list):

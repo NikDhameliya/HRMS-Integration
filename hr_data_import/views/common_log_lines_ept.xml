@@ -7,9 +7,6 @@
             <search>
                 <field name="message"/>
                 <field name="model_id"/>
-                <field name="employee_id"/>
-                <field name="department_id"/>
-                <field name="leave_id"/>
                 <filter name="filter_write_date" date="write_date" string="Update Date"/>
                 <group expand="0" string="Group By...">
                     <filter name="groupby_model" string="Model" icon="terp-personal"
@@ -26,10 +23,7 @@
         <field name="model">common.log.lines</field>
         <field name="arch" type="xml">
             <tree create="false" default_order="write_date desc" sample="1">
-<!--                <field name="log_book_id"/>-->
-                <field name="employee_id"/>
-                <field name="department_id"/>
-                <field name="leave_id"/>
+                <field name="log_book_id" invisible="1"/>
                 <field name="message"/>
                 <field name="model_id"/>
                 <field name="write_date"/>
@@ -48,14 +42,8 @@
                     </h3>
                     <group>
                         <group>
-<!--                            <field name="log_book_id" readonly="1"/>-->
                             <field name="model_id" readonly="1"/>
                             <field name="write_date"/>
-                        </group>
-                        <group>
-                            <field name="employee_id"/>
-                            <field name="department_id"/>
-                            <field name="leave_id"/>
                         </group>
                     </group>
                 </sheet>

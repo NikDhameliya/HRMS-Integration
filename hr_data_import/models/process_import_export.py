@@ -12,7 +12,7 @@ from odoo import models, fields, api, _
 _logger = logging.getLogger("hrms Operations")
 
 
-class ProcessImportExport(models.TransientModel):
+class ProcessImportExport(models.Model):
     _name = 'process.import.export'
     _description = 'Process Import Export'
 
@@ -37,6 +37,31 @@ class ProcessImportExport(models.TransientModel):
                                  help="Based on Leave ids get Leave from api and import in odoo")
     skip_existing_leave = fields.Boolean(string="Do Not Update Existing Leaves",
                                          help="Check if you want to skip existing Leaves.")
+    log_book_id = fields.Many2one('common.log.book', string="Log Book")
+    log_lines = fields.One2many(related='log_book_id.log_lines')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('started', 'Started'),
+        ('done', 'Done'),
+        ('cancelled', 'Cancelled')
+    ], default='draft')
+    
+    def action_start(self):
+        self.env.company.import_job_status = 'running'
+        self.state = 'started'
+        self.hrms_execute()
+        return {
+            "type": "ir.actions.client",
+            "tag": "reload",
+        }
+
+    def action_stop(self):
+        self.env.company.import_job_status = 'stopped'
+        self.state = 'cancelled'
+
+    def action_done(self):
+        self.env.company.import_job_status = 'stopped'
+        self.state = 'done'
 
     def hrms_execute(self):
         """This method used to execute the operation as per given in wizard.
@@ -44,16 +69,21 @@ class ProcessImportExport(models.TransientModel):
         data_ids = False
         context = dict(self.env.context or {})
         context.update({'hrms_instance_id': self.hrms_instance_id.id})
+        self.env.company.import_job_status = 'running'
+        self.state = 'started'
         try:
             if self.hrms_operation == "sync_employee":
+                log_book = self.env['common.log.book'].create_common_log_book_ept(model_name='hr.employee', type='import', message="Starting employee import")
+                self.log_book_id = log_book.id
                 employee_ids = self.with_context(context).hrms_create_employee(
-                    self.skip_existing_employee)
+                    self.skip_existing_employee, log_book)
                 # Flatten the list of lists into a single list
                 flat_employee_ids = [
                     item for sublist in employee_ids for item in sublist]
                 if flat_employee_ids:
                     data_ids = flat_employee_ids
                     if data_ids:
+                        self.action_done()
                         return {
                             'type': 'ir.actions.act_window',
                             'name': _('HRMS Employees'),
@@ -63,8 +93,10 @@ class ProcessImportExport(models.TransientModel):
                         }
 
             elif self.hrms_operation == "sync_department":
+                log_book = self.env['common.log.book'].create_common_log_book_ept(model_name='hr.department', type='import', message="Starting Department import")
+                self.log_book_id = log_book.id
                 department_ids = self.with_context(context).hrms_create_department(
-                    self.skip_existing_department)
+                    self.skip_existing_department, log_book)
                 # Flatten the list of lists into a single list
                 flat_department_ids = [
                     item for sublist in department_ids for item in sublist]
@@ -72,6 +104,7 @@ class ProcessImportExport(models.TransientModel):
                 if flat_department_ids:
                     data_ids = flat_department_ids
                     if data_ids:
+                        self.action_done()
                         return {
                             'type': 'ir.actions.act_window',
                             'name': _('HRMS Departments'),
@@ -81,14 +114,17 @@ class ProcessImportExport(models.TransientModel):
                         }
 
             elif self.hrms_operation == "sync_leave":
+                log_book = self.env['common.log.book'].create_common_log_book_ept(model_name='hr.leave', type='import', message="Starting Leaves import")
+                self.log_book_id = log_book.id
                 leave_ids = self.with_context(
-                    context).hrms_create_leave(self.skip_existing_leave)
+                    context).hrms_create_leave(self.skip_existing_leave, log_book)
                 # Flatten the list of lists into a single list
                 flat_leave_ids = [
                     item for sublist in leave_ids for item in sublist]
                 if flat_leave_ids:
                     data_ids = flat_leave_ids
                     if flat_leave_ids:
+                        self.action_done()
                         return {
                             'type': 'ir.actions.act_window',
                             'name': _('HRMS Leaves'),
@@ -107,7 +143,7 @@ class ProcessImportExport(models.TransientModel):
             "tag": "reload",
         }
 
-    def hrms_create_employee(self, skip_existing_employee):
+    def hrms_create_employee(self, skip_existing_employee, log_book):
         """
         It creates employee data queue from data of Employee.
         """
@@ -134,7 +170,7 @@ class ProcessImportExport(models.TransientModel):
         if len(employee_data) > 0:
             for employee_id_chunk in split_every(25, employee_data):
                 hrms_employees_ids = employee_obj.hrms_create_employee(
-                    employee_id_chunk, skip_existing_employee)
+                    employee_id_chunk, skip_existing_employee, log_book)
                 hrms_employees = employee_obj.browse(hrms_employees_ids)
                 message = "Employee created %s" % ', '.join(
                     hrms_employees.mapped('name'))
@@ -147,7 +183,7 @@ class ProcessImportExport(models.TransientModel):
             self._cr.commit()
         return hrms_employee_ids
 
-    def hrms_create_department(self, skip_existing_department):
+    def hrms_create_department(self, skip_existing_department, log_book):
         """
         It creates department data queue from data of department.
         """
@@ -338,7 +374,7 @@ class ProcessImportExport(models.TransientModel):
         if len(department_data) > 0:
             for department_id_chunk in split_every(25, department_data):
                 hrms_departments_ids = department_obj.hrms_create_department(
-                    department_id_chunk, skip_existing_department)
+                    department_id_chunk, skip_existing_department, log_book)
                 hrms_departments = department_obj.browse(hrms_departments_ids)
 
                 message = "Department created %s" % ', '.join(
@@ -352,7 +388,7 @@ class ProcessImportExport(models.TransientModel):
             self._cr.commit()
         return hrms_department_ids
 
-    def hrms_create_leave(self, skip_existing_leave):
+    def hrms_create_leave(self, skip_existing_leave, log_book):
         """
         It creates leave data queue from data of leave.
         """
@@ -737,7 +773,7 @@ class ProcessImportExport(models.TransientModel):
         if len(leave_data) > 0:
             for leave_id_chunk in split_every(50, leave_data):
                 hrms_leaves_ids = leave_obj.hrms_create_leave(
-                    leave_id_chunk, skip_existing_leave)
+                    leave_id_chunk, skip_existing_leave, log_book)
                 hrms_leaves = leave_obj.browse(hrms_leaves_ids)
 
                 message = "Leave created %s" % ', '.join(

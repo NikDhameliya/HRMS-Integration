@@ -9,6 +9,10 @@ class ResCompany(models.Model):
 
     hrm_api_key = fields.Char(string="HRM API Key")
     hrm_base_url = fields.Char(string="HRM Base URL")
+    import_job_status = fields.Selection([
+           ('stopped', 'Stopped'),
+           ('running', 'Running'),
+       ], string="Import Job Status", default='stopped')
 
 
 class ResConfigSettings(models.TransientModel):
@@ -16,3 +20,4 @@ class ResConfigSettings(models.TransientModel):
 
     hrm_api_key = fields.Char(string="HRM API Key", related="company_id.hrm_api_key", readonly=False, help="Set API Key")
     hrm_base_url = fields.Char(string="HRM Base URL", related="company_id.hrm_base_url", readonly=False, help="Set Base URL")
+    import_job_status = fields.Selection(related="company_id.import_job_status", readonly=False)

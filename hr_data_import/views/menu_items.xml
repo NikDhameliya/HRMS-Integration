@@ -18,7 +18,7 @@
             id="menu_hrms_processes_ept"
             parent="hr_data_import.menu_hr_data_import_root" 
             name="Operations"
-            action="hr_data_import.action_wizard_hrms_import_orders_in_hr_data_import" 
+            action="hr_data_import.action_process_import_export" 
             sequence="2" />
         
         <menuitem 

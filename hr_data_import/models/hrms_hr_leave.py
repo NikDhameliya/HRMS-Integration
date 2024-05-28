@@ -28,7 +28,7 @@ class HrmsHrLeave(models.Model):
     leave_detail_ids = fields.One2many(
         'hr.leave.detail', 'hrms_leave_id', string="Business Trip")
 
-    def hrms_create_leave(self, leave_data, skip_existing_leave=False):
+    def hrms_create_leave(self, leave_data, skip_existing_leave, log_book):
         Leave = self.env['hr.leave']
         created_leave_ids = []
 
@@ -40,8 +40,16 @@ class HrmsHrLeave(models.Model):
                 return False
             hours, minutes = map(int, time_str.split(':'))
             return hours if minutes == 0 else hours + minutes / 60.0
-
+        self.env['common.log.lines'].create_common_log_line_ept(
+            log_book_id=log_book.id,
+            message=f"Processing Leave Data",
+            log_line_type='success',
+            model_name='hr.leave'
+        )
         for leave in leave_data:
+            import_job_status = self.env.company.import_job_status
+            if import_job_status == 'stopped':
+                break
             try:
                 if skip_existing_leave:
                     existing_leave = Leave.search([('hrms_external_id', '=', leave['id'])])

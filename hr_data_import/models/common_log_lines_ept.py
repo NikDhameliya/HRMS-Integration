@@ -7,20 +7,13 @@ class CommonLogLineEpt(models.Model):
     _name = "common.log.lines"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _description = "Common log line"
-    
 
-    employee_id = fields.Many2one('hr.employee', ondelete="cascade")
-    department_id = fields.Many2one('hr.department', ondelete="cascade")
-    leave_id = fields.Many2one('hr.leave', ondelete="cascade")
     log_book_id = fields.Many2one('common.log.book', ondelete="cascade")
     message = fields.Text()
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
     mismatch_details = fields.Boolean(string='Mismatch Detail', help="Mismatch Detail of process record")
-    file_name = fields.Char()
     log_line_type = fields.Selection(selection=[('success', 'Success'), ('fail', 'Fail')], default='fail')
-    operation_type = fields.Selection([('import', 'Import')], string="Operation")
-    module = fields.Selection([('hrms', 'HRMS Connector')])
 
     def create_common_log_line_ept(self, **kwargs):
         """
