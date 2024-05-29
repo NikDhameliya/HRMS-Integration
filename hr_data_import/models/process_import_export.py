@@ -477,7 +477,6 @@ class ProcessImportExport(models.Model):
                 hrms_departments_ids = department_obj.hrms_create_department(
                     department_id_chunk, skip_existing_department, log_book)
                 hrms_department_ids.append(hrms_departments_ids)
-        self._cr.commit()
         return hrms_department_ids
 
     def hrms_create_leave(self, skip_existing_leave, log_book):

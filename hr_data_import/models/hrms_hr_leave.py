@@ -50,11 +50,23 @@ class HrmsHrLeave(models.Model):
         for leave in leave_data:
             import_job_status = self.env.company.import_job_status
             if import_job_status == 'stopped':
+                self.env['common.log.lines'].create_common_log_line_ept(
+                    log_book_id=log_book.id,
+                    message="Import job stopped by user",
+                    log_line_type='warning',
+                    model_name='hr.leave'
+                )
                 break
             try:
                 if skip_existing_leave:
                     existing_leave = Leave.search([('hrms_external_id', '=', leave['id'])])
                     if existing_leave:
+                        self.env['common.log.lines'].create_common_log_line_ept(
+                            log_book_id=log_book.id,
+                            message=f"Skipping existing leave with HRMS ID {leave['id']}",
+                            log_line_type='info',
+                            model_name='hr.leave'
+                        )
                         continue
                 employee_id = self.env['hr.employee'].search(
                     [('hrms_external_id', '=', leave['id'])], limit=1)
@@ -66,6 +78,12 @@ class HrmsHrLeave(models.Model):
                         'employee_type': 'employee',
                         'company_id': self.env.company.id
                     })
+                    self.env['common.log.lines'].create_common_log_line_ept(
+                        log_book_id=log_book.id,
+                        message=f"Created new employee for leave processing with HRMS ID {leave['id']}",
+                        log_line_type='success',
+                        model_name='hr.employee'
+                    )
                 for leave_type in ['business_trip', 'home_work', 'sick_leave', 'documented_sick_leave', 'vacation', 'unpaid_vacation', 'overtime', 'weekend_work', 'night_shift', 'day_transfer']:
                     for detail in leave.get(leave_type, []):
                         # Initialize from_time and to_time
@@ -104,6 +122,12 @@ class HrmsHrLeave(models.Model):
                                     holiday_status_id = self.env['hr.leave.type'].create({
                                         'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
                                     })
+                                    self.env['common.log.lines'].create_common_log_line_ept(
+                                        log_book_id=log_book.id,
+                                        message=f"Created new leave type {leave_type}",
+                                        log_line_type='success',
+                                        model_name='hr.leave.type'
+                                    )
                                 start_vals.update({'holiday_status_id': holiday_status_id.id})
                                 start_vals['leave_detail_ids'].append((0, 0, start_detail_vals))
                                 start_leave_record = Leave.create(start_vals)
@@ -120,6 +144,12 @@ class HrmsHrLeave(models.Model):
                                     'leave_detail_ids': [detail for detail in start_vals['leave_detail_ids']]
                                 })
                                 created_leave_ids.append(hrms_leave_start.id)
+                                self.env['common.log.lines'].create_common_log_line_ept(
+                                    log_book_id=log_book.id,
+                                    message=f"Created start leave record for day_transfer for employee {employee_id.name} with HRMS ID {leave['id']}",
+                                    log_line_type='success',
+                                    model_name='hr.leave'
+                                )
                             # Handle end part of day_transfer
                             end = detail.get('end', {})
                             if end:
@@ -152,6 +182,12 @@ class HrmsHrLeave(models.Model):
                                     holiday_status_id = self.env['hr.leave.type'].create({
                                         'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
                                     })
+                                    self.env['common.log.lines'].create_common_log_line_ept(
+                                        log_book_id=log_book.id,
+                                        message=f"Created new leave type {leave_type}",
+                                        log_line_type='success',
+                                        model_name='hr.leave.type'
+                                    )
                                 end_vals.update({'holiday_status_id': holiday_status_id.id})
                                 end_vals['leave_detail_ids'].append((0, 0, end_detail_vals))
                                 end_leave_record = Leave.create(end_vals)
@@ -168,6 +204,12 @@ class HrmsHrLeave(models.Model):
                                     'leave_detail_ids': [detail for detail in end_vals['leave_detail_ids']]
                                 })
                                 created_leave_ids.append(hrms_leave_end.id)
+                                self.env['common.log.lines'].create_common_log_line_ept(
+                                    log_book_id=log_book.id,
+                                    message=f"Created end leave record for day_transfer for employee {employee_id.name} with HRMS ID {leave['id']}",
+                                    log_line_type='success',
+                                    model_name='hr.leave'
+                                )
                         else:
                             leave_vals = {
                                 'name': leave['name'],
@@ -202,6 +244,12 @@ class HrmsHrLeave(models.Model):
                                 holiday_status_id = self.env['hr.leave.type'].create({
                                     'name': leave_type, 'employee_requests': 'no', 'request_unit': 'day', 'requires_allocation': 'yes'
                                 })
+                                self.env['common.log.lines'].create_common_log_line_ept(
+                                    log_book_id=log_book.id,
+                                    message=f"Created new leave type {leave_type}",
+                                    log_line_type='success',
+                                    model_name='hr.leave.type'
+                                )
                             leave_vals.update({'holiday_status_id': holiday_status_id.id})
                             leave_vals['leave_detail_ids'].append((0, 0, detail_vals))
                             leave_record = Leave.create(leave_vals)
@@ -218,8 +266,20 @@ class HrmsHrLeave(models.Model):
                                 'leave_detail_ids': [detail for detail in leave_vals['leave_detail_ids']]
                             })
                             created_leave_ids.append(hrms_leave.id)
+                            self.env['common.log.lines'].create_common_log_line_ept(
+                                log_book_id=log_book.id,
+                                message=f"Created leave record for employee {employee_id.name} with HRMS ID {leave['id']}",
+                                log_line_type='success',
+                                model_name='hr.leave'
+                            )
             except Exception as e:
                 _logger.error(f"Error processing leave for {leave['name']}: {e}")
+                self.env['common.log.lines'].create_common_log_line_ept(
+                    log_book_id=log_book.id,
+                    message=f"Error processing leave for {leave['name']} with HRMS ID {leave['id']}: {e}",
+                    log_line_type='error',
+                    model_name='hr.leave'
+                )
                 continue
         return created_leave_ids
 

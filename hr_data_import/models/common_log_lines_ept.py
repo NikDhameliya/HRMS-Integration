@@ -13,13 +13,13 @@ class CommonLogLineEpt(models.Model):
     model_id = fields.Many2one("ir.model", string="Model")
     res_id = fields.Integer("Record ID")
     mismatch_details = fields.Boolean(string='Mismatch Detail', help="Mismatch Detail of process record")
-    log_line_type = fields.Selection(selection=[('success', 'Success'), ('fail', 'Fail')], default='fail')
+    log_line_type = fields.Selection(selection=[('success', 'Success'), ('error', 'Error'), ('info', 'Info'), ('warning', 'Warning')], default='info')
 
     def create_common_log_line_ept(self, **kwargs):
         """
         It is use to create log lines.
         @param : **kwargs, Pass the argument like, self.env['common.log.lines'].create_common_log_line_ept(
-        log_book_id=1, message=message, mismatch=True, log_line_type='fail', model_name = 'hr.employee')
+        log_book_id=1, message=message, mismatch=True, log_line_type='info', model_name = 'hr.employee')
         """
         values = {}
         for key, value in kwargs.items():

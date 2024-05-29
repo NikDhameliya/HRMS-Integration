@@ -71,6 +71,7 @@ class HrmsHrEmployee(models.Model):
             log_line_type='success',
             model_name='hr.employee'
         )
+        
         for employee in employee_data:
             import_job_status = self.env.company.import_job_status
             if import_job_status == 'stopped':
@@ -79,14 +80,37 @@ class HrmsHrEmployee(models.Model):
                 [('hrms_external_id', '=', employee.get('id'))], limit=1)
             if skip_existing_employee and employee_rec:
                 continue
-            country_id = res_country_obj.search(
-                [('name', '=', employee.get('country'))], limit=1)
-            team_ids = []
-            for team in employee.get('team', []):
-                team_rec = hr_department_obj.search(
-                    [('name', '=', team.get('name'))], limit=1)
-                if not team_rec:
-                    message = "Creating new team %s" % (team.get('name'))
+            try:
+                country_id = res_country_obj.search(
+                    [('name', '=', employee.get('country'))], limit=1)
+                team_ids = []
+                for team in employee.get('team', []):
+                    team_rec = hr_department_obj.search(
+                        [('name', '=', team.get('name'))], limit=1)
+                    if not team_rec:
+                        message = "Creating new team %s" % (team.get('name'))
+                        _logger.info(message)
+                        self.env['common.log.lines'].create_common_log_line_ept(
+                            log_book_id=log_book.id,
+                            message=message,
+                            log_line_type='success',
+                            model_name='hr.employee'
+                        )
+                        team_rec = hr_department_obj.create(
+                            {'name': team.get('name')})
+                        message = "Created new team %s" % (team.get('name'))
+                        _logger.info(message)
+                        self.env['common.log.lines'].create_common_log_line_ept(
+                            log_book_id=log_book.id,
+                            message=message,
+                            log_line_type='success',
+                            model_name='hr.employee'
+                        )
+                    team_ids.append(team_rec.id)
+                job_id = hr_job_obj.search(
+                    [('name', '=', employee.get('position'))], limit=1)
+                if not job_id:
+                    message = "Creating new job %s" % (employee.get('position'))
                     _logger.info(message)
                     self.env['common.log.lines'].create_common_log_line_ept(
                         log_book_id=log_book.id,
@@ -94,9 +118,8 @@ class HrmsHrEmployee(models.Model):
                         log_line_type='success',
                         model_name='hr.employee'
                     )
-                    team_rec = hr_department_obj.create(
-                        {'name': team.get('name')})
-                    message = "Created new team %s" % (team.get('name'))
+                    job_id = hr_job_obj.create({'name': employee.get('position')})
+                    message = "Created new job %s" % (employee.get('position'))
                     _logger.info(message)
                     self.env['common.log.lines'].create_common_log_line_ept(
                         log_book_id=log_book.id,
@@ -104,124 +127,129 @@ class HrmsHrEmployee(models.Model):
                         log_line_type='success',
                         model_name='hr.employee'
                     )
-                team_ids.append(team_rec.id)
-            job_id = hr_job_obj.search(
-                [('name', '=', employee.get('position'))], limit=1)
-            if not job_id:
-                message = "Creating new job %s" % (employee.get('position'))
-                _logger.info(message)
-                self.env['common.log.lines'].create_common_log_line_ept(
-                    log_book_id=log_book.id,
-                    message=message,
-                    log_line_type='success',
-                    model_name='hr.employee'
-                )
-                job_id = hr_job_obj.create({'name': employee.get('position')})
-                message = "Created new job %s" % (employee.get('position'))
-                _logger.info(message)
-                self.env['common.log.lines'].create_common_log_line_ept(
-                    log_book_id=log_book.id,
-                    message=message,
-                    log_line_type='success',
-                    model_name='hr.employee'
-                )
-                
-            # Handling skills, languages, awards, educations
-            skill_ids = []
-            for skill in employee.get('skills', []):
-                skill_rec = self.env['hr.skill'].search([('name', '=', skill)], limit=1)
-                if not skill_rec:
-                    skill_rec = self.env['hr.skill'].create({'name': skill})
-                skill_ids.append(skill_rec.id)
 
-            language_ids = []
-            #TODO check language search
-            for language in employee.get('languages', []):
-                language_rec = self.env['res.lang'].search([('name', 'like', language)], limit=1)
-                if language_rec:
-                    language_ids.append(language_rec.id)
-                else:
-                     _logger.info("Language %s Not found" % (language))
+                # Handling skills, languages, awards, educations
+                skill_ids = []
+                for skill in employee.get('skills', []):
+                    skill_rec = self.env['hr.skill'].search([('name', '=', skill)], limit=1)
+                    if not skill_rec:
+                        skill_rec = self.env['hr.skill'].create({'name': skill})
+                    skill_ids.append(skill_rec.id)
 
-            awards = employee.get('awards', "")
-            educations = employee.get('educations', "")
+                language_ids = []
+                #TODO check language search
+                for language in employee.get('languages', []):
+                    language_rec = self.env['res.lang'].search([('name', 'like', language)], limit=1)
+                    if language_rec:
+                        language_ids.append(language_rec.id)
+                    else:
+                        message = f"Language {language} Not found"
+                        _logger.info(message)
+                        self.env['common.log.lines'].create_common_log_line_ept(
+                            log_book_id=log_book.id,
+                            message=message,
+                            log_line_type='warning',
+                            model_name='hr.employee'
+                        )
 
-            #TODO Verify date format in Odoo DB
-            def str_to_date(date_str):
-                return datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else False
+                awards = employee.get('awards', "")
+                educations = employee.get('educations', "")
+                #TODO Verify date format in Odoo DB
+                def str_to_date(date_str):
+                    return datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else False
 
-            employee_vals = {
-                'name': employee.get('name'),
-                'email': employee.get('email') or False,
-                'phone': employee.get('phone') or False,
-                'skype': employee.get('skype') or False,
-                'grade': employee.get('grade', "") or False,
-                'linked_in': employee.get('linked_in') or False,
-                'telegram': employee.get('telegram') or False,
-                'birth_date': str_to_date(employee.get('birth_date')) if employee.get('birth_date') else False,
-                'end_test': employee.get('end_test') or False,
-                'fired_date': str_to_date(employee.get('fired_date')) if employee.get('fired_date') else False,
-                'start_date': str_to_date(employee.get('start_date')) if employee.get('start_date') else False,
-                'gender': 'male' if employee.get('gender') == 1 else 'female',
-                'additional_email': employee.get('additional_email') or False,
-                'additional_phone': employee.get('additional_phone') or False,
-                'relocate': employee.get('relocate') or False,
-                'duties': employee.get('duties') or False,
-                'description': employee.get('description') or False,
-                'additional_info': employee.get('additional_info') or False,
-                'residence': employee.get('residence') or False,
-                'residence_comment': employee.get('residence_comment') or False,
-                'country': country_id.id if country_id else False,
-                'city': employee.get('city') or False,
-                'hrms_external_id': employee.get('id') or False,
-                'company_id': self.env.company.id,
-                'team_ids': [(6, 0, team_ids)],
-                'job_id': job_id.id if job_id else False,
-                'skill_ids': [(6, 0, skill_ids)],
-                'language_ids': [(6, 0, language_ids)],
-                'awards': awards or False,
-                'educations': educations or False,
-                'hrms_instance_id': self.env.context.get('hrms_instance_id'),
-                'hrms_process_id': self.env.context.get('hrms_process_id'),
-            }
-
-            if employee_rec:
-                employee_rec.write(employee_vals)
-                hr_employee = employee_rec.employee_id
-            else:
-                hr_employee = hr_employee_obj.create({
+                employee_vals = {
                     'name': employee.get('name'),
-                    'employee_type': 'employee',
-                    'work_email': employee.get('email') or False,
-                    'work_phone': employee.get('phone') or False,
-                    'job_id': job_id.id if job_id else False,
-                    'department_id': team_ids[0] if team_ids else False,
-                    'private_country_id': country_id.id if country_id else False,
-                    'private_street': employee.get('residence') or False,
-                    'private_city': employee.get('city') or False,
-                    'birthday': str_to_date(employee.get('birthday')) if employee.get('birthday') else False,
-                    'start_date': str_to_date(employee.get('start_date')) if employee.get('start_date') else False,
-                    'gender': 'male' if employee.get('gender') == 1 else 'female',
-                    'hrms_external_id': employee.get('id') or False,
-                    'grade': employee.get('grade', "") or False,
-                    'residence_comment': employee.get('residence_comment') or False,
+                    'email': employee.get('email') or False,
+                    'phone': employee.get('phone') or False,
                     'skype': employee.get('skype') or False,
+                    'grade': employee.get('grade', "") or False,
                     'linked_in': employee.get('linked_in') or False,
                     'telegram': employee.get('telegram') or False,
-                    'additional_email': employee.get('additional_email') or False,
-                    'additional_phone': employee.get('additional_phone') or False,
+                    'birth_date': str_to_date(employee.get('birth_date')) if employee.get('birth_date') else False,
                     'end_test': employee.get('end_test') or False,
                     'fired_date': str_to_date(employee.get('fired_date')) if employee.get('fired_date') else False,
+                    'start_date': str_to_date(employee.get('start_date')) if employee.get('start_date') else False,
+                    'gender': 'male' if employee.get('gender') == 1 else 'female',
+                    'additional_email': employee.get('additional_email') or False,
+                    'additional_phone': employee.get('additional_phone') or False,
                     'relocate': employee.get('relocate') or False,
                     'duties': employee.get('duties') or False,
                     'description': employee.get('description') or False,
                     'additional_info': employee.get('additional_info') or False,
+                    'residence': employee.get('residence') or False,
+                    'residence_comment': employee.get('residence_comment') or False,
+                    'country': country_id.id if country_id else False,
+                    'city': employee.get('city') or False,
+                    'hrms_external_id': employee.get('id') or False,
+                    'company_id': self.env.company.id,
+                    'team_ids': [(6, 0, team_ids)],
+                    'job_id': job_id.id if job_id else False,
+                    'skill_ids': [(6, 0, skill_ids)],
+                    'language_ids': [(6, 0, language_ids)],
                     'awards': awards or False,
-                    'educations': educations or False
-                })
+                    'educations': educations or False,
+                    'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                    'hrms_process_id': self.env.context.get('hrms_process_id'),
+                }
 
-                employee_vals['employee_id'] = hr_employee.id
-                employee_rec = employee_obj.create(employee_vals)
+                if employee_rec:
+                    employee_rec.write(employee_vals)
+                    hr_employee = employee_rec.employee_id
+                    self.env['common.log.lines'].create_common_log_line_ept(
+                        log_book_id=log_book.id,
+                        message=f"Updated existing employee {employee.get('name')} with HRMS ID {employee.get('id')}",
+                        log_line_type='success',
+                        model_name='hr.employee'
+                    )
+                else:
+                    hr_employee = hr_employee_obj.create({
+                        'name': employee.get('name'),
+                        'employee_type': 'employee',
+                        'work_email': employee.get('email') or False,
+                        'work_phone': employee.get('phone') or False,
+                        'job_id': job_id.id if job_id else False,
+                        'department_id': team_ids[0] if team_ids else False,
+                        'private_country_id': country_id.id if country_id else False,
+                        'private_street': employee.get('residence') or False,
+                        'private_city': employee.get('city') or False,
+                        'birthday': str_to_date(employee.get('birthday')) if employee.get('birthday') else False,
+                        'start_date': str_to_date(employee.get('start_date')) if employee.get('start_date') else False,
+                        'gender': 'male' if employee.get('gender') == 1 else 'female',
+                        'hrms_external_id': employee.get('id') or False,
+                        'grade': employee.get('grade', "") or False,
+                        'residence_comment': employee.get('residence_comment') or False,
+                        'skype': employee.get('skype') or False,
+                        'linked_in': employee.get('linked_in') or False,
+                        'telegram': employee.get('telegram') or False,
+                        'additional_email': employee.get('additional_email') or False,
+                        'additional_phone': employee.get('additional_phone') or False,
+                        'end_test': employee.get('end_test') or False,
+                        'fired_date': str_to_date(employee.get('fired_date')) if employee.get('fired_date') else False,
+                        'relocate': employee.get('relocate') or False,
+                        'duties': employee.get('duties') or False,
+                        'description': employee.get('description') or False,
+                        'additional_info': employee.get('additional_info') or False,
+                        'awards': awards or False,
+                        'educations': educations or False
+                    })
+                    employee_vals['employee_id'] = hr_employee.id
+                    employee_rec = employee_obj.create(employee_vals)
+                    self.env['common.log.lines'].create_common_log_line_ept(
+                        log_book_id=log_book.id,
+                        message=f"Created new employee {employee.get('name')} with HRMS ID {employee.get('id')}",
+                        log_line_type='success',
+                        model_name='hr.employee'
+                    )
+            except Exception as e:
+                _logger.error(f"Error processing employee for {employee.get['name']}: {e}")
+                self.env['common.log.lines'].create_common_log_line_ept(
+                    log_book_id=log_book.id,
+                    message=f"Error processing employee for {employee.get['name']} with HRMS ID {employee.get('id')}: {e}",
+                    log_line_type='error',
+                    model_name='hr.employee'
+                )
+                continue
 
             employee_ids.append(employee_rec.id)
 
@@ -266,6 +294,18 @@ class HrmsHrEmployee(models.Model):
                     career_rec.write(career_vals)
                 else:
                     employee_rec.career_ids.create(career_vals)
+            self.env['common.log.lines'].create_common_log_line_ept(
+                log_book_id=log_book.id,
+                message=f"Processed employee {employee.get('name')} with HRMS ID {employee.get('id')}",
+                log_line_type='info',
+                model_name='hr.employee'
+            )
+        self.env['common.log.lines'].create_common_log_line_ept(
+            log_book_id=log_book.id,
+            message="Completed Employee Data Processing",
+            log_line_type='info',
+            model_name='hr.employee'
+        )
         return employee_ids
 
 

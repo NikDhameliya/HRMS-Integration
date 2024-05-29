@@ -39,8 +39,8 @@
                         <notebook>
                             <page string="Common Logs">
                                 <field name="log_lines" readonly="True">
-                                    <tree create="false" editable="bottom" decoration-danger="log_line_type=='fail'"
-                                          decoration-success="log_line_type=='success'">
+                                    <tree create="false" editable="bottom" decoration-danger="log_line_type=='error'"
+                                          decoration-success="log_line_type=='success'" decoration-info="log_line_type=='info'" decoration-warning="log_line_type=='warning'">
                                         <field name="message"/>
                                         <field name="model_id"/>
                                         <field name="res_id"/>
