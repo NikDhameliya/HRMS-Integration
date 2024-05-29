@@ -22,6 +22,7 @@ class HrmsHrLeave(models.Model):
         'hr.data.dashboard', string="HRMS Instance", required=True)
     updated_at = fields.Datetime()
     hrms_external_id = fields.Char(string="HRMS Leave ID")
+    hrms_process_id = fields.Many2one('process.import.export', string="Process ID")
     leave_id = fields.Many2one('hr.leave', string="Leave", ondelete="cascade")
     end_test = fields.Date(string="End Test")
     fired_date = fields.Date(string="Fired Date")
@@ -112,6 +113,7 @@ class HrmsHrLeave(models.Model):
                                     'email': leave['email'],
                                     'company_id': self.env.company.id,
                                     'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                    'hrms_process_id': self.env.context.get('hrms_process_id'),
                                     'hrms_external_id': leave['id'],
                                     'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
                                     'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
@@ -159,6 +161,7 @@ class HrmsHrLeave(models.Model):
                                     'email': leave['email'],
                                     'company_id': self.env.company.id,
                                     'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                    'hrms_process_id': self.env.context.get('hrms_process_id'),
                                     'hrms_external_id': leave['id'],
                                     'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
                                     'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,
@@ -208,6 +211,7 @@ class HrmsHrLeave(models.Model):
                                 'email': leave['email'],
                                 'company_id': self.env.company.id,
                                 'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                                'hrms_process_id': self.env.context.get('hrms_process_id'),
                                 'hrms_external_id': leave['id'],
                                 'end_test': str_to_date(leave.get('end_test')) if leave.get('end_test') else False,
                                 'fired_date': str_to_date(leave.get('fired_date')) if leave.get('fired_date') else False,

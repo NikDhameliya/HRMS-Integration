@@ -6,12 +6,11 @@
         <record id="view_hrms_process_import_export_ept" model="ir.ui.view">
             <field name="name">Process Import/Export</field>
             <field name="model">process.import.export</field>
-            <field name="priority">11</field>
             <field name="arch" type="xml">
                 <form string="Import/Export">
                     <header>
-                        <button name="action_start" type="object" string="Start" invisible="state != 'draft'" />
-                        <button name="action_stop" type="object" string="Pause" invisible="state != 'started'"/>
+                        <button name="action_start" class="btn btn-primary" type="object" string="Start" invisible="state != 'draft'" />
+                        <button name="action_stop" class="btn btn-primary" type="object" string="Stop" invisible="state != 'started'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,started,done,cancelled"/>
                     </header>
                     <sheet>
@@ -21,6 +20,24 @@
                             min-height: 15rem !important;
                             }
                         </style>
+                        <div name="button_box" class="oe_button_box">
+                            <button name="action_view_logbook" type="object" string="Log Book" class="oe_stat_button"
+                                    icon="fa-book" invisible="log_count == 0">
+                                <field name="log_count" widget="statinfo" icon="fa-book" string="Log Book"/>
+                            </button>
+                            <button name="action_view_employees" type="object" string="Employees" class="oe_stat_button"
+                                    icon="fa-users" invisible="employee_count == 0">
+                                <field name="employee_count" widget="statinfo" icon="fa-users" string="Employees"/>
+                            </button>
+                            <button name="action_view_departments" type="object" string="Departments" class="oe_stat_button"
+                                    icon="fa-building" invisible="department_count == 0">
+                                <field name="department_count" widget="statinfo" icon="fa-building" string="Departments"/>
+                            </button>
+                            <button name="action_view_leaves" type="object" string="Leaves" class="oe_stat_button"
+                                    icon="fa-calendar" invisible="leave_count == 0">
+                                <field name="leave_count" widget="statinfo" icon="fa-calendar" string="Leaves"/>
+                            </button>
+                        </div>
                         <div style="padding-left:5px;">
 
                             <group name='hrms_instance'>

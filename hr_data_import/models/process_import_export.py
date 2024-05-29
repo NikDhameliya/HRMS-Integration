@@ -25,16 +25,11 @@ class ProcessImportExport(models.Model):
             ("sync_leave", "Import Leaves"),
         ],
         default="sync_employee", string="Operation")
-    hrms_employee_ids = fields.Text(string="Employee Ids",
-                                    help="Based on employee ids get employee from api and import in odoo")
     skip_existing_employee = fields.Boolean(string="Do Not Update Existing Employees",
                                             help="Check if you want to skip existing Employees.")
-    hrms_department_ids = fields.Text(string="Department Ids",
-                                      help="Based on department ids get department from api and import in odoo")
+    
     skip_existing_department = fields.Boolean(string="Do Not Update Existing Departments",
                                               help="Check if you want to skip existing Departments.")
-    hrms_leave_ids = fields.Text(string="Leave Ids",
-                                 help="Based on Leave ids get Leave from api and import in odoo")
     skip_existing_leave = fields.Boolean(string="Do Not Update Existing Leaves",
                                          help="Check if you want to skip existing Leaves.")
     log_book_id = fields.Many2one('common.log.book', string="Log Book")
@@ -45,6 +40,76 @@ class ProcessImportExport(models.Model):
         ('done', 'Done'),
         ('cancelled', 'Cancelled')
     ], default='draft')
+    hrms_employee_ids = fields.Many2many(
+        'hrms.hr.employee', 
+        string="Employee Ids",
+        help="Based on employee ids get employee from api and import in odoo",
+        compute='_compute_hrms_employee_ids'
+    )
+    hrms_department_ids = fields.Many2many(
+        'hrms.hr.department', 
+        string="Department Ids", 
+        compute='_compute_hrms_department_ids'
+    )
+    hrms_leave_ids = fields.Many2many(
+        'hrms.hr.leave', 
+        string="Leave Ids", 
+        compute='_compute_hrms_leave_ids'
+    )
+
+
+    employee_count = fields.Integer(string="Employees", compute='_compute_employee_count')
+    department_count = fields.Integer(string="Departments", compute='_compute_department_count')
+    leave_count = fields.Integer(string="Leaves", compute='_compute_leave_count')
+    log_count = fields.Integer(string="Log Book", compute='_compute_log_count')
+    
+    def _compute_hrms_employee_ids(self):
+        for record in self:
+            if record.id:
+                employee_ids = self.env['hrms.hr.employee'].search([('hrms_process_id', '=', record.id)]).ids
+                record.hrms_employee_ids = [(6, 0, employee_ids)]
+            else:
+                record.hrms_employee_ids = [(6, 0, [])]
+
+    def _compute_hrms_department_ids(self):
+        for record in self:
+            if record.id:
+                department_ids = self.env['hrms.hr.department'].search([('hrms_process_id', '=', record.id)]).ids
+                record.hrms_department_ids = [(6, 0, department_ids)]
+            else:
+                record.hrms_department_ids = [(6, 0, [])]
+
+
+    def _compute_hrms_leave_ids(self):
+        for record in self:
+            if record.id:
+                leave_ids = self.env['hrms.hr.leave'].search([('hrms_process_id', '=', record.id)]).ids
+                record.hrms_leave_ids = [(6, 0, leave_ids)]
+            else:
+                record.hrms_leave_ids = [(6, 0, [])]
+
+
+
+    @api.depends('hrms_employee_ids')
+    def _compute_employee_count(self):
+        for record in self:
+            record.employee_count = len(record.hrms_employee_ids.ids)
+
+    @api.depends('hrms_department_ids')
+    def _compute_department_count(self):
+        for record in self:
+            record.department_count = len(record.hrms_department_ids.ids)
+
+    @api.depends('hrms_leave_ids')
+    def _compute_leave_count(self):
+        for record in self:
+            record.leave_count = len(record.hrms_leave_ids.ids)
+
+    @api.depends('log_book_id')
+    def _compute_log_count(self):
+        for record in self:
+            record.log_count = len(record.log_book_id.log_lines) if record.log_book_id else 0
+
     
     def action_start(self):
         self.env.company.import_job_status = 'running'
@@ -63,12 +128,48 @@ class ProcessImportExport(models.Model):
         self.env.company.import_job_status = 'stopped'
         self.state = 'done'
 
+    def action_view_logbook(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Log Book',
+            'res_model': 'common.log.book',
+            'view_mode': 'form',
+            'res_id': self.log_book_id.id,
+        }
+
+    def action_view_employees(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Employees',
+            'res_model': 'hr.employee',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', self.hrms_employee_ids.ids)],
+        }
+
+    def action_view_departments(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Departments',
+            'res_model': 'hr.department',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', self.hrms_department_ids.ids)],
+        }
+
+    def action_view_leaves(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Leaves',
+            'res_model': 'hr.leave',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', self.hrms_leave_ids.ids)],
+        }
+
     def hrms_execute(self):
         """This method used to execute the operation as per given in wizard.
         """
         data_ids = False
         context = dict(self.env.context or {})
-        context.update({'hrms_instance_id': self.hrms_instance_id.id})
+        context.update({'hrms_instance_id': self.hrms_instance_id.id, 'hrms_process_id':self.id})
         self.env.company.import_job_status = 'running'
         self.state = 'started'
         try:
@@ -375,17 +476,8 @@ class ProcessImportExport(models.Model):
             for department_id_chunk in split_every(25, department_data):
                 hrms_departments_ids = department_obj.hrms_create_department(
                     department_id_chunk, skip_existing_department, log_book)
-                hrms_departments = department_obj.browse(hrms_departments_ids)
-
-                message = "Department created %s" % ', '.join(
-                    hrms_departments.mapped('name'))
-                bus_bus_obj._sendone(self.env.user.partner_id, "simple_notification",
-                                     {"title": "HRMS Notification", "message": message, "sticky": False,
-                                      "warning": True})
-                _logger.info(message)
                 hrms_department_ids.append(hrms_departments_ids)
-
-            self._cr.commit()
+        self._cr.commit()
         return hrms_department_ids
 
     def hrms_create_leave(self, skip_existing_leave, log_book):
@@ -774,14 +866,6 @@ class ProcessImportExport(models.Model):
             for leave_id_chunk in split_every(50, leave_data):
                 hrms_leaves_ids = leave_obj.hrms_create_leave(
                     leave_id_chunk, skip_existing_leave, log_book)
-                hrms_leaves = leave_obj.browse(hrms_leaves_ids)
-
-                message = "Leave created %s" % ', '.join(
-                    hrms_leaves.mapped('name'))
-                bus_bus_obj._sendone(self.env.user.partner_id, "simple_notification",
-                                     {"title": "HRMS Notification", "message": message, "sticky": False,
-                                      "warning": True})
-                _logger.info(message)
                 hrms_leave_ids.append(hrms_leaves_ids)
 
             self._cr.commit()

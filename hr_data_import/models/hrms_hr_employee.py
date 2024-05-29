@@ -20,6 +20,7 @@ class HrmsHrEmployee(models.Model):
         'hr.data.dashboard', string="HRMS Instance")
     active = fields.Boolean(default=True)
     hrms_external_id = fields.Char(string="HRMS Employee ID")
+    hrms_process_id = fields.Many2one('process.import.export', string="Process ID")
     employee_id = fields.Many2one(
         'hr.employee', string="Employee", ondelete="cascade")
     email = fields.Char(string='Email')
@@ -181,6 +182,7 @@ class HrmsHrEmployee(models.Model):
                 'awards': awards or False,
                 'educations': educations or False,
                 'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                'hrms_process_id': self.env.context.get('hrms_process_id'),
             }
 
             if employee_rec:

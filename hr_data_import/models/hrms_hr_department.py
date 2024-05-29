@@ -16,7 +16,8 @@ class HrmsHrDepartment(models.Model):
         'res.company', string='Company', required=True, default=lambda self: self.env.company)
     hrms_instance_id = fields.Many2one('hr.data.dashboard', string="HRMS Instance", required=True)
     hrms_external_id = fields.Char(string="HRMS Department ID")
-    department_id = fields.Many2one('hr.department', string="Department", ondelete="cascade")
+    hrms_process_id = fields.Many2one('process.import.export', string="Process ID")
+    department_id = fields.Many2one('hr.department', string="Department")
     type = fields.Integer(string="Type")
     number_of_members = fields.Integer(string="Number of Members")
     number_of_members_with_subteams = fields.Integer(string="Number of Members with Subteams")
@@ -77,6 +78,7 @@ class HrmsHrDepartment(models.Model):
                     'name': dept['name'],
                     'company_id': self.env.company.id,
                     'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                    'hrms_process_id': self.env.context.get('hrms_process_id'),
                     'hrms_external_id': dept['id'],
                     'department_id': department.id,
                     'type': dept.get('type', 1),
@@ -93,6 +95,7 @@ class HrmsHrDepartment(models.Model):
                     'name': dept['name'],
                     'company_id': self.env.company.id,
                     'hrms_instance_id': self.env.context.get('hrms_instance_id'),
+                    'hrms_process_id': self.env.context.get('hrms_process_id'),
                     'hrms_external_id': dept['id'],
                     'department_id': department.id,
                     'type': dept.get('type', 1),
