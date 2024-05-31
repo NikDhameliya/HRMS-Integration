@@ -26,6 +26,11 @@
             parent="hr_data_import.menu_hr_data_import_root" 
             name="HRMS Records"
             sequence="3" />
+        <menuitem 
+            id="menu_odoo_hr_data"
+            parent="hr_data_import.menu_hr_data_import_root" 
+            name="HR Records"
+            sequence="4" />
 
         <menuitem
             id="menu_hrms_import_configuration"
@@ -62,6 +67,28 @@
             parent="hr_data_import.menu_hrms_data"
             sequence="3"
             action="hr_data_import.action_hrms_leaves_instance_ept" />
+
+        <menuitem 
+            id="menu_item_hr_employee"
+            name="Employees"
+            parent="hr_data_import.menu_odoo_hr_data"
+            sequence="1"
+            action="hr.open_view_employee_list_my" />
+
+        <menuitem 
+            id="menu_item_hr_department"
+            name="Departments"
+            parent="hr_data_import.menu_odoo_hr_data"
+            sequence="2"
+            action="hr.hr_department_kanban_action" />
+
+        <menuitem 
+            id="menu_item_hr_leave"
+            name="Leaves"
+            parent="hr_data_import.menu_odoo_hr_data"
+            sequence="3"
+            action="hr_holidays.hr_leave_action_new_request" />
+        
         
         <menuitem 
             id="menu_hr_career" 
@@ -76,33 +103,6 @@
             parent="hr_data_import.menu_hrms_data"
             action="hr_data_import.action_hr_contact" 
             sequence="5" />
-        
-        <!-- <menuitem 
-            id="menu_hrms_queue" 
-            name="Queue" 
-            parent="hr_data_import.menu_hrms_data" 
-            sequence="7"/>
-
-        <menuitem 
-            id="hrms_employee_data_menu"
-            name="Employee Queue" 
-            parent="hr_data_import.menu_hrms_queue"
-            action="hr_data_import.action_hrms_employee_data_queue"
-            sequence="1"/>
-
-        <menuitem 
-            id="hrms_department_data_menu"
-            name="Department Queue" 
-            parent="hr_data_import.menu_hrms_queue"
-            action="hr_data_import.action_hrms_department_data_queue" 
-            sequence="2"/>
-
-        <menuitem 
-            id="hrms_leave_data_menu"
-            name="Leave Queue" 
-            parent="hr_data_import.menu_hrms_queue"
-            action="hr_data_import.action_hrms_leave_data_queue" 
-            sequence="3"/> -->
 
         <menuitem 
             id="menu_log_book_ept" 

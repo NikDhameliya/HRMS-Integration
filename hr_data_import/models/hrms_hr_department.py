@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+from odoo import models, fields, _
 
 import logging
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger("HRMS Department Operations")
 
