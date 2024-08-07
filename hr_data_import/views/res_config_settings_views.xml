@@ -4,25 +4,30 @@
     <record id="res_config_settings_view_form" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.inherit.hr</field>
         <field name="model">res.config.settings</field>
-        <field name="priority" eval="71" />
-        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="priority" eval="71"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <app data-string="HRMS Data Import" string="HRMS Data Import" name="hr_data_import"
-                    groups="hr.group_hr_manager">
+                     groups="hr.group_hr_manager">
                     <block title="HRMS Data Import" name="employee_data_import_setting_container">
                         <div class="content-group">
+
                             <div class="row mt8">
-                                <label for="hrm_api_key" class="col-lg-5 o_light_label" />
-                                <field name="hrm_api_key" />
+                                <label for="hrm_base_url" class="col-lg-5 o_light_label"/>
+                                <field name="hrm_base_url"/>
                             </div>
+                            <!--                            <div class="row mt8">-->
+                            <!--                                <label for="hrm_api_key" class="col-lg-5 o_light_label" />-->
+                            <!--                                <field name="hrm_api_key" />-->
+                            <!--                            </div>-->
                             <div class="row mt8">
-                                <label for="hrm_base_url" class="col-lg-5 o_light_label" />
-                                <field name="hrm_base_url" />
+                                <label for="hrm_token" class="col-lg-5 o_light_label"/>
+                                <field name="hrm_token"/>
                             </div>
                             <div class="content-group">
                                 <div class="mt16">
-                                    <label for="import_job_status" class="col-lg-5 o_light_label" />
+                                    <label for="import_job_status" class="col-lg-5 o_light_label"/>
                                     <field name="import_job_status" class="o_light_label" widget="radio"/>
                                 </div>
                             </div>
@@ -41,7 +46,6 @@
         <field name="target">inline</field>
         <field name="context">{'module' : 'hr_data_import', 'bin_size': False}</field>
     </record>
-
 
 
 </odoo>

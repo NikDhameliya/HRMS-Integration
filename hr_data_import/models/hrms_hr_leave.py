@@ -130,7 +130,7 @@ class HrmsHrLeave(models.Model):
                                     )
                                 start_vals.update({'holiday_status_id': holiday_status_id.id})
                                 start_vals['leave_detail_ids'].append((0, 0, start_detail_vals))
-                                start_leave_record = Leave.create(start_vals)
+                                Leave.create(start_vals)
                                 hrms_leave_start = self.create({
                                     'name': leave['name'],
                                     'employee_id': employee_id.id if employee_id else False,

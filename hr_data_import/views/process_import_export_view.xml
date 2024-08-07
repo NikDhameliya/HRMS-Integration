@@ -45,6 +45,8 @@
                                     <field name='hrms_instance_id'
                                         options="{'no_create':True,'no_create_edit': True,'no_open': True}"
                                         required="1" domain="[('active','=',True)]" />
+                                    <field name='page'/>
+                                    <field name='per_page'/>
                                 </group>
                                 <group>
                                     <field name='hrms_operation' string="Operations" required="1" />
