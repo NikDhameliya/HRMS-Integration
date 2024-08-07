@@ -266,7 +266,7 @@ class ProcessImportExport(models.Model):
         )
 
         headers = {
-            # 'token': self.company_id.hrm_token
+            'token': self.company_id.hrm_token or 'test token'
         }
 
         while True:
@@ -322,7 +322,7 @@ class ProcessImportExport(models.Model):
         )
 
         headers = {
-            # 'token': self.company_id.hrm_token
+            'token': self.company_id.hrm_token or 'test token'
         }
 
         while True:
@@ -367,7 +367,7 @@ class ProcessImportExport(models.Model):
         )
 
         headers = {
-            # 'token': self.company_id.hrm_token
+            'token': self.company_id.hrm_token or 'test token'
         }
 
         while True:
