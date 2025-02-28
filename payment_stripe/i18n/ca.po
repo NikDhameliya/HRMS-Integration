@@ -3,24 +3,24 @@
 # 	* payment_stripe
 # 
 # Translators:
-# Martin Trigaux, 2023
-# Quim - eccit <quim@eccit.com>, 2023
-# Eugeni Chafer <eugeni@chafer.cat>, 2023
-# Guspy12, 2023
-# Óscar Fonseca <tecnico@pyming.com>, 2023
-# RGB Consulting <odoo@rgbconsulting.com>, 2023
-# Ivan Espinola, 2023
-# Josep Anton Belchi, 2023
-# marcescu, 2023
+# Quim - eccit <quim@eccit.com>, 2024
+# Eugeni Chafer <eugeni@chafer.cat>, 2024
+# Martin Trigaux, 2024
+# RGB Consulting <odoo@rgbconsulting.com>, 2024
+# Josep Anton Belchi, 2024
+# Óscar Fonseca <tecnico@pyming.com>, 2024
+# Guspy12, 2024
+# Ivan Espinola, 2024
 # Carles Antoli <carlesantoli@hotmail.com>, 2024
+# marcescu, 2024
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0\n"
+"Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-13 10:28+0000\n"
-"PO-Revision-Date: 2023-10-26 23:09+0000\n"
-"Last-Translator: Carles Antoli <carlesantoli@hotmail.com>, 2024\n"
+"POT-Creation-Date: 2024-09-26 08:56+0000\n"
+"PO-Revision-Date: 2024-09-25 09:41+0000\n"
+"Last-Translator: marcescu, 2024\n"
 "Language-Team: Catalan (https://app.transifex.com/odoo/teams/41243/ca/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,7 +31,6 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/payment_form.js:0
-#, python-format
 msgid "Cannot display the payment form"
 msgstr ""
 
@@ -48,14 +47,12 @@ msgstr "Connecta Stripe"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Could not establish the connection to the API."
 msgstr "No s'ha pogut establir la connexió a l'API."
 
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/express_checkout_form.js:0
-#, python-format
 msgid "Delivery"
 msgstr "Lliurament"
 
@@ -67,7 +64,6 @@ msgstr "Habilitar Apple Pay "
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/express_checkout_form.js:0
-#, python-format
 msgid "Free Shipping"
 msgstr "Enviament gratuït"
 
@@ -94,21 +90,18 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/payment_form.js:0
-#, python-format
 msgid "Incorrect payment details"
 msgstr ""
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "No transaction found matching reference %s."
 msgstr "No s'ha trobat cap transacció que coincideixi amb la referència %s."
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Other Payment Providers"
 msgstr ""
 
@@ -135,14 +128,12 @@ msgstr "Transacció de pagament"
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/payment_form.js:0
-#, python-format
 msgid "Payment processing failed"
 msgstr ""
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Please use live credentials to enable Apple Pay."
 msgstr ""
 "Si us plau, utilitzeu les credencials actuals per habilitar Apple Pay."
@@ -155,21 +146,18 @@ msgstr "Clau Publicable"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "Received data with invalid intent status: %s"
 msgstr "Dades rebudes amb un estat d'intenció no vàlid: %s"
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "Received data with missing intent status."
 msgstr "S'han rebut dades amb l'estat d'intent que manquen."
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "Received data with missing merchant reference"
 msgstr "Dades rebudes en els quals falta la referència del comerciant"
 
@@ -186,7 +174,6 @@ msgstr "Stripe"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid ""
 "Stripe Connect is not available in your country, please use another payment "
 "provider."
@@ -207,21 +194,18 @@ msgstr "ID del mètode de pagament Stripe"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Stripe Proxy error: %(error)s"
 msgstr "Error de Stripe Proxy: %(error)s"
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Stripe Proxy: An error occurred when communicating with the proxy."
 msgstr "Proxy de Stripe: S'ha produït un error en comunicar-se amb el proxy."
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Stripe Proxy: Could not establish the connection."
 msgstr "Stripe Proxy: No s'ha pogut establir la connexió."
 
@@ -229,7 +213,6 @@ msgstr "Stripe Proxy: No s'ha pogut establir la connexió."
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid ""
 "The communication with the API failed.\n"
 "Stripe gave us the following info about the problem:\n"
@@ -242,7 +225,6 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "The customer left the payment page."
 msgstr ""
 
@@ -254,7 +236,6 @@ msgstr "La clau utilitzada únicament per identificar el compte amb Stripe"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid ""
 "The refund did not go through. Please log into your Stripe Dashboard to get "
 "more information on that matter, and address any accounting discrepancies."
@@ -268,14 +249,12 @@ msgstr "El codi tècnic d'aquest proveïdor de pagaments."
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_transaction.py:0
-#, python-format
 msgid "The transaction is not linked to a token."
 msgstr "La transacció no està enllaçada a un token."
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_token.py:0
-#, python-format
 msgid "Unable to convert payment token to new API."
 msgstr "No es pot convertir el token de pagament a la nova API."
 
@@ -287,14 +266,12 @@ msgstr "Secret de la signatura del webhook"
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "You Stripe Webhook was successfully set up!"
 msgstr "Heu configurat el Webhook de Stripe correctament!"
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid ""
 "You cannot create a Stripe Webhook if your Stripe Secret Key is not set."
 msgstr ""
@@ -304,7 +281,6 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid ""
 "You cannot set the provider state to Enabled until your onboarding to Stripe"
 " is completed."
@@ -313,7 +289,6 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid ""
 "You cannot set the provider to Test Mode while it is linked with your Stripe"
 " account."
@@ -322,20 +297,17 @@ msgstr ""
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Your Stripe Webhook is already set up."
 msgstr "El vostre Webhook Stripe ja està configurat."
 
 #. module: payment_stripe
 #. odoo-javascript
 #: code:addons/payment_stripe/static/src/js/express_checkout_form.js:0
-#, python-format
 msgid "Your order"
 msgstr "La vostra comanda"
 
 #. module: payment_stripe
 #. odoo-python
 #: code:addons/payment_stripe/models/payment_provider.py:0
-#, python-format
 msgid "Your web domain was successfully verified."
 msgstr ""
